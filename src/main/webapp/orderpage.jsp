@@ -16,18 +16,37 @@
         
         <form>
             <select name="carport-width">
-                <option value="240"></option>
-                <option value="750"></option>
+                <option value="240">240</option>
+                <option value="750">750</option>
             </select>
             
             <select name="carport-length">
-                <option value="240"></option>
-                <option value="780"></option>
+                <option value="240">240</option>
+                <option value="780">780</option>
             </select>
             
             <select name="roof">
-                <option value="Plasttrapezplader"></option>
+                <option value="Plasttrapezplader">Plasttrapezplader</option>
             </select>
+            
+            <select name="shed-width">
+                <option value="210">210</option>
+                <option value="720">720</option>
+            </select>
+            
+            <select name="shed-length">
+                <option value="150">150</option>
+                <option value="690">690</option>
+            </select>
+            
+            <input type="text" name="fullname" placeholder="Navn">
+            <input type="text" name="address" placeholder="Adresse">
+            <input type="text" name="zipCity" placeholder="Postnummer og by">
+            <input type="text" name="phone" placeholder="Telefon">
+            <input type="text" name="email" placeholder="Email">
+            <textarea name="message"></textarea>
+            
         </form>
+        
     </body>
 </html>
