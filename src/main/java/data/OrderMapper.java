@@ -45,8 +45,7 @@ public class OrderMapper implements OrderInterface {
     public ArrayList<Order> getOrders() {
         ArrayList<Order> orders = new ArrayList<>();
         try {
-            Connector c = new Connector();
-            Connection con = c.connection();
+            Connection con = Connector.connection();
             String query = "SELECT * FROM c_order";
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
@@ -80,8 +79,7 @@ public class OrderMapper implements OrderInterface {
     @Override
     public void assignOrder(User user, Order order) {
         try {
-            Connector c = new Connector();
-            Connection con = c.connection();
+            Connection con = Connector.connection();
             String query = "UPDATE c_order SET userid = ? WHERE id = ?";
             PreparedStatement ps = con.prepareStatement(query);
                         
