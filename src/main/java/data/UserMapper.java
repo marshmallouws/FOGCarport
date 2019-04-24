@@ -20,7 +20,7 @@ public class UserMapper implements UserInterface {
     public void logIn(User user) throws LogInException {
         try {
             Connector c = new Connector();
-            Connection con = c.getConnection();
+            Connection con = c.connection();
             
             String query = "SELECT username, password FROM c_user WHERE usernamem = ? AND password = ?";
             PreparedStatement ps = con.prepareStatement(query);
@@ -34,7 +34,7 @@ public class UserMapper implements UserInterface {
                 throw new LogInException(); // Needs to be caught when user is trying to log in.
             }
             
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             // Do something
         }
     }

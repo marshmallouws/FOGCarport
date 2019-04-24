@@ -6,35 +6,22 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class Connector {
-	private static Connection connection = null;
-	
-	//Constants
-	private static final String IP	     = "localhost";
-	private static final String PORT     = "3306";
-	public  static final String DATABASE = "carports";
-	private static final String USERNAME = "root"; 
-	private static final String PASSWORD = "Repsac270390";	     	
-	
-	public Connector() throws SQLException {
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-                String url = "jdbc:mysql://" + IP + ":" + PORT + "/" + DATABASE;
-                Properties props = new Properties();
-                props.put("user", USERNAME);
-                props.put("password", PASSWORD);
-                props.put("allowMultiQueries", true);
-                props.put("useUnicode", true);
-                props.put("useJDBCCompliantTimezoneShift", true);
-                props.put("useLegacyDatetimeCode", false);
-                props.put("serverTimezone", "CET");
-                this.connection = DriverManager.getConnection(url, props);
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-                ex.printStackTrace();
-                throw new SQLException(ex.getMessage());
-            }
-	}
-	
-	public static Connection getConnection() {
-   		return connection;
-	}
+
+    private static final String URL = "jdbc:mysql://localhost:3306/carports";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "mysql123";
+
+    private static Connection singleton;
+
+    public static void setConnection( Connection con ) {
+        singleton = con;
+    }
+
+    public static Connection connection() throws ClassNotFoundException, SQLException {
+        if ( singleton == null || singleton.isClosed() ) {
+            Class.forName( "com.mysql.cj.jdbc.Driver" );
+            singleton = DriverManager.getConnection( URL, USERNAME, PASSWORD );
+        }
+        return singleton;
+    }
 }
