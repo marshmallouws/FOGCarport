@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author Bitten
  */
 public interface OrderInterface {
-    public void createOrder(Order order);
+    public boolean createOrder(Order order);
     public ArrayList<Order> getOrders();
     public Order getOrder(int id);
     public void assignOrder(User user, Order order);

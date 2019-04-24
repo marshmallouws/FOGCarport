@@ -15,8 +15,8 @@ import java.util.ArrayList;
  */
 public class LogicFacade {
     
-    public void createOrder(Order order){ 
-        new data.OrderMapper().createOrder(order);
+    public boolean createOrder(Order order){ 
+        return new data.OrderMapper().createOrder(order);
     }
     
     public ArrayList<Order> getOrders(){
