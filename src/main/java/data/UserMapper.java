@@ -17,7 +17,6 @@ import java.sql.SQLException;
  */
 public class UserMapper implements UserInterface {
 
-    @Override
     public void logIn(User user) throws LogInException {
         try {
             Connector c = new Connector();

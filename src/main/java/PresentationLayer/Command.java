@@ -20,6 +20,7 @@ public abstract class Command {
         String origin = request.getParameter("command");
 
         Map<String, Command> commands = new HashMap();
+        commands.put("backendpage", new BackendPageCommand());
         commands.put("orderpage", new OrderPageCommand());
         commands.put("addorder", new AddOrderCommand());
         
