@@ -14,5 +14,7 @@
     <body>
         <h1>Ordren er oprettet og modtaget!</h1>
         <p>Vi kontakter dig hurtigst muligt med en pris på din nye carport</p>
+        
+        <%= request.getAttribute("succes") %>
     </body>
 </html>
