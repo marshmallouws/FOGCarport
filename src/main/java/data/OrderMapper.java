@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 public class OrderMapper implements OrderInterface {
 
     @Override
-    public void createOrder(Order order) {
+    public boolean createOrder(Order order) {
         try {
             Connection con = Connector.getConnection();
             String SQL = "INSERT INTO `user` (height, length, width, shed_length, shed_width, roof_angle, userid, o_date) VALUES (?, ?, ?, ?, ?, ?, ?, now())";
@@ -36,8 +36,9 @@ public class OrderMapper implements OrderInterface {
             ps.setInt( 6, order.getRoofAngle() );
             ps.setInt( 7, 0 );
             ps.executeUpdate();
+            return true;
             } catch ( SQLException ex ) {
-
+            return false;
             }
     }
 
