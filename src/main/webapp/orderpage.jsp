@@ -3,50 +3,117 @@
     Created on : Apr 23, 2019, 10:52:48 AM
     Author     : caspe
 --%>
-
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    List<Integer> carportSelectWidth = (List<Integer>) request.getAttribute("carportSelectWidth");
+    List<Integer> carportSelectLength = (List<Integer>) request.getAttribute("carportSelectLength");
+    List<Integer> shedSelectWidth = (List<Integer>) request.getAttribute("shedSelectWidth");
+    List<Integer> shedSelectLength = (List<Integer>) request.getAttribute("shedSelectLength");
+%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Orderpage</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
     <body>
-        <h1>Hello World!</h1>
-        
-        <form>
-            <select name="carport-width">
-                <option value="240">240</option>
-                <option value="750">750</option>
-            </select>
-            
-            <select name="carport-length">
-                <option value="240">240</option>
-                <option value="780">780</option>
-            </select>
-            
-            <select name="roof">
-                <option value="Plasttrapezplader">Plasttrapezplader</option>
-            </select>
-            
-            <select name="shed-width">
-                <option value="210">210</option>
-                <option value="720">720</option>
-            </select>
-            
-            <select name="shed-length">
-                <option value="150">150</option>
-                <option value="690">690</option>
-            </select>
-            
-            <input type="text" name="fullname" placeholder="Navn">
-            <input type="text" name="address" placeholder="Adresse">
-            <input type="text" name="zipCity" placeholder="Postnummer og by">
-            <input type="text" name="phone" placeholder="Telefon">
-            <input type="text" name="email" placeholder="Email">
-            <textarea name="message"></textarea>
-            
-        </form>
-        
+        <div class="container">
+            <h1>Orderpage</h1>
+
+            <form method="POST" action="FrontController?command=addorder">
+                <div class="form-group">
+                    <label for="carportWidth">Carport bredde</label>
+                    <select class="form-control" name="carportWidth" id="carportWidth">
+                        <option value=0>Vælg bredde</option>
+                        <% for (int width : carportSelectWidth) {%>
+                        <option value=<%= width%>><%= width%> cm</option>
+                        <% } %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="carportLength">Carport længde</label>
+                    <select class="form-control" name="carportLength" id="carportLength">
+                        <option value=0>Vælg længde</option>
+                        <% for (int length : carportSelectLength) {%>
+                        <option value=<%= length%>><%= length%> cm</option>
+                        <% } %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="roofMaterial">Tag</label>
+                    <select class="form-control" name="roofMaterial" id="roofMaterial">
+                        <option value=0>Vælg tag</option>
+                        <option value="Plasttrapezplader">Plasttrapezplader</option>
+                    </select>
+                </div>
+                    
+                    <div class="form-group">
+                    <label for="roofAngle">Tag-vinkel</label>
+                    <select class="form-control" name="roofAngle" id="roofAngle">
+                        <option value=0>Ingen rejsning LOL</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="shedWidth">Redskabsrum bredde:</label>
+                    <select class="form-control" name="shedWidth" id="shedWidth">
+                        <option value=0>Ønsker ikke redskabsrum</option>
+                        <% for (int width : shedSelectWidth) {%>
+                        <option value=<%= width%>><%= width%> cm</option>
+                        <% } %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="shedLength">Redskabsrum længde:</label>
+                    <select class="form-control" name="shedLength" id="shedLength">
+                        <option value=0>Ønsker ikke redskabsrum</option>
+                        <% for (int length : shedSelectLength) {%>
+                        <option value=<%= length%>><%= length%> cm</option>
+                        <% }%>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullname">Navn</label>
+                    <input type="text" class="form-control" name="fullname" id="fullname">
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Adresse</label>
+                    <input type="text" class="form-control" name="address" id="address">
+                </div>
+
+                <div class="form-group">
+                    <label for="zip">Postnummer</label>
+                    <input type="text" class="form-control" name="zip" id="zip">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Telefon</label>
+                    <input type="text" class="form-control" name="phone" id="phone">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" class="form-control" name="email" id="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Evt. bemærkninger</label>
+                    <textarea class="form-control" name="message" id="message"></textarea>
+                </div>
+                    
+                <button type="submit" class="btn btn-success">Bestil Carport</button>    
+
+            </form>
+
+        </div><!-- container end -->
     </body>
 </html>
