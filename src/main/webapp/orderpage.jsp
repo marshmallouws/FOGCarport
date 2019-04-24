@@ -79,7 +79,7 @@
                         <% }%>
                     </select>
                 </div>
-
+<!--
                 <div class="form-group">
                     <label for="fullname">Navn</label>
                     <input type="text" class="form-control" name="fullname" id="fullname">
@@ -109,7 +109,7 @@
                     <label for="message">Evt. bemærkninger</label>
                     <textarea class="form-control" name="message" id="message"></textarea>
                 </div>
-                    
+-->
                 <button type="submit" class="btn btn-success">Bestil Carport</button>    
 
             </form>
