@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import logic.LogicFacade;
 
 /**
  *
@@ -27,6 +28,8 @@ public class AddOrderCommand extends Command {
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String message = request.getParameter("message");
+        
+        LogicFacade lf = new LogicFacade();
 
         try {
             int height = 0; // skal beregnes hvis roofAngle > 0
@@ -37,7 +40,9 @@ public class AddOrderCommand extends Command {
             int roofAngle = Integer.parseInt(_roofAngle);
 
             Order order = new Order(height, carportWidth, carportLength, shedWidth, shedLength, roofAngle);
+            boolean success = lf.createOrder(order);
             
+            request.setAttribute("succes", success);
             request.getRequestDispatcher("./landingpage.jsp").forward(request, response);
 
         } catch (NumberFormatException ex) {
