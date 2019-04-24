@@ -18,12 +18,9 @@ import java.sql.SQLException;
 public class UserMapper implements UserInterface {
 
     public void logIn(User user) throws LogInException {
-        try {
-            Connector c = new Connector();
-            Connection con = c.connection();
-            
+        try {          
             String query = "SELECT username, password FROM c_user WHERE usernamem = ? AND password = ?";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = Connector.connection().prepareStatement(query);
             
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
