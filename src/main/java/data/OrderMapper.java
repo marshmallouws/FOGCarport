@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +24,21 @@ public class OrderMapper implements OrderInterface {
 
     @Override
     public void createOrder(Order order) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            Connection con = Connector.getConnection();
+            String SQL = "INSERT INTO `user` (height, length, width, shed_length, shed_width, roof_angle, userid, o_date) VALUES (?, ?, ?, ?, ?, ?, ?, now())";
+            PreparedStatement ps = con.prepareStatement( SQL );
+            ps.setInt( 1, order.getHeight() );
+            ps.setInt( 2, order.getLenght() );
+            ps.setInt( 3, order.getWidth() );
+            ps.setInt( 4, order.getShedLength() );
+            ps.setInt( 5, order.getShedWidth() );
+            ps.setInt( 6, order.getRoofAngle() );
+            ps.setInt( 7, 0 );
+            ps.executeUpdate();
+            } catch ( SQLException ex ) {
+
+            }
     }
 
     @Override
