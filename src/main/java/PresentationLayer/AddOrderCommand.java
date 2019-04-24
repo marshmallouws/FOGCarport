@@ -42,7 +42,7 @@ public class AddOrderCommand extends Command {
             Order order = new Order(height, carportWidth, carportLength, shedWidth, shedLength, roofAngle);
             boolean success = lf.createOrder(order);
             
-            request.setAttribute("succes", success);
+            request.setAttribute("success", success);
             request.getRequestDispatcher("./landingpage.jsp").forward(request, response);
 
         } catch (NumberFormatException ex) {
