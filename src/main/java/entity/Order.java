@@ -30,6 +30,22 @@ public class Order {
         this.roofAngle = roofAngle;
     }
 
+    public Order(int id, int employeeId, int height, int width, int length,
+            int shedLength, int shedWidth, int roofAngle, String date) {
+        this(height, length, width, shedLength, shedWidth, roofAngle);
+        this.id = id;
+        this.employeeId = employeeId;
+        this.date = date;
+    }
+    
+    public int getId() {
+        return id;
+    }
+    
+    public int employeeId() {
+        return id;
+    }
+    
     public int getHeight() {
         return height;
     }
@@ -52,14 +68,6 @@ public class Order {
 
     public int getRoofAngle() {
         return roofAngle;
-    }
-
-    public Order(int id, int employeeId, int height, int width, int length,
-            int shedLength, int shedWidth, int roofAngle, String date) {
-        this(height, length, width, shedLength, shedWidth, roofAngle);
-        this.id = id;
-        this.employeeId = employeeId;
-        this.date = date;
     }
 
 }
