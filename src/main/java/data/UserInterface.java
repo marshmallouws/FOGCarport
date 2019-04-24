@@ -5,10 +5,12 @@
  */
 package data;
 
+import entity.User;
+
 /**
  *
  * @author Annika
  */
 public interface UserInterface {
-    
+    public void logIn(User user) throws LogInException;
 }
