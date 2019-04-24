@@ -17,7 +17,7 @@ CREATE TABLE c_order(
     shed_width INT,
     roof_angle INT,
     userid INT,
-    o_date DATETIME, 
+    o_date DATETIME DEFAULT NOW(), 
     #Reference to employee handling the order
 	CONSTRAINT c_user_c_order
 		FOREIGN KEY(userid)
