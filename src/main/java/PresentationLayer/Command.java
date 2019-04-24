@@ -2,6 +2,7 @@ package PresentationLayer;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,16 +17,12 @@ public abstract class Command {
 
     public static Command from(HttpServletRequest request) {
         Command c;
-        String path = request.getPathInfo().substring(1);
-        //String path = request.getParameter("action");
+        String origin = request.getParameter("command");
 
-        switch (path) {
-            case "orderpage":
-                c = new OrderPageCommand();
-                break;
-            default:
-                c = new UnknownCommand();
-        }
+        Map<String, Command> commands = new HashMap();
+        commands.put("orderpage", new OrderPageCommand());
+        
+        c = commands.getOrDefault(origin, new UnknownCommand());
 
         return c;
     }

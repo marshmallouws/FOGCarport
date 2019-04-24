@@ -19,9 +19,8 @@ public class OrderPageCommand extends Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/orderpage.jsp");
-        dispatcher.forward(request, response);
+        
+        response.sendRedirect("./orderpage.jsp");
 
     }
 

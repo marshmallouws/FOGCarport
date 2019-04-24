@@ -26,24 +26,9 @@ public class FrontController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        try {
-            Command c = Command.from(request);
-            c.execute(request, response);
-        } catch (Exception e) {
-            response.setContentType("text/html;charset=UTF-8");
-            try (PrintWriter out = response.getWriter()) {
-                out.println("<!DOCTYPE html>");
-                out.println("<html>");
-                out.println("<head>");
-                out.println("<title>Fejl side</title>");
-                out.println("</head>");
-                out.println("<body>");
-                out.println("<h1>Error:</h1>");
-                out.println("</body>");
-                out.println("</html>");
-            }
-        }
+
+        Command c = Command.from(request);
+        c.execute(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
