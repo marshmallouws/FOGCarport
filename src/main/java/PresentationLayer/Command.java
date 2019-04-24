@@ -21,6 +21,7 @@ public abstract class Command {
 
         Map<String, Command> commands = new HashMap();
         commands.put("orderpage", new OrderPageCommand());
+        commands.put("addorder", new AddOrderCommand());
         
         c = commands.getOrDefault(origin, new UnknownCommand());
 

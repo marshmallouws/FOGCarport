@@ -22,10 +22,10 @@
         <div class="container">
             <h1>Orderpage</h1>
 
-            <form>
+            <form method="POST" action="FrontController?command=addorder">
                 <div class="form-group">
-                    <label for="carport-width">Carport bredde</label>
-                    <select class="form-control" name="carport-width" id="carport-width">
+                    <label for="carportWidth">Carport bredde</label>
+                    <select class="form-control" name="carportWidth" id="carportWidth">
                         <option value=0>Vælg bredde</option>
                         <% for (int width : carportSelectWidth) {%>
                         <option value=<%= width%>><%= width%> cm</option>
@@ -34,8 +34,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="carport-length">Carport længde</label>
-                    <select class="form-control" name="carport-length" id="carport-length">
+                    <label for="carportLength">Carport længde</label>
+                    <select class="form-control" name="carportLength" id="carportLength">
                         <option value=0>Vælg længde</option>
                         <% for (int length : carportSelectLength) {%>
                         <option value=<%= length%>><%= length%> cm</option>
@@ -44,16 +44,16 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="roof-material">Tag</label>
-                    <select class="form-control" name="roof-material" id="roof-material">
+                    <label for="roofMaterial">Tag</label>
+                    <select class="form-control" name="roofMaterial" id="roofMaterial">
                         <option value=0>Vælg tag</option>
                         <option value="Plasttrapezplader">Plasttrapezplader</option>
                     </select>
                 </div>
                     
                     <div class="form-group">
-                    <label for="roof-angle">Tag-vinkel</label>
-                    <select class="form-control" name="roof-angle" id="roof-angle">
+                    <label for="roofAngle">Tag-vinkel</label>
+                    <select class="form-control" name="roofAngle" id="roofAngle">
                         <option value=0>Ingen rejsning LOL</option>
                         <option value="10">10</option>
                         <option value="20">20</option>
@@ -61,8 +61,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="shed-width">Redskabsrum bredde:</label>
-                    <select class="form-control" name="shed-width" id="shed-width">
+                    <label for="shedWidth">Redskabsrum bredde:</label>
+                    <select class="form-control" name="shedWidth" id="shedWidth">
                         <option value=0>Ønsker ikke redskabsrum</option>
                         <% for (int width : shedSelectWidth) {%>
                         <option value=<%= width%>><%= width%> cm</option>
@@ -71,8 +71,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="shed-length">Redskabsrum længde:</label>
-                    <select class="form-control" name="shed-length" id="shed-length">
+                    <label for="shedLength">Redskabsrum længde:</label>
+                    <select class="form-control" name="shedLength" id="shedLength">
                         <option value=0>Ønsker ikke redskabsrum</option>
                         <% for (int length : shedSelectLength) {%>
                         <option value=<%= length%>><%= length%> cm</option>
@@ -109,6 +109,8 @@
                     <label for="message">Evt. bemærkninger</label>
                     <textarea class="form-control" name="message" id="message"></textarea>
                 </div>
+                    
+                <button type="submit" class="btn btn-success">Bestil Carport</button>    
 
             </form>
 
