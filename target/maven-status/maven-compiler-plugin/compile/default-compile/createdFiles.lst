@@ -1,6 +1,9 @@
+entity\User.class
 data\Connector.class
+entity\Order.class
+data\OrderInterface.class
+PresentationLayer\UnknownCommand.class
+PresentationLayer\OrderPageCommand.class
 PresentationLayer\FrontController.class
 data\OrderMapper.class
 PresentationLayer\Command.class
-PresentationLayer\UnknownCommand.class
-PresentationLayer\OrderPageCommand.class
