@@ -35,4 +35,6 @@ public class LogicFacade {
     public void logIn(User user) throws LogInException {
         new data.UserMapper().logIn(user);
     }
+    
+    //Testing something
 }
