@@ -66,7 +66,7 @@ public class OrderMapper implements OrderInterface {
             }
 
         } catch (Exception e) {
-            //Do something
+            e.printStackTrace();
         }
         return orders;
     }
