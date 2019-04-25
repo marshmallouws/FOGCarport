@@ -54,7 +54,7 @@
                     <div class="form-group">
                     <label for="roofAngle">Tag-vinkel</label>
                     <select class="form-control" name="roofAngle" id="roofAngle">
-                        <option value=0>Ingen rejsning LOL</option>
+                        <option value=0>Ingen rejsning</option>
                         <option value="10">10</option>
                         <option value="20">20</option>
                     </select>
