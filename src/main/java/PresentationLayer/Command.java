@@ -23,6 +23,7 @@ public abstract class Command {
         commands.put("backendpage", new BackendPageCommand());
         commands.put("orderpage", new OrderPageCommand());
         commands.put("addorder", new AddOrderCommand());
+        commands.put("orderinfo", new OrderInfoCommand());
         
         c = commands.getOrDefault(origin, new UnknownCommand());
 
