@@ -18,12 +18,12 @@ public class OrderInfoCommand extends Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        int orderID = (int)request.getAttribute("orderID");
+        int orderID = Integer.parseInt(request.getParameter("orderID"));
         Order orderToShow = lf.getOrder(orderID);
         
         request.setAttribute("order", orderToShow);
         
-        request.getRequestDispatcher("./orderdetials.jsp").forward(request, response);
+        request.getRequestDispatcher("./orderdetails.jsp").forward(request, response);
     }
     
 }
