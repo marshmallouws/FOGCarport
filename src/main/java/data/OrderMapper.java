@@ -56,7 +56,7 @@ public class OrderMapper implements OrderInterface {
                 int height = rs.getInt("height");
                 int length = rs.getInt("length");
                 int width = rs.getInt("width");
-                int shedLength = rs.getInt("shed_lenght");
+                int shedLength = rs.getInt("shed_length");
                 int shedWidth = rs.getInt("shed_width");
                 int roofAngle = rs.getInt("roof_angle");
                 String date = rs.getString("o_date");
@@ -67,7 +67,7 @@ public class OrderMapper implements OrderInterface {
             }
 
         } catch (Exception e) {
-            //Do something
+            e.printStackTrace();
         }
         return orders;
     }
