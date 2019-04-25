@@ -9,6 +9,6 @@ package data;
  *
  * @author Annika
  */
-class LogInException extends Exception {
-    
+public class LogInException extends Exception {
+    //Implement
 }
