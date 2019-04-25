@@ -12,5 +12,5 @@ import entity.User;
  * @author Annika
  */
 public interface UserInterface {
-    public void logIn(User user) throws LogInException;
+    public User logIn(String username, String password) throws LogInException;
 }

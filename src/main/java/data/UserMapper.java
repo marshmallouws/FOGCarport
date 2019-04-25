@@ -17,23 +17,26 @@ import java.sql.SQLException;
  */
 public class UserMapper implements UserInterface {
 
-    public void logIn(User user) throws LogInException {
+    public User logIn(String username, String password) throws LogInException {
+        User user = null;
         try {          
-            String query = "SELECT username, password FROM c_user WHERE usernamem = ? AND password = ?";
+            String query = "SELECT username, pass, id FROM c_user WHERE username = ? AND pass = ?";
             PreparedStatement ps = Connector.connection().prepareStatement(query);
             
-            ps.setString(1, user.getUsername());
-            ps.setString(2, user.getPassword());
+            ps.setString(1, username);
+            ps.setString(2, password);
             
             ResultSet rs = ps.executeQuery();
             
-            if(!rs.next()) {
-                throw new LogInException(); // Needs to be caught when user is trying to log in.
+            if (rs.next()) {
+                user = new User(rs.getInt("id"), username, password);
             }
             
         } catch (Exception ex) {
-            // Do something
+            throw new LogInException();
         }
+        
+        return user;
     }
     
     

@@ -32,8 +32,8 @@ public class LogicFacade {
         new data.OrderMapper().assignOrder(user, order);
     }
 
-    public void logIn(User user) throws LogInException {
-        new data.UserMapper().logIn(user);
+    public User logIn(String username, String password) throws LogInException {
+        return new data.UserMapper().logIn(username, password);
     }
     
     //Testing something
