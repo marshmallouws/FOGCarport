@@ -1,6 +1,0 @@
-data\Connector.class
-PresentationLayer\FrontController.class
-data\OrderMapper.class
-PresentationLayer\Command.class
-PresentationLayer\UnknownCommand.class
-PresentationLayer\OrderPageCommand.class
