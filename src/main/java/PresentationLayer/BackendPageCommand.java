@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import logic.LogicFacade;
 
 /**
  *
@@ -17,8 +18,8 @@ public class BackendPageCommand extends Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        OrderMapper om = new OrderMapper();
-        List<Order> orders = om.getOrders();
+        LogicFacade logic = new LogicFacade();
+        List<Order> orders = logic.getOrders();
         
         request.setAttribute("orders", orders);
         
