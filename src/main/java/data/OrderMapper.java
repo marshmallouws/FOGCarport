@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,16 +23,30 @@ import java.util.logging.Logger;
 public class OrderMapper implements OrderInterface {
 
     @Override
-    public void createOrder(Order order) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean createOrder(Order order) {
+        try {
+            Connection con = Connector.connection();
+            String SQL = "INSERT INTO `c_order` (height, length, width, shed_length, shed_width, roof_angle) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = con.prepareStatement( SQL );
+            ps.setInt( 1, order.getHeight() );
+            ps.setInt( 2, order.getLenght() );
+            ps.setInt( 3, order.getWidth() );
+            ps.setInt( 4, order.getShedLength() );
+            ps.setInt( 5, order.getShedWidth() );
+            ps.setInt( 6, order.getRoofAngle() );
+            ps.executeUpdate();
+            return true;
+            } catch ( Exception ex ) {
+                ex.printStackTrace();
+            return false;
+            }
     }
 
     @Override
     public ArrayList<Order> getOrders() {
         ArrayList<Order> orders = new ArrayList<>();
         try {
-            Connector c = new Connector();
-            Connection con = c.getConnection();
+            Connection con = Connector.connection();
             String query = "SELECT * FROM c_order";
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
@@ -51,7 +66,7 @@ public class OrderMapper implements OrderInterface {
                 orders.add(o);
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             //Do something
         }
         return orders;
@@ -65,8 +80,7 @@ public class OrderMapper implements OrderInterface {
     @Override
     public void assignOrder(User user, Order order) {
         try {
-            Connector c = new Connector();
-            Connection con = c.getConnection();
+            Connection con = Connector.connection();
             String query = "UPDATE c_order SET userid = ? WHERE id = ?";
             PreparedStatement ps = con.prepareStatement(query);
                         
@@ -74,7 +88,7 @@ public class OrderMapper implements OrderInterface {
             ps.setInt(2, order.getId());
             
             ps.executeQuery();
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(OrderMapper.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

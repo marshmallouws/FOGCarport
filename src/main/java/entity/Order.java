@@ -43,7 +43,7 @@ public class Order {
     }
     
     public int employeeId() {
-        return id;
+        return employeeId;
     }
     
     public int getHeight() {
@@ -68,6 +68,10 @@ public class Order {
 
     public int getRoofAngle() {
         return roofAngle;
+    }
+    
+    public String getDate() {
+        return date;
     }
 
 }
