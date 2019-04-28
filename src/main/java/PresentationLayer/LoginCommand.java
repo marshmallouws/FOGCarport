@@ -34,7 +34,7 @@ public class LoginCommand extends Command {
                 session.setAttribute("user", user);
                 response.sendRedirect("FrontController?command=backendpage");
             } else {
-                response.sendRedirect("./index.jsp");
+                response.sendRedirect("");
             }
             
         } catch (LogInException ex) {

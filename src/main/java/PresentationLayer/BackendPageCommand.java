@@ -23,7 +23,7 @@ public class BackendPageCommand extends Command {
         
         request.setAttribute("orders", orders);
         
-        request.getRequestDispatcher("./backendpage.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/backendpage.jsp").forward(request, response);
         
     }
     

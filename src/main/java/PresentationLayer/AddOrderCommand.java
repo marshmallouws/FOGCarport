@@ -43,7 +43,7 @@ public class AddOrderCommand extends Command {
             boolean success = lf.createOrder(order);
             
             request.setAttribute("success", success);
-            request.getRequestDispatcher("./landingpage.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/landingpage.jsp").forward(request, response);
 
         } catch (NumberFormatException ex) {
             ex.printStackTrace();

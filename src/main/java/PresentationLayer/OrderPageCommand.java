@@ -59,7 +59,7 @@ public class OrderPageCommand extends Command {
         request.setAttribute("shedSelectWidth", shedSelectWidth);
         request.setAttribute("shedSelectLength", shedSelectLength);
         
-        request.getRequestDispatcher("./orderpage.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/orderpage.jsp").forward(request, response);
 
     }
 

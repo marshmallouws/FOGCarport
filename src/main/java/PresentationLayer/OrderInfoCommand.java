@@ -23,7 +23,7 @@ public class OrderInfoCommand extends Command {
         
         request.setAttribute("order", orderToShow);
         
-        request.getRequestDispatcher("./orderdetails.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/orderdetails.jsp").forward(request, response);
     }
     
 }
