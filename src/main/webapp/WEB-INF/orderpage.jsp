@@ -22,7 +22,7 @@
         <div class="container">
             <h1>Orderpage</h1>
 
-            <form method="POST" action="FrontController?command=addorder">
+            <form method="POST" action="byggecenter?view=addorder">
                 <div class="form-group">
                     <label for="carportWidth">Carport bredde</label>
                     <select class="form-control" name="carportWidth" id="carportWidth">

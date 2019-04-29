@@ -41,7 +41,7 @@
                     <td><%= o.getShedWidth()%></td>
                     <td><%= o.getRoofAngle()%></td>
                     <td><%= o.getDate()%></td>
-                    <td><form method="POST" action="FrontController?command=orderinfo&orderID=<%= o.getId()%>"><button type="submit">Vis Ordre</button></form></td>
+                    <td><form method="POST" action="byggecenter?view=orderinfo&orderID=<%= o.getId()%>"><button type="submit">Vis Ordre</button></form></td>
                 </tr>
                 <% }%>
             </tbody>

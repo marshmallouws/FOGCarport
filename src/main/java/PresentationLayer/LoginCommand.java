@@ -32,7 +32,7 @@ public class LoginCommand extends Command {
             
             if (user != null) {
                 session.setAttribute("user", user);
-                response.sendRedirect("FrontController?command=backendpage");
+                response.sendRedirect("byggecenter?view=backendpage");
             } else {
                 response.sendRedirect("");
             }

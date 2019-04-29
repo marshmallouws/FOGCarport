@@ -13,10 +13,10 @@
     </head>
     <body>
         <h1>Hello World!</h1>
-        <a href="FrontController?command=orderpage">Frontend</a>
-        <a href="FrontController?command=backendpage">Backend</a>
+        <a href="byggecenter?view=orderpage">Frontend</a>
+        <a href="byggecenter?view=backendpage">Backend</a>
         
-        <form method="POST" action="FrontController?command=login">
+        <form method="POST" action="byggecenter?view=login">
             <input type="text" name="username" id="username" placeholder="Brugernavn">
             <input type="password" name="password" id="password" placeholder="Password">
             <button type="submit">Login</button>
