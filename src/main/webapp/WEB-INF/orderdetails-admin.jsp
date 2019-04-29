@@ -24,17 +24,17 @@
 
             <div class="form-group">
                 <label for="orderID">Ordrenummer</label>
-                <input type="text" class="form-control" name="orderID" id="orderID" value="<%= order.getId()%>" disabled>
-            </div>
-            
-            <div class="form-group">
-                <label for="orderDate">Bestillingsdato</label>
-                <input type="text" class="form-control" name="orderDate" id="orderDate" value="<%= order.getDate() %>" disabled>
+                <input type="text" class="form-control input-disabled" name="orderID" id="orderID" value="<%= order.getId()%>">
             </div>
 
-             <div class="form-group">
+            <div class="form-group">
+                <label for="orderDate">Bestillingsdato</label>
+                <input type="text" class="form-control input-disabled" name="orderDate" id="orderDate" value="<%= order.getDate()%>">
+            </div>
+
+            <div class="form-group">
                 <label for="carportLength">Carport længde</label>
-                <select class="form-control" name="carportLength" id="carportLength" disabled>
+                <select class="form-control input-disabled" name="carportLength" id="carportLength">
                     <option value=0>Vælg længde</option>
                     <%
                         for (int length : carportSelectLength) {
@@ -47,10 +47,10 @@
                         } %>
                 </select>
             </div>
-            
+
             <div class="form-group">
                 <label for="carportWidth">Carport bredde</label>
-                <select class="form-control" name="carportWidth" id="carportWidth" disabled>
+                <select class="form-control input-disabled" name="carportWidth" id="carportWidth">
                     <option value="0">Vælg bredde</option>
                     <%
                         for (int width : carportSelectWidth) {
@@ -66,7 +66,7 @@
 
             <div class="form-group">
                 <label for="carportHeight">Carport højde</label>
-                <select class="form-control" name="carportHeight" id="carportHeight" disabled>
+                <select class="form-control input-disabled" name="carportHeight" id="carportHeight">
                     <option value=0>Vælg højde</option>
                     <%
                         for (int height : carportSelectHeight) {
@@ -90,15 +90,15 @@
 
             <div class="form-group">
                 <label for="roofAngle">Tag-vinkel</label>
-                <select class="form-control" name="roofAngle" id="roofAngle" disabled>
+                <select class="form-control input-disabled" name="roofAngle" id="roofAngle">
                     <option value=0>Ingen rejsning</option>
                     <%
                         for (int angle : roofSelectAngle) {
                             if (angle == order.getRoofAngle()) {
                     %>
-                    <option value="<%= angle %>" selected><%= angle %> cm</option>
+                    <option value="<%= angle%>" selected><%= angle%> cm</option>
                     <% } else {%>
-                    <option value="<%= angle %>"><%= angle %> cm</option>
+                    <option value="<%= angle%>"><%= angle%> cm</option>
                     <% }
                         } %>
                 </select>
@@ -106,14 +106,14 @@
 
             <div class="form-group">
                 <label for="shedWidth">Redskabsrum bredde:</label>
-                <select class="form-control" name="shedWidth" id="shedWidth" disabled>
+                <select class="form-control input-disabled" name="shedWidth" id="shedWidth">
                     <option value=0>Ønsker ikke redskabsrum</option>
                     <%
                         for (int width : shedSelectWidth) {
                             if (width == order.getShedWidth()) {
                     %>
                     <option value="<%= width%>" selected><%= width%> cm</option>
-                    <% } else { %>
+                    <% } else {%>
                     <option value="<%= width%>"><%= width%> cm</option>
                     <% }
                         } %>
@@ -122,16 +122,17 @@
 
             <div class="form-group">
                 <label for="shedLength">Redskabsrum længde:</label>
-                <select class="form-control" name="shedLength" id="shedLength" disabled>
+                <select class="form-control input-disabled" name="shedLength" id="shedLength">
                     <option value=0>Ønsker ikke redskabsrum</option>
-                    <% 
+                    <%
                         for (int length : shedSelectLength) {
                             if (length == order.getShedLength()) {
                     %>
                     <option value="<%= length%>" selected><%= length%> cm</option>
-                    <% } else { %>
+                    <% } else {%>
                     <option value="<%= length%>"><%= length%> cm</option>
-                    <% } }%>
+                    <% }
+                        }%>
                 </select>
             </div>
             <!--
@@ -170,16 +171,21 @@
         </form>
 
     </div> <!-- container end -->
-    
+
     <script>
-        $(document).ready(function() {
-            $("#editBtn").click(function() {
-               $("form#orderForm :input").each(function() {
-                   
-               }); 
+        $(document).ready(function () {
+            
+            // sets disabled on input fields with class 'input-disabled'
+            $(".input-disabled").prop("disabled", true);
+
+            // removes disabled on inputs by clicking the edit btn
+            $(document).ready(function () {
+                $("#editBtn").click(function () {
+                    $(".input-disabled").removeAttr("disabled");
+                });
             });
         });
     </script>
-    
+
 </body>
 </html>
