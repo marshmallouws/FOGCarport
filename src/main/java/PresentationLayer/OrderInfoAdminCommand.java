@@ -1,6 +1,7 @@
 package PresentationLayer;
 
 import entity.Order;
+import entity.User;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,8 @@ public class OrderInfoAdminCommand extends Command {
         List<Integer> shedSelectLength = new ArrayList();
         List<Integer> roofSelectAngle = new ArrayList();
         
+        List<User> employees = lf.getEmployees();
+        
         // carport width
         for (int i = carportMinWidth; i <= carportMaxWidth; i += interval) {
             carportSelectWidth.add(i);
@@ -81,6 +84,8 @@ public class OrderInfoAdminCommand extends Command {
         request.setAttribute("shedSelectWidth", shedSelectWidth);
         request.setAttribute("shedSelectLength", shedSelectLength);
         request.setAttribute("roofSelectAngle", roofSelectAngle);
+        
+        request.setAttribute("employees", employees);
         
         int orderID = Integer.parseInt(request.getParameter("orderID"));
         Order orderToShow = lf.getOrder(orderID);
