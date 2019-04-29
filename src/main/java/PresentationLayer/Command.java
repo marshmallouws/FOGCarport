@@ -25,6 +25,7 @@ public abstract class Command {
         commands.put("orderpage", new OrderPageCommand());
         commands.put("addorder", new AddOrderCommand());
         commands.put("orderinfo", new OrderInfoCommand());
+        commands.put("orderinfoadmin", new OrderInfoAdminCommand());
         
         c = commands.getOrDefault(origin, new UnknownCommand());
 
