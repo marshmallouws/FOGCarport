@@ -149,7 +149,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="shedWidth">Redskabsrum bredde:</label>
+                        <label for="shedWidth">Redskabsrum bredde</label>
                         <select class="form-control input-disabled" name="shedWidth" id="shedWidth">
                             <option value=0>Ønsker ikke redskabsrum</option>
                             <%
@@ -165,7 +165,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="shedLength">Redskabsrum længde:</label>
+                        <label for="shedLength">Redskabsrum længde</label>
                         <select class="form-control input-disabled" name="shedLength" id="shedLength">
                             <option value=0>Ønsker ikke redskabsrum</option>
                             <%

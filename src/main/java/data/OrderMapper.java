@@ -116,6 +116,21 @@ public class OrderMapper implements OrderInterface {
             Logger.getLogger(OrderMapper.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void assignOrder(int orderID, int employeeID) {
+        try {
+            Connection con = Connector.connection();
+            String query = "UPDATE c_order SET userid = ? WHERE id = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+
+            ps.setInt(1, employeeID);
+            ps.setInt(2, orderID);
+
+            ps.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         OrderMapper m = new OrderMapper();

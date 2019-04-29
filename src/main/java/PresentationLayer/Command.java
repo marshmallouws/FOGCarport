@@ -24,6 +24,7 @@ public abstract class Command {
         commands.put("backendpage", new BackendPageCommand());
         commands.put("orderpage", new OrderPageCommand());
         commands.put("addorder", new AddOrderCommand());
+        commands.put("assignorder", new AssignOrderCommand());
         commands.put("orderinfo", new OrderInfoCommand());
         commands.put("orderinfoadmin", new OrderInfoAdminCommand());
         

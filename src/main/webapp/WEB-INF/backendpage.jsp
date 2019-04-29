@@ -28,6 +28,7 @@
                         <th>Tag vinkel</th>
                         <th>Dato</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,6 +43,7 @@
                     <td><%= o.getRoofAngle()%></td>
                     <td><%= o.getDate()%></td>
                     <td><form method="POST" action="byggecenter?view=orderinfo&orderID=<%= o.getId()%>"><button type="submit">Vis Ordre</button></form></td>
+                    <td><form method="POST" action="byggecenter?view=assignorder"><input type="hidden" name="orderID" value="<%= o.getId() %>"><button type="submit">Assign</button></form></td>
                 </tr>
                 <% }%>
             </tbody>
