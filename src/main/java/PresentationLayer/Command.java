@@ -17,7 +17,7 @@ public abstract class Command {
 
     public static Command from(HttpServletRequest request) {
         Command c;
-        String origin = request.getParameter("command");
+        String origin = request.getParameter("view");
 
         Map<String, Command> commands = new HashMap();
         commands.put("login", new LoginCommand());

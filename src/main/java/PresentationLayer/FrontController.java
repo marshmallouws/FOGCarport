@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author caspe
  */
-@WebServlet(name = "FrontController", urlPatterns = {"/FrontController"})
+@WebServlet(name = "FrontController", urlPatterns = {"/byggecenter"})
 public class FrontController extends HttpServlet {
 
     /**
