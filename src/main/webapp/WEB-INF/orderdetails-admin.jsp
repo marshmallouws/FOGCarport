@@ -52,10 +52,11 @@
                                 for (User employee : employees) {
                                     if (employee.getId() == order.employeeId()) {
                             %>
-                            <option value="<%= order.employeeId()%>" selected><%= order.employeeId() %></option>
-                                    <%} else {%>
-                                    <option value="<%= employee.getId() %>"><%= employee.getUsername() %></option>
-                                <% } } %>
+                            <option value="<%= order.employeeId()%>" selected><%= order.employeeId()%></option>
+                            <%} else {%>
+                            <option value="<%= employee.getId()%>"><%= employee.getUsername()%></option>
+                            <% }
+                                } %>
 
                         </select>
                     </div>
@@ -164,6 +165,15 @@
                             <% }
                                 } %>
                         </select>
+                    </div>
+
+                    <div class="custom-control custom-switch">
+                        <% if (order.getShedLength() > 0 && order.getShedWidth() > 0) { %>
+                        <input type="checkbox" class="custom-control-input input-disabled" id="switch1" name="example" checked>
+                        <% } else {  %>
+                        <input type="checkbox" class="custom-control-input input-disabled" id="switch1" name="example">
+                        <% } %>
+                        <label class="custom-control-label" for="switch1">Redskabsrum</label>
                     </div>
 
                     <div class="form-group">
