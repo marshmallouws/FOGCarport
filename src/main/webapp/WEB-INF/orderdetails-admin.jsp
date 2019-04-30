@@ -29,7 +29,7 @@
 
         <button type="button" id="editBtn">Edit</button>
         <button type="button" id="saveBtn">Gem</button>
-        <form method="POST" id="orderForm">
+        <form method="POST" id="orderForm" action="byggecenter?view=updateorder">
 
             <div class="row">
                 <div class="col">
@@ -221,7 +221,7 @@
             // sets disabled on input fields with class 'input-disabled'
             $("#orderForm :input").each(function () {
                 var input = $(this);
-                input.prop("disabled", true);
+                input.prop("disabled", false);
             });
 
             // removes disabled on inputs by clicking the 'edit' btn

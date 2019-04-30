@@ -36,6 +36,10 @@ public class LogicFacade {
     public void assignOrder(int orderID, int employeeID) {
         new data.OrderMapper().assignOrder(orderID, employeeID);
     }
+    
+    public Order updateOrder(Order order) {
+        return new data.OrderMapper().updateOrder(order);
+    }
 
     public User logIn(String username, String password) throws LogInException {
         return new data.UserMapper().logIn(username, password);

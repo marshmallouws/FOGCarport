@@ -37,6 +37,20 @@ public class Order {
         this.employeeId = employeeId;
         this.date = date;
     }
+
+    // No date
+    public Order(int id, int employeeId, int height, int width, int lenght, int shedLength, int shedWidth, int roofAngle) {
+        this.id = id;
+        this.employeeId = employeeId;
+        this.height = height;
+        this.width = width;
+        this.lenght = lenght;
+        this.shedLength = shedLength;
+        this.shedWidth = shedWidth;
+        this.roofAngle = roofAngle;
+    }
+    
+    
     
     public int getId() {
         return id;

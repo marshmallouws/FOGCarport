@@ -8,8 +8,10 @@ package data;
 import entity.Order;
 import entity.User;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -117,6 +119,7 @@ public class OrderMapper implements OrderInterface {
         }
     }
     
+    @Override
     public void assignOrder(int orderID, int employeeID) {
         try {
             Connection con = Connector.connection();
@@ -130,6 +133,33 @@ public class OrderMapper implements OrderInterface {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+    
+    @Override
+    public Order updateOrder(Order order) {
+        Order o = null;
+        try {
+            Connection con = Connector.connection();
+            String query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ?, userid = ? WHERE id = ?;";
+            PreparedStatement ps = con.prepareStatement(query);
+            
+            ps.setInt(1, order.getHeight());
+            ps.setInt(2, order.getLenght());
+            ps.setInt(3, order.getWidth());
+            ps.setInt(4, order.getShedLength());
+            ps.setInt(5, order.getShedWidth());
+            ps.setInt(6, order.getRoofAngle());
+            ps.setInt(7, order.employeeId());
+            ps.setInt(8, order.getId());
+            
+            if (ps.executeUpdate() == 1) {
+                o = getOrder(order.getId());
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return o;
     }
 
     public static void main(String[] args) {

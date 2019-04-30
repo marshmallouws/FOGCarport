@@ -18,4 +18,6 @@ public interface OrderInterface {
     public ArrayList<Order> getOrders();
     public Order getOrder(int id);
     public void assignOrder(User user, Order order);
+    public void assignOrder(int orderID, int employeeID);
+    public Order updateOrder(Order order);
 }
