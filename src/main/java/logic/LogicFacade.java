@@ -9,6 +9,7 @@ import entity.Order;
 import entity.User;
 import java.util.ArrayList;
 import data.LogInException;
+import java.util.List;
 
 /**
  *
@@ -38,6 +39,10 @@ public class LogicFacade {
 
     public User logIn(String username, String password) throws LogInException {
         return new data.UserMapper().logIn(username, password);
+    }
+    
+    public List<User> getEmployees() {
+        return new data.UserMapper().getEmployees();
     }
     
     //Testing something
