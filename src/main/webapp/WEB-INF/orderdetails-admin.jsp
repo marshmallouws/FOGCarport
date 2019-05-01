@@ -34,9 +34,11 @@
                 <div class="col">
 
                     <div class="form-group">
-                        <label for="orderID">Ordrenummer</label>
-                        <input type="text" class="form-control input-disabled" name="orderID" id="orderID" value="<%= order.getId()%>">
+                        <label for="order">Ordrenummer</label>
+                        <input type="text" class="form-control" name="order" id="order" value="<%= order.getId()%>">
                     </div>
+                    <input type="hidden" class="input-disabled" name="orderID" id="orderID" value="<%= order.getId()%>">
+                    
 
                     <div class="form-group">
                         <label for="orderDate">Bestillingsdato</label>
@@ -158,9 +160,9 @@
                                 for (int angle : roofSelectAngle) {
                                     if (angle == order.getRoofAngle()) {
                             %>
-                            <option value="<%= angle%>" selected><%= angle%> cm</option>
+                            <option value="<%= angle%>" selected><%= angle%>°</option>
                             <% } else {%>
-                            <option value="<%= angle%>"><%= angle%> cm</option>
+                            <option value="<%= angle%>"><%= angle%>°</option>
                             <% }
                                 } %>
                         </select>
@@ -223,14 +225,23 @@
             $("#orderForm :input").each(function () {
                 var input = $(this);
                 input.prop("disabled", true);
-                
+
                 $("#editBtn").removeAttr("disabled");
             });
 
             // removes disabled on inputs by clicking the 'edit' btn
             $("#editBtn").click(function () {
-                $(".input-disabled").removeAttr("disabled");
-                $("#updateBtn").removeAttr("disabled");
+                var inputs = $(".input-disabled");
+
+                if (inputs.hasClass("active")) {
+                    inputs.prop("disabled", true);
+                    inputs.removeClass("active");
+                    $("#updateBtn").prop("disabled", true);
+                } else {
+                    $(".input-disabled").removeAttr("disabled").addClass("active");
+                    $("#updateBtn").removeAttr("disabled");
+                }
+
             });
 
             //search function
