@@ -61,11 +61,12 @@ public class OrderMapper implements OrderInterface {
                 int shedWidth = rs.getInt("shed_width");
                 int roofAngle = rs.getInt("roof_angle");
                 String date = rs.getString("o_date");
-                int emplID = rs.getInt("userid");
+                int emplID = rs.getInt("emp_id");
                 String status = rs.getString("o_status");
                 double salesPrice = rs.getDouble("sales_price");
+                int custId = rs.getInt("cust_id");
 
-                Order o = new Order(id, emplID, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice);
+                Order o = new Order(id, emplID, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice, custId);
                 orders.add(o);
             }
 
@@ -94,11 +95,12 @@ public class OrderMapper implements OrderInterface {
                 int shedWidth = rs.getInt("shed_width");
                 int roofAngle = rs.getInt("roof_angle");
                 String date = rs.getString("o_date");
-                int emplID = rs.getInt("userid");
+                int emplID = rs.getInt("emp_id");
                 String status = rs.getString("o_status");
                 double salesPrice = rs.getDouble("sales_price");
+                int custId = rs.getInt("cust_id");
 
-                o = new Order(ids, emplID, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice);
+                o = new Order(ids, emplID, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice, custId);
             }
 
         } catch (Exception e) {

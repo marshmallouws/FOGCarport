@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import entity.Customer;
 import entity.Order;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -21,15 +22,25 @@ public class AddOrderCommand extends Command {
         String _shedWidth = request.getParameter("shedWidth");
         String _shedLength = request.getParameter("shedLength");
         String _roofAngle = request.getParameter("roofAngle");
-        
+
         String fullname = request.getParameter("fullname");
         String address = request.getParameter("address");
         String zip = request.getParameter("zip");
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String message = request.getParameter("message");
-        
+
         LogicFacade lf = new LogicFacade();
+        Customer c = null;
+        try {
+            int formatZip = Integer.parseInt(zip);
+            int formatPhone = Integer.parseInt(phone);
+
+            c = new Customer(fullname, email, address, formatZip, formatPhone);
+            lf.createCustomer(c);
+        } catch (NumberFormatException ex) {
+            ex.printStackTrace();
+        }
 
         try {
             int height = 0; // skal beregnes hvis roofAngle > 0
@@ -40,8 +51,8 @@ public class AddOrderCommand extends Command {
             int roofAngle = Integer.parseInt(_roofAngle);
 
             Order order = new Order(height, carportWidth, carportLength, shedWidth, shedLength, roofAngle);
-            boolean success = lf.createOrder(order);
-            
+            boolean success = lf.createOrder(order, c);
+
             request.setAttribute("success", success);
             request.getRequestDispatcher("/WEB-INF/landingpage.jsp").forward(request, response);
 

@@ -9,6 +9,7 @@ import entity.Order;
 import entity.Employee;
 import java.util.ArrayList;
 import data.LogInException;
+import entity.Customer;
 import java.util.List;
 
 /**
@@ -17,8 +18,8 @@ import java.util.List;
  */
 public class LogicFacade {
 
-    public boolean createOrder(Order order) {
-        return new data.OrderMapper().createOrder(order);
+    public boolean createOrder(Order order, Customer customer) {
+        return new data.OrderMapper().createOrder(order, customer);
     }
 
     public ArrayList<Order> getOrders() {
@@ -47,6 +48,10 @@ public class LogicFacade {
     
     public List<Employee> getEmployees() {
         return new data.UserMapper().getEmployees();
+    }
+    
+    public int createCustomer(Customer customer) {
+        return new data.UserMapper().createCustomer(customer);
     }
     
     //Testing something

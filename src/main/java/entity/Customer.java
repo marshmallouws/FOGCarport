@@ -15,9 +15,10 @@ public class Customer {
     private String address;
     private int zip;
     private int phone;
+    private String name;
     //private String password;
     
-    public Customer(int id, String email, String address, int zip, int phone  /*String password*/) {
+    public Customer(int id, String name, String email, String address, int zip, int phone  /*String password*/) {
         this.id = id;
         this.email = email;
         this.address = address;
@@ -25,10 +26,22 @@ public class Customer {
         this.phone = phone;
         //this.password = password;
         
-    }   
+    }
+    
+    public Customer(String name, String email, String address, int zip, int phone) {
+        this.name = name;
+        this.email = email;
+        this.address = address;
+        this.zip = zip;
+        this.phone = phone;
+    }
 
     public int getId() {
         return id;
+    }
+    
+    public String getName() {
+        return name;
     }
 
     public String getEmail() {

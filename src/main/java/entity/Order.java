@@ -25,7 +25,7 @@ public class Order {
     private double salesPrice;
     
     //For creating new order in db
-    public Order(int height, int width, int length, int shedLength, int shedWidth, int roofAngle, int customerId) {
+    public Order(int height, int width, int length, int shedLength, int shedWidth, int roofAngle) {
         this.height = height;
         this.width = width;
         this.lenght = length;
@@ -38,11 +38,12 @@ public class Order {
     //For fetching order from db
     public Order(int id, int employeeId, int height, int width, int length,
             int shedLength, int shedWidth, int roofAngle, String date, String status, double salesPrice, int customerId) {
-        this(height, length, width, shedLength, shedWidth, roofAngle, customerId);
+        this(height, length, width, shedLength, shedWidth, roofAngle);
         this.id = id;
         this.employeeId = employeeId;
         this.date = date;
         this.status = status;
+        this.customerId = customerId;
     }
 
     // No date (is it used?)
