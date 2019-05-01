@@ -5,11 +5,13 @@
  */
 package logic;
 
+import com.google.gson.Gson;
 import entity.Order;
 import entity.Employee;
 import java.util.ArrayList;
 import data.LogInException;
 import entity.Customer;
+import entity.Product;
 import java.util.List;
 
 /**
@@ -52,6 +54,39 @@ public class LogicFacade {
     
     public int createCustomer(Customer customer) {
         return new data.UserMapper().createCustomer(customer);
+    }
+    
+    public String getCategories(){
+        return new Gson().toJson(new data.ProductMapper().getCategories());
+    }
+    
+    public String getProductList(String category_id){
+        try{
+        int cat_id = Integer.parseInt(category_id);
+        return new Gson().toJson(new data.ProductMapper().getProductList(cat_id));
+        }catch(NumberFormatException e){
+            return "error";
+        }
+    }
+    
+    public String getProduct(String product_id){
+        try{
+        int prod_id = Integer.parseInt(product_id);
+        return new Gson().toJson(new data.ProductMapper().getProduct(prod_id));
+        }catch(NumberFormatException e){
+            return "error";
+        }
+    }
+    
+    public String saveProduct(String product){
+        try{
+        Product prod = new Gson().fromJson(product, Product.class);
+        boolean success = new data.ProductMapper().saveProduct(prod);
+        if(!success)throw new Exception();
+        return "success";
+        }catch(Exception e){
+            return "error";
+        }
     }
     
     //Testing something

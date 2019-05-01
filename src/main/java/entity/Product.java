@@ -17,6 +17,7 @@ public class Product {
     private int width;
     private double price;
     private boolean active;
+    private int stock;
     
     //For creating new product
     public Product (Category category, int height, int length, int width, double price) {
@@ -29,11 +30,11 @@ public class Product {
     
     //For fetching products from database
     public Product (int id, Category category, int height, int length, 
-            int width, double price, boolean active) {
+            int width, double price, boolean active, int stock) {
         this(category, height, length, width, price);
         this.id = id;
         this.active = active;
-
+        this.stock = stock;
     }
 
     public double getPrice() {
