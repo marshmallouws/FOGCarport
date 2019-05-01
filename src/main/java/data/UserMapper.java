@@ -5,15 +5,12 @@
  */
 package data;
 
-import entity.User;
-import java.sql.Connection;
+import entity.Employee;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -21,9 +18,9 @@ import java.util.logging.Logger;
  */
 public class UserMapper implements UserInterface {
 
-    public User logIn(String username, String password) throws LogInException {
+    public Employee logIn(String username, String password) throws LogInException {
         
-        User user = null;
+        Employee user = null;
         try {
             String query = "SELECT username, pass, id FROM c_user WHERE username = ? AND pass = ?";
             PreparedStatement ps = Connector.connection().prepareStatement(query);
@@ -34,7 +31,7 @@ public class UserMapper implements UserInterface {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                user = new User(rs.getInt("id"), username, password);
+                user = new Employee(rs.getInt("id"), username, password);
             }
 
         } catch (Exception ex) {
@@ -45,8 +42,8 @@ public class UserMapper implements UserInterface {
     } 
 
     @Override
-    public List<User> getEmployees() {
-        List<User> employees = new ArrayList();
+    public List<Employee> getEmployees() {
+        List<Employee> employees = new ArrayList();
 
         try {
             String query = "SELECT * FROM c_user";
@@ -54,7 +51,7 @@ public class UserMapper implements UserInterface {
             ResultSet rs = ps.executeQuery();
             
             while (rs.next()) {
-                employees.add(new User(rs.getInt("id"), rs.getString("username"), rs.getString("pass")));
+                employees.add(new Employee(rs.getInt("id"), rs.getString("username"), rs.getString("pass")));
             }
 
         } catch (ClassNotFoundException | SQLException ex) {

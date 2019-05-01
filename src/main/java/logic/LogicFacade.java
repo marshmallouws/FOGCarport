@@ -6,7 +6,7 @@
 package logic;
 
 import entity.Order;
-import entity.User;
+import entity.Employee;
 import java.util.ArrayList;
 import data.LogInException;
 import java.util.List;
@@ -29,7 +29,7 @@ public class LogicFacade {
         return new data.OrderMapper().getOrder(id);
     }
 
-    public void assignOrder(User user, Order order) {
+    public void assignOrder(Employee user, Order order) {
         new data.OrderMapper().assignOrder(user, order);
     }
     
@@ -41,11 +41,11 @@ public class LogicFacade {
         return new data.OrderMapper().updateOrder(order);
     }
 
-    public User logIn(String username, String password) throws LogInException {
+    public Employee logIn(String username, String password) throws LogInException {
         return new data.UserMapper().logIn(username, password);
     }
     
-    public List<User> getEmployees() {
+    public List<Employee> getEmployees() {
         return new data.UserMapper().getEmployees();
     }
     

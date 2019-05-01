@@ -1,7 +1,7 @@
 package PresentationLayer;
 
 import data.LogInException;
-import entity.User;
+import entity.Employee;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +28,7 @@ public class LoginCommand extends Command {
         String password = request.getParameter("password");
         
         try {
-            User user = logic.logIn(username, password);
+            Employee user = logic.logIn(username, password);
             
             if (user != null) {
                 session.setAttribute("user", user);

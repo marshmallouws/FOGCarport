@@ -6,7 +6,7 @@
 package data;
 
 import entity.Order;
-import entity.User;
+import entity.Employee;
 import java.util.ArrayList;
 
 /**
@@ -42,7 +42,7 @@ public class OneMapperToRuleThemAll {
         return order.getOrder(id);
     }
     
-    public void assignOrder(User u, Order o) {
+    public void assignOrder(Employee u, Order o) {
         order.assignOrder(u, o);
     }
     

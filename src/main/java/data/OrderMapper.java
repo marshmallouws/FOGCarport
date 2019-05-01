@@ -6,7 +6,7 @@
 package data;
 
 import entity.Order;
-import entity.User;
+import entity.Employee;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -107,7 +107,7 @@ public class OrderMapper implements OrderInterface {
     }
 
     @Override
-    public void assignOrder(User user, Order order) {
+    public void assignOrder(Employee user, Order order) {
         try {
             Connection con = Connector.connection();
             String query = "UPDATE c_order SET userid = ? WHERE id = ?";

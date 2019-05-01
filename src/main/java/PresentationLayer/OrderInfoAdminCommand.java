@@ -1,7 +1,7 @@
 package PresentationLayer;
 
 import entity.Order;
-import entity.User;
+import entity.Employee;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class OrderInfoAdminCommand extends Command {
         List<Integer> shedSelectLength = new ArrayList();
         List<Integer> roofSelectAngle = new ArrayList();
         
-        List<User> employees = lf.getEmployees();
+        List<Employee> employees = lf.getEmployees();
         
         // carport width
         for (int i = carportMinWidth; i <= carportMaxWidth; i += interval) {

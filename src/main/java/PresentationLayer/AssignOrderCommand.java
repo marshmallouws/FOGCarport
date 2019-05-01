@@ -1,6 +1,6 @@
 package PresentationLayer;
 
-import entity.User;
+import entity.Employee;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -19,7 +19,7 @@ public class AssignOrderCommand extends Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        Employee user = (Employee) session.getAttribute("user");
         LogicFacade logic = new LogicFacade();
 
         String _orderID = request.getParameter("orderID");

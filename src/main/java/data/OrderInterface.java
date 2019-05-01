@@ -6,7 +6,7 @@
 package data;
 
 import entity.Order;
-import entity.User;
+import entity.Employee;
 import java.util.ArrayList;
 
 /**
@@ -18,7 +18,7 @@ public interface OrderInterface {
     public ArrayList<Order> getUnfinishedOrders();
     public ArrayList<Order> getOldOrders();
     public Order getOrder(int id);
-    public void assignOrder(User user, Order order);
+    public void assignOrder(Employee user, Order order);
     public void assignOrder(int orderID, int employeeID);
     public Order updateOrder(Order order);
 }

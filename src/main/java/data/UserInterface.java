@@ -5,7 +5,7 @@
  */
 package data;
 
-import entity.User;
+import entity.Employee;
 import java.util.List;
 
 /**
@@ -13,6 +13,6 @@ import java.util.List;
  * @author Annika
  */
 public interface UserInterface {
-    public User logIn(String username, String password) throws LogInException;
-    public List<User> getEmployees();
+    public Employee logIn(String username, String password) throws LogInException;
+    public List<Employee> getEmployees();
 }
