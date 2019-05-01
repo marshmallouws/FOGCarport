@@ -49,12 +49,12 @@ public class UserMapper implements UserInterface {
         List<Employee> employees = new ArrayList();
 
         try {
-            String query = "SELECT * FROM c_user";
+            String query = "SELECT * FROM employee";
             PreparedStatement ps = Connector.connection().prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             
             while (rs.next()) {
-                employees.add(new Employee(rs.getInt("id"), rs.getString("username"), rs.getString("pass")));
+                employees.add(new Employee(rs.getInt("id"), rs.getString("initials"), rs.getString("passw")));
             }
 
         } catch (ClassNotFoundException | SQLException ex) {
