@@ -27,6 +27,11 @@ public class Product {
         this(category, height, length, width);
         this.id = id;        
     }
+    
+    public Product (int id, Category category) {
+        this.id = id;
+        this.category = category;
+    }
 
     public int getId() {
         return id;
