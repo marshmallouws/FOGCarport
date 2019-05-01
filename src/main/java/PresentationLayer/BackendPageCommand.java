@@ -19,9 +19,12 @@ public class BackendPageCommand extends Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         LogicFacade logic = new LogicFacade();
-        List<Order> orders = logic.getOrders();
+        List<Order> allOrders = logic.getOrders();
+        List<Order> unassignedOrders = logic.getOrdersUnassigned();
         
-        request.setAttribute("orders", orders);
+        
+        request.setAttribute("allOrders", allOrders);
+        request.setAttribute("unassignedOrders", unassignedOrders);
         
         request.getRequestDispatcher("/WEB-INF/backendpage.jsp").forward(request, response);
         

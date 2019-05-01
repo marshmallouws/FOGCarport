@@ -7,7 +7,8 @@
 <%@page import="java.util.List"%>
 <%@page import="entity.Order"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<% List<Order> orders = (List<Order>) request.getAttribute("orders"); %>
+<% List<Order> allOrders = (List<Order>) request.getAttribute("allOrders"); %>
+<% List<Order> unassignedOrders = (List<Order>) request.getAttribute("unassignedOrders"); %>
 
 <jsp:include page="header.jsp"></jsp:include>
 
@@ -15,7 +16,7 @@
         <body>
             <h1>Backend Page</h1>
 
-            <h3>Orders</h3>
+            <h3>Alle Ordrer</h3>
             <table>
                 <thead>
                     <tr>
@@ -32,7 +33,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                <% for (Order o : orders) {%>
+                <% for (Order o : allOrders) {%>
                 <tr>
                     <td><%= o.getId()%></td>
                     <td><%= o.getLenght()%></td>
@@ -43,7 +44,41 @@
                     <td><%= o.getRoofAngle()%></td>
                     <td><%= o.getDate()%></td>
                     <td><form method="POST" action="byggecenter?view=orderinfo&orderID=<%= o.getId()%>"><button type="submit">Vis Ordre</button></form></td>
-                    <td><form method="POST" action="byggecenter?view=assignorder"><input type="hidden" name="orderID" value="<%= o.getId() %>"><button type="submit">Assign</button></form></td>
+                    <td><form method="POST" action="byggecenter?view=assignorder"><input type="hidden" name="orderID" value="<%= o.getId()%>"><button type="submit">Assign</button></form></td>
+                </tr>
+                <% }%>
+            </tbody>
+        </table>
+
+        <h3>Unassigned Ordrer</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Carport længde</th>
+                    <th>Carport bredde</th>
+                    <th>Carport højde</th>
+                    <th>Skur længde</th>
+                    <th>Skur bredde</th>
+                    <th>Tag vinkel</th>
+                    <th>Dato</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (Order o : unassignedOrders) {%>
+                <tr>
+                    <td><%= o.getId()%></td>
+                    <td><%= o.getLenght()%></td>
+                    <td><%= o.getWidth()%></td>
+                    <td><%= o.getHeight()%></td>
+                    <td><%= o.getShedLength()%></td>
+                    <td><%= o.getShedWidth()%></td>
+                    <td><%= o.getRoofAngle()%></td>
+                    <td><%= o.getDate()%></td>
+                    <td><form method="POST" action="byggecenter?view=orderinfo&orderID=<%= o.getId()%>"><button type="submit">Vis Ordre</button></form></td>
+                    <td><form method="POST" action="byggecenter?view=assignorder"><input type="hidden" name="orderID" value="<%= o.getId()%>"><button type="submit">Assign</button></form></td>
                 </tr>
                 <% }%>
             </tbody>

@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,6 +42,74 @@ public class OrderMapper implements OrderInterface {
             ex.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public List<Order> getOrders() {
+        List<Order> orders = new ArrayList<>();
+        try {
+            Connection con = Connector.connection();
+            String query = "SELECT * FROM c_order";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int height = rs.getInt("height");
+                int length = rs.getInt("length");
+                int width = rs.getInt("width");
+                int shedLength = rs.getInt("shed_length");
+                int shedWidth = rs.getInt("shed_width");
+                int roofAngle = rs.getInt("roof_angle");
+                String date = rs.getString("o_date");
+                int emplID = rs.getInt("emp_id");
+                String status = rs.getString("o_status");
+                double salesPrice = rs.getDouble("sales_price");
+                int custId = rs.getInt("cust_id");
+
+                Order o = new Order(id, emplID, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice, custId);
+                orders.add(o);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return orders;
+
+    }
+
+    @Override
+    public List<Order> getOrdersUnassigned() {
+        List<Order> orders = new ArrayList<>();
+        try {
+            Connection con = Connector.connection();
+            String query = "SELECT * FROM c_order WHERE emp_id IS NULL";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int height = rs.getInt("height");
+                int length = rs.getInt("length");
+                int width = rs.getInt("width");
+                int shedLength = rs.getInt("shed_length");
+                int shedWidth = rs.getInt("shed_width");
+                int roofAngle = rs.getInt("roof_angle");
+                String date = rs.getString("o_date");
+                int emplID = rs.getInt("emp_id");
+                String status = rs.getString("o_status");
+                double salesPrice = rs.getDouble("sales_price");
+                int custId = rs.getInt("cust_id");
+
+                Order o = new Order(id, emplID, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice, custId);
+                orders.add(o);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return orders;
+
     }
 
     @Override
@@ -187,4 +256,5 @@ public class OrderMapper implements OrderInterface {
     public ArrayList<Order> getOldOrders() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 }

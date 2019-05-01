@@ -21,13 +21,21 @@ public class LogicFacade {
     public boolean createOrder(Order order, Customer customer) {
         return new data.OrderMapper().createOrder(order, customer);
     }
-
-    public ArrayList<Order> getOrders() {
-        return new data.OrderMapper().getUnfinishedOrders();
-    }
-
+    
     public Order getOrder(int id) {
         return new data.OrderMapper().getOrder(id);
+    }
+
+    public List<Order> getOrders() {
+        return new data.OrderMapper().getOrders();
+    }
+    
+    public List<Order> getOrdersUnassigned() {
+        return new data.OrderMapper().getOrdersUnassigned();
+    }
+    
+    public List<Order> getUnfinishedOrders() {
+        return new data.OrderMapper().getUnfinishedOrders();
     }
 
     public void assignOrder(Employee user, Order order) {
