@@ -17,7 +17,7 @@
             <h1>Backend Page</h1>
 
             <h3>Alle Ordrer</h3>
-            <table>
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>id</th>
@@ -27,6 +27,7 @@
                         <th>Skur længde</th>
                         <th>Skur bredde</th>
                         <th>Tag vinkel</th>
+                        <th>Ansvarlig</th>
                         <th>Dato</th>
                         <th></th>
                         <th></th>
@@ -42,8 +43,9 @@
                     <td><%= o.getShedLength()%></td>
                     <td><%= o.getShedWidth()%></td>
                     <td><%= o.getRoofAngle()%></td>
+                    <td><%= o.employeeId() %></td>
                     <td><%= o.getDate()%></td>
-                    <td><form method="POST" action="byggecenter?view=orderinfo&orderID=<%= o.getId()%>"><button type="submit">Vis Ordre</button></form></td>
+                    <td><form method="POST" action="byggecenter?view=orderinfo&orderID=<%= o.getId()%>"><button type="submit">Vis</button></form></td>
                     <td><form method="POST" action="byggecenter?view=assignorder"><input type="hidden" name="orderID" value="<%= o.getId()%>"><button type="submit">Assign</button></form></td>
                 </tr>
                 <% }%>
@@ -51,7 +53,7 @@
         </table>
 
         <h3>Unassigned Ordrer</h3>
-        <table>
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>id</th>
@@ -61,6 +63,7 @@
                     <th>Skur længde</th>
                     <th>Skur bredde</th>
                     <th>Tag vinkel</th>
+                    <th>Ansvarlig</th>
                     <th>Dato</th>
                     <th></th>
                     <th></th>
@@ -76,8 +79,9 @@
                     <td><%= o.getShedLength()%></td>
                     <td><%= o.getShedWidth()%></td>
                     <td><%= o.getRoofAngle()%></td>
+                    <td><%= o.employeeId() %></td>
                     <td><%= o.getDate()%></td>
-                    <td><form method="POST" action="byggecenter?view=orderinfo&orderID=<%= o.getId()%>"><button type="submit">Vis Ordre</button></form></td>
+                    <td><form method="POST" action="byggecenter?view=orderinfo&orderID=<%= o.getId()%>"><button type="submit">Vis</button></form></td>
                     <td><form method="POST" action="byggecenter?view=assignorder"><input type="hidden" name="orderID" value="<%= o.getId()%>"><button type="submit">Assign</button></form></td>
                 </tr>
                 <% }%>
