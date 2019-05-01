@@ -5,6 +5,8 @@
  */
 package data;
 
+import entity.Category;
+import entity.Product;
 import java.util.ArrayList;
 
 /**

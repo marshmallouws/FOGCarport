@@ -9,7 +9,7 @@ package entity;
  *
  * @author Bitten
  */
-public class User {
+public class Customer {
     private int id;
     private String email;
     private String address;
@@ -17,7 +17,7 @@ public class User {
     private int phone;
     //private String password;
     
-    public User(int id, String email, String address, int zip, int phone  /*String password*/) {
+    public Customer(int id, String email, String address, int zip, int phone  /*String password*/) {
         this.id = id;
         this.email = email;
         this.address = address;

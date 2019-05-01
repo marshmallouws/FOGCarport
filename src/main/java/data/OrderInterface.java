@@ -15,7 +15,8 @@ import java.util.ArrayList;
  */
 public interface OrderInterface {
     public boolean createOrder(Order order);
-    public ArrayList<Order> getOrders();
+    public ArrayList<Order> getUnfinishedOrders();
+    public ArrayList<Order> getOldOrders();
     public Order getOrder(int id);
     public void assignOrder(User user, Order order);
     public void assignOrder(int orderID, int employeeID);

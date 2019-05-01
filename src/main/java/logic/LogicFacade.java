@@ -22,7 +22,7 @@ public class LogicFacade {
     }
 
     public ArrayList<Order> getOrders() {
-        return new data.OrderMapper().getOrders();
+        return new data.OrderMapper().getUnfinishedOrders();
     }
 
     public Order getOrder(int id) {

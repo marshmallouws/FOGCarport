@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package data;
+package entity;
 
 /**
  *
@@ -15,22 +15,33 @@ public class Product {
     private int height;
     private int length;
     private int width;
+    private double price;
+    private boolean active;
     
-    public Product (Category category, int height, int length, int width) {
+    //For creating new product
+    public Product (Category category, int height, int length, int width, double price) {
         this.category = category;
         this.height = height;
         this.length = length;
         this.width = width;
+        this.price = price;
     }
     
-    public Product (int id, Category category, int height, int length, int width) {
-        this(category, height, length, width);
-        this.id = id;        
-    }
-    
-    public Product (int id, Category category) {
+    //For fetching products from database
+    public Product (int id, Category category, int height, int length, 
+            int width, double price, boolean active) {
+        this(category, height, length, width, price);
         this.id = id;
-        this.category = category;
+        this.active = active;
+
+    }
+
+    public double getPrice() {
+        return price;
+    }
+    
+    public boolean isActive() {
+        return active;
     }
 
     public int getId() {

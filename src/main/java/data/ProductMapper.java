@@ -5,6 +5,8 @@
  */
 package data;
 
+import entity.Category;
+import entity.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,7 +32,7 @@ public class ProductMapper implements ProductDAOInterface {
             ps.setInt(3, product.getWidth());
             ps.executeUpdate();
             
-        } catch (Exception ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             ex.printStackTrace();
         }
     }
@@ -40,7 +42,7 @@ public class ProductMapper implements ProductDAOInterface {
         ArrayList<Product> p = new ArrayList<>();
         try {
             Connection con = Connector.connection();
-            String query = "SELECT * FROM product";
+            String query = "SELECT * FROM product;";
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             
@@ -50,11 +52,42 @@ public class ProductMapper implements ProductDAOInterface {
                 int height = rs.getInt("height");
                 int length = rs.getInt("length");
                 int width = rs.getInt("width");
+                double price = rs.getDouble("price");
+                boolean active = rs.getBoolean("active");
+                
+                Category cat = getCategory(catId);
+                
+                p.add(new Product(id, cat, height, length, width, price, active));
             }
         } catch (SQLException | ClassNotFoundException ex) {
             ex.printStackTrace();
         }
         return p;
+    }
+    
+    private Category getCategory(int id) {
+        Category cat = null;
+        try {
+            Connection con = Connector.connection();
+            String query = "SELECT * FROM category WHERE id = ?;";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            
+            
+            if(rs.next()) {
+                String name = rs.getString("cat_name");
+                boolean height = rs.getBoolean("height");
+                boolean length = rs.getBoolean("width");
+                boolean width = rs.getBoolean("width");
+                
+                cat = new Category(id, name, height, width, length);
+            }
+            
+        } catch (SQLException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        } 
+        return cat;
     }
 
     @Override

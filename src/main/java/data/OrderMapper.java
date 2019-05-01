@@ -8,7 +8,6 @@ package data;
 import entity.Order;
 import entity.User;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,11 +43,11 @@ public class OrderMapper implements OrderInterface {
     }
 
     @Override
-    public ArrayList<Order> getOrders() {
+    public ArrayList<Order> getUnfinishedOrders() {
         ArrayList<Order> orders = new ArrayList<>();
         try {
             Connection con = Connector.connection();
-            String query = "SELECT * FROM c_order";
+            String query = "SELECT * FROM c_order WHERE o_status != 'delivered'";
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
 
@@ -62,8 +61,10 @@ public class OrderMapper implements OrderInterface {
                 int roofAngle = rs.getInt("roof_angle");
                 String date = rs.getString("o_date");
                 int emplID = rs.getInt("userid");
+                String status = rs.getString("o_status");
+                double salesPrice = rs.getDouble("sales_price");
 
-                Order o = new Order(id, emplID, height, width, length, shedLength, shedWidth, roofAngle, date);
+                Order o = new Order(id, emplID, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice);
                 orders.add(o);
             }
 
@@ -93,8 +94,10 @@ public class OrderMapper implements OrderInterface {
                 int roofAngle = rs.getInt("roof_angle");
                 String date = rs.getString("o_date");
                 int emplID = rs.getInt("userid");
+                String status = rs.getString("o_status");
+                double salesPrice = rs.getDouble("sales_price");
 
-                o = new Order(ids, emplID, height, width, length, shedLength, shedWidth, roofAngle, date);
+                o = new Order(ids, emplID, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice);
             }
 
         } catch (Exception e) {
@@ -162,21 +165,8 @@ public class OrderMapper implements OrderInterface {
         return o;
     }
 
-    public static void main(String[] args) {
-        OrderMapper m = new OrderMapper();
-        Order order = new Order(230, 200, 200, 0, 0, 0);
-        m.createOrder(order);
-        System.out.println(order);
-
-        ArrayList<Order> o = m.getOrders();
-        for (Order or : o) {
-            System.out.println(or.getDate());
-        }
-
-        User user = new User(1, "Annika", "Annika");
-        Order theo = m.getOrder(1);
-        System.out.println(theo.getLenght());
-        m.assignOrder(user, theo);
+    @Override
+    public ArrayList<Order> getOldOrders() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }

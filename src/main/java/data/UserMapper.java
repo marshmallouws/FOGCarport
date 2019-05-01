@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 public class UserMapper implements UserInterface {
 
     public User logIn(String username, String password) throws LogInException {
+        
         User user = null;
         try {
             String query = "SELECT username, pass, id FROM c_user WHERE username = ? AND pass = ?";
@@ -40,8 +41,8 @@ public class UserMapper implements UserInterface {
             throw new LogInException();
         }
 
-        return user;
-    }
+        return user; 
+    } 
 
     @Override
     public List<User> getEmployees() {
