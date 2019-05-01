@@ -17,20 +17,22 @@ public class Product {
     private int width;
     private double price;
     private boolean active;
+    private int stock;
     
     //For creating new product
-    public Product (Category category, int height, int length, int width, double price) {
+    public Product (Category category, int height, int length, int width, double price, int stock) {
         this.category = category;
         this.height = height;
         this.length = length;
         this.width = width;
         this.price = price;
+        this.stock = stock;
     }
     
     //For fetching products from database
     public Product (int id, Category category, int height, int length, 
-            int width, double price, boolean active) {
-        this(category, height, length, width, price);
+            int width, double price, boolean active, int stock) {
+        this(category, height, length, width, price, stock);
         this.id = id;
         this.active = active;
 
@@ -62,5 +64,9 @@ public class Product {
 
     public int getWidth() {
         return width;
+    }
+    
+    public int getStock() {
+        return stock;
     }
 }

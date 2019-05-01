@@ -251,10 +251,9 @@ public class OrderMapper implements OrderInterface {
 
         return o;
     }
-
+    
     @Override
     public ArrayList<Order> getOldOrders() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }
