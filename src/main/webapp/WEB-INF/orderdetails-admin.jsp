@@ -27,8 +27,7 @@
         </div>
 
 
-        <button type="button" id="editBtn">Edit</button>
-        <button type="button" id="saveBtn">Gem</button>
+
         <form method="POST" id="orderForm" action="byggecenter?view=updateorder">
 
             <div class="row">
@@ -36,7 +35,7 @@
 
                     <div class="form-group">
                         <label for="orderID">Ordrenummer</label>
-                        <input type="text" class="form-control" name="orderID" id="orderID" value="<%= order.getId()%>">
+                        <input type="text" class="form-control input-disabled" name="orderID" id="orderID" value="<%= order.getId()%>">
                     </div>
 
                     <div class="form-group">
@@ -210,6 +209,7 @@
                 </div>
             </div>
 
+            <button type="button" class="btn btn-primary" id="editBtn">Edit</button>
             <button type="submit" class="btn btn-success" id="updateBtn">Opdater</button>    
 
         </form>
@@ -219,20 +219,17 @@
     <script>
         $(document).ready(function () {
             // sets disabled on input fields with class 'input-disabled'
+            // removes it again from 'editBtn'
             $("#orderForm :input").each(function () {
                 var input = $(this);
-                input.prop("disabled", false);
+                input.prop("disabled", true);
+                
+                $("#editBtn").removeAttr("disabled");
             });
 
             // removes disabled on inputs by clicking the 'edit' btn
             $("#editBtn").click(function () {
                 $(".input-disabled").removeAttr("disabled");
-            });
-
-            // add disabled on inputs by clicking the 'save' btn.
-            // removes disabled on submit btn
-            $("#saveBtn").click(function () {
-                $(".input-disabled").prop("disabled", true);
                 $("#updateBtn").removeAttr("disabled");
             });
 
