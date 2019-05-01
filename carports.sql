@@ -17,7 +17,7 @@ CREATE TABLE employee(
 CREATE TABLE customer(
 	id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(20) UNIQUE NOT NULL,
-    passw VARCHAR(20) NOT NULL,
+	#passw VARCHAR(20) NOT NULL,
     address VARCHAR(30) NOT NULL,
     zip INT(4) NOT NULL,
     phone INT(8) NOT NULL,
@@ -37,7 +37,8 @@ CREATE TABLE c_order(
     emp_id INT,
     cust_id INT NOT NULL,
     o_date DATETIME DEFAULT NOW(),
-    o_status ENUM('recieved', 'delivered'),
+    o_status ENUM('recieved', 'delivered') DEFAULT 'recieved',
+    sales_price DOUBLE, #Price given by employee
     #Reference to employee handling the order
 	CONSTRAINT empl_c_order
 		FOREIGN KEY(emp_id)
@@ -64,7 +65,7 @@ CREATE TABLE product(
     width INT,
     price DOUBLE,
     stock INT,
-    active BOOLEAN,
+    active BOOLEAN DEFAULT TRUE,
     CONSTRAINT cat_prod
 		FOREIGN KEY(cat_id)
         REFERENCES category(id)
