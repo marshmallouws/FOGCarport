@@ -1,4 +1,4 @@
-<%@page import="entity.User"%>
+<%@page import="entity.Employee"%>
 <%@page import="java.util.List"%>
 <%@page import="entity.Order"%>
 <%-- 
@@ -15,7 +15,7 @@
     List<Integer> shedSelectWidth = (List<Integer>) request.getAttribute("shedSelectWidth");
     List<Integer> shedSelectLength = (List<Integer>) request.getAttribute("shedSelectLength");
     List<Integer> roofSelectAngle = (List<Integer>) request.getAttribute("roofSelectAngle");
-    List<User> employees = (List<User>) request.getAttribute("employees");
+    List<Employee> employees = (List<Employee>) request.getAttribute("employees");
 %>
 <body>
     <div class="container">
@@ -48,12 +48,12 @@
                         <select class="form-control input-disabled" name="employee" id="employee">
                             <option value=0>Vælg medarbejder</option>
                             <%
-                                for (User employee : employees) {
+                                for (Employee employee : employees) {
                                     if (employee.getId() == order.employeeId()) {
                             %>
                             <option value="<%= order.employeeId()%>" selected><%= order.employeeId()%></option>
                             <%} else {%>
-                            <option value="<%= employee.getId()%>"><%= employee.getUsername()%></option>
+                            <option value="<%= employee.getId()%>"><%= employee.getInitials()%></option>
                             <% }
                                 } %>
 
