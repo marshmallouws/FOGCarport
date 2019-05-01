@@ -14,5 +14,6 @@ import java.util.ArrayList;
 public interface ProductDAOInterface {
     public void insertNewProduct(Product product);
     public ArrayList<Product> getProducts();
+    public ArrayList<Product> getProducts(Category category);
     public Product getProduct();
 }
