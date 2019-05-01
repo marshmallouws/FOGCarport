@@ -35,7 +35,7 @@ CREATE TABLE c_order(
     shed_width INT,
     roof_angle INT,
     emp_id INT,
-    cust_id INT NOT NULL,
+    cust_id INT, #Needs to be changed to 'not null'
     o_date DATETIME DEFAULT NOW(),
     o_status ENUM('recieved', 'delivered') DEFAULT 'recieved',
     sales_price DOUBLE, #Price given by employee
@@ -83,5 +83,3 @@ CREATE TABLE odetail(
 		FOREIGN KEY(order_id)
         REFERENCES c_order(id)
 );
-
-
