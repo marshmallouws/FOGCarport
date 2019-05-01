@@ -5,6 +5,7 @@
  */
 package data;
 
+import entity.Customer;
 import entity.Order;
 import entity.Employee;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
  * @author Bitten
  */
 public interface OrderInterface {
-    public boolean createOrder(Order order);
+    public boolean createOrder(Order order, Customer customer);
     public ArrayList<Order> getUnfinishedOrders();
     public ArrayList<Order> getOldOrders();
     public Order getOrder(int id);

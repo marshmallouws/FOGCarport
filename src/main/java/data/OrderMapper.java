@@ -5,6 +5,7 @@
  */
 package data;
 
+import entity.Customer;
 import entity.Order;
 import entity.Employee;
 import java.sql.Connection;
@@ -22,7 +23,7 @@ import java.util.logging.Logger;
 public class OrderMapper implements OrderInterface {
 
     @Override
-    public boolean createOrder(Order order) {
+    public boolean createOrder(Order order, Customer customer) {
         try {
             Connection con = Connector.connection();
             String SQL = "INSERT INTO `c_order` (height, length, width, shed_length, shed_width, roof_angle) "

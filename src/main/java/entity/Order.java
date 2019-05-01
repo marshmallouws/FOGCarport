@@ -13,7 +13,7 @@ public class Order {
 
     private int id;
     private int employeeId;
-    //private int customerId;
+    private int customerId;
     private int height; //Will be calculated from the angle of the roof
     private int width;
     private int lenght;
@@ -25,19 +25,20 @@ public class Order {
     private double salesPrice;
     
     //For creating new order in db
-    public Order(int height, int width, int length, int shedLength, int shedWidth, int roofAngle) {
+    public Order(int height, int width, int length, int shedLength, int shedWidth, int roofAngle, int customerId) {
         this.height = height;
         this.width = width;
         this.lenght = length;
         this.shedLength = shedLength;
         this.shedWidth = shedWidth;
         this.roofAngle = roofAngle;
+        this.customerId = customerId;
     }
     
     //For fetching order from db
     public Order(int id, int employeeId, int height, int width, int length,
-            int shedLength, int shedWidth, int roofAngle, String date, String status, double salesPrice) {
-        this(height, length, width, shedLength, shedWidth, roofAngle);
+            int shedLength, int shedWidth, int roofAngle, String date, String status, double salesPrice, int customerId) {
+        this(height, length, width, shedLength, shedWidth, roofAngle, customerId);
         this.id = id;
         this.employeeId = employeeId;
         this.date = date;
@@ -98,6 +99,10 @@ public class Order {
     
     public double getSalesPrice() {
         return salesPrice;
+    }
+    
+    public int getCustomerId() {
+        return customerId;
     }
 
 }

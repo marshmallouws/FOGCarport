@@ -5,6 +5,7 @@
  */
 package data;
 
+import entity.Customer;
 import entity.Order;
 import entity.Employee;
 import java.util.ArrayList;
@@ -34,8 +35,8 @@ public class OneMapperToRuleThemAll {
         return order.getOldOrders();
     }
     
-    public boolean createOrder(Order o) {
-        return order.createOrder(o);
+    public boolean createOrder(Order o, Customer c) {
+        return order.createOrder(o, c);
     }
     
     public Order getOrder(int id) {

@@ -5,10 +5,13 @@
  */
 package data;
 
+import entity.Customer;
 import entity.Employee;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +62,35 @@ public class UserMapper implements UserInterface {
         }
 
         return employees;
+    }
+    
+    public int createCustomer(Customer customer) {
+        int id = 0;
+        
+        try {
+            Connection con = Connector.connection();
+            String query = "INSERT INTO customer (email, address, zip, phone) "
+                    + "VALUES (?, ?, ?, ?)";
+            PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, customer.getEmail());
+            ps.setString(2, customer.getAddress());
+            ps.setInt(3, customer.getZip());
+            ps.setInt(4, customer.getPhone());
+            
+            
+            ps.executeUpdate();
+            
+            ResultSet rs = ps.getGeneratedKeys();
+            
+            if (rs.next()) {
+                id = rs.getInt(1);
+            }
+            
+        } catch (ClassNotFoundException | SQLException ex) {
+            
+        }
+        
+        return id;
     }
 
 }
