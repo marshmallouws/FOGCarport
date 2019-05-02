@@ -190,5 +190,77 @@ public class ProductMapper implements ProductDAOInterface {
         }
         return p;
     }
+    
+    public ArrayList<Category> getCategories() {
+        ArrayList<Category> cat = new ArrayList();
+        try {
+            Connection con = Connector.connection();
+            String query = "SELECT * FROM category;";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("cat_name");
+                boolean height = rs.getBoolean("height");
+                boolean length = rs.getBoolean("width");
+                boolean width = rs.getBoolean("width");
+
+                cat.add(new Category(id, name, height, width, length));
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        return cat;
+    }
+
+    public ArrayList<Product> getProductList(int category_id) {
+        ArrayList<Product> prod = new ArrayList();
+        try {
+            Connection con = Connector.connection();
+            String query = "SELECT * FROM product WHERE cat_id=?;";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, category_id);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int height = rs.getInt("height");
+                int length = rs.getInt("width");
+                int width = rs.getInt("width");
+                double price = rs.getDouble("price");
+                boolean active = rs.getBoolean("active");
+                int stock = rs.getInt("stock");
+
+                prod.add(new Product(id, getCategory(category_id), height, length, width, price, active, stock));
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        return prod;
+    }
+
+    public boolean saveProduct(Product product) {
+        try {
+            Connection con = Connector.connection();
+            String query = "UPDATE product SET "+
+                    "height=?,length=?,width=?,price=?,active=? "+
+                    "WHERE id=?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, product.getHeight());
+            ps.setInt(2, product.getLength());
+            ps.setInt(3, product.getWidth());
+            ps.setDouble(4, product.getPrice());
+            ps.setBoolean(5,product.isActive());
+            ps.setInt(6, product.getId());
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
 
 }

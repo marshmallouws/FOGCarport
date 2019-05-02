@@ -28,6 +28,7 @@ public abstract class Command {
         commands.put("updateorder", new UpdateOrderCommand());
         commands.put("orderinfo", new OrderInfoCommand());
         commands.put("orderinfoadmin", new OrderInfoAdminCommand());
+        commands.put("mats", new MaterialPageCommand());
         
         c = commands.getOrDefault(origin, new UnknownCommand());
 
