@@ -20,6 +20,7 @@ public class Customer {
     
     public Customer(int id, String name, String email, String address, int zip, int phone  /*String password*/) {
         this.id = id;
+        this.name = name;
         this.email = email;
         this.address = address;
         this.zip = zip;
@@ -62,5 +63,9 @@ public class Customer {
 
     public int getPhone() {
         return phone;
+    }
+    
+    public void setID(int id) {
+        this.id = id;
     }
 }

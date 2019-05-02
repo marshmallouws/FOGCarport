@@ -37,7 +37,10 @@ public class AddOrderCommand extends Command {
             int formatPhone = Integer.parseInt(phone);
 
             c = new Customer(fullname, email, address, formatZip, formatPhone);
-            lf.createCustomer(c);
+            int custID = lf.createCustomer(c);
+            
+            c.setID(custID);
+            
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
         }

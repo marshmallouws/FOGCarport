@@ -27,8 +27,8 @@ public class OrderMapper implements OrderInterface {
     public boolean createOrder(Order order, Customer customer) {
         try {
             Connection con = Connector.connection();
-            String SQL = "INSERT INTO `c_order` (height, length, width, shed_length, shed_width, roof_angle) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
+            String SQL = "INSERT INTO `c_order` (height, length, width, shed_length, shed_width, roof_angle, cust_id) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(SQL);
             ps.setInt(1, order.getHeight());
             ps.setInt(2, order.getLenght());
@@ -36,6 +36,7 @@ public class OrderMapper implements OrderInterface {
             ps.setInt(4, order.getShedLength());
             ps.setInt(5, order.getShedWidth());
             ps.setInt(6, order.getRoofAngle());
+            ps.setInt(7, customer.getId());
             ps.executeUpdate();
             return true;
         } catch (Exception ex) {

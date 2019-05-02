@@ -79,7 +79,7 @@
                         <% }%>
                     </select>
                 </div>
-<!--
+
                 <div class="form-group">
                     <label for="fullname">Navn</label>
                     <input type="text" class="form-control" name="fullname" id="fullname">
@@ -105,7 +105,7 @@
                     <input type="text" class="form-control" name="email" id="email">
                 </div>
 
-                <div class="form-group">
+ <!--               <div class="form-group">
                     <label for="message">Evt. bemærkninger</label>
                     <textarea class="form-control" name="message" id="message"></textarea>
                 </div>

@@ -3,13 +3,29 @@
     Created on : 25-04-2019, 12:09:53
     Author     : Martin
 --%>
+<%@page import="entity.Customer"%>
 <%@page import="entity.Order"%>
 <jsp:include page="header.jsp"></jsp:include>
-<% Order order = (Order) request.getAttribute("order"); %>
+<% 
+    Order order = (Order) request.getAttribute("order"); 
+    Customer c = (Customer) request.getAttribute("customer");
+%>
     <body>
         <div class="container">
             <h1>Details for order #<%=order.getId()%></h1> 
             <p>Ordered: <%= order.getDate() %></p>
+            
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title">Customer information</h5>
+                  <p class="card-text"><%=c.getName()%></p>
+                  <p class="card-text"><%=c.getEmail()%></p>
+                  <p class="card-text"><%=c.getPhone()%></p>
+                </div>
+            </div>
+            
+            <br>
+            
             <table class="table table-hover">
                 <tr>
                     <th>Height</th>

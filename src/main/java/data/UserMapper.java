@@ -71,13 +71,14 @@ public class UserMapper implements UserInterface {
         
         try {
             Connection con = Connector.connection();
-            String query = "INSERT INTO customer (email, address, zip, phone) "
-                    + "VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO customer (cname, email, address, zip, phone) "
+                    + "VALUES (?, ?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, customer.getEmail());
-            ps.setString(2, customer.getAddress());
-            ps.setInt(3, customer.getZip());
-            ps.setInt(4, customer.getPhone());
+            ps.setString(1, customer.getName());
+            ps.setString(2, customer.getEmail());
+            ps.setString(3, customer.getAddress());
+            ps.setInt(4, customer.getZip());
+            ps.setInt(5, customer.getPhone());
             
             
             ps.executeUpdate();
@@ -91,7 +92,6 @@ public class UserMapper implements UserInterface {
         } catch (ClassNotFoundException | SQLException ex) {
             
         }
-        
         return id;
     }
     
@@ -101,7 +101,15 @@ public class UserMapper implements UserInterface {
         
         try {
             Connection con = Connector.connection();
-            String query = "SELECT * FROM customer WHERE";
+            String query = "SELECT * FROM customer WHERE id = " + customerID + ";";
+            
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                customer = new Customer(rs.getInt("id"), rs.getString("cname"), rs.getString("email"), rs.getString("address"), rs.getInt("zip"), rs.getInt("phone"));
+            }
+            
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
         }
