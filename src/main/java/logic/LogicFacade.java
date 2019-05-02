@@ -9,6 +9,7 @@ import entity.Order;
 import entity.Employee;
 import java.util.ArrayList;
 import data.LogInException;
+import data.UpdateException;
 import entity.Customer;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class LogicFacade {
         new data.OrderMapper().assignOrder(orderID, employeeID);
     }
     
-    public Order updateOrder(Order order) {
+    public Order updateOrder(Order order) throws UpdateException {
         return new data.OrderMapper().updateOrder(order);
     }
 

@@ -28,6 +28,9 @@
 
 
 
+        <% if (request.getAttribute("error") != null) { %>
+        <p><%= request.getAttribute("error") %></p>
+        <% } %>
         <form method="POST" id="orderForm" action="byggecenter?view=updateorder">
 
             <div class="row">

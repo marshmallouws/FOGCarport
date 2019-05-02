@@ -211,7 +211,7 @@ public class OrderMapper implements OrderInterface {
     }
 
     @Override
-    public Order updateOrder(Order order) {
+    public Order updateOrder(Order order) throws UpdateException {
         Order o = null;
         String query;
         PreparedStatement ps;
@@ -240,13 +240,17 @@ public class OrderMapper implements OrderInterface {
                 ps.setInt(6, order.getRoofAngle());
                 ps.setInt(7, order.employeeId());
                 ps.setInt(8, order.getId());
+                
             }
 
             if (ps.executeUpdate() == 1) {
                 o = getOrder(order.getId());
+            } else {
+                throw new UpdateException("Fejl ved opdatering af ordre " + order.getId());
             }
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
+            throw new UpdateException("Fejl ved opdatering af ordre " + order.getId());
         }
 
         return o;

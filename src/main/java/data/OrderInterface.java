@@ -24,7 +24,7 @@ public interface OrderInterface {
     public Order getOrder(int id);
     public void assignOrder(Employee user, Order order);
     public void assignOrder(int orderID, int employeeID);
-    public Order updateOrder(Order order);
+    public Order updateOrder(Order order) throws UpdateException;
     
     
 }
