@@ -64,6 +64,10 @@ public class LogicFacade {
     public int createCustomer(Customer customer) {
         return new data.UserMapper().createCustomer(customer);
     }
+    
+    public Customer getCustomer(int customerID) {
+        return new data.UserMapper().getCustomer(customerID);
+    }
 
     public String getCategories() {
         return new Gson().toJson(new data.ProductMapper().getCategories());

@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -91,6 +93,20 @@ public class UserMapper implements UserInterface {
         }
         
         return id;
+    }
+    
+    @Override
+    public Customer getCustomer(int customerID) {
+        Customer customer = null;
+        
+        try {
+            Connection con = Connector.connection();
+            String query = "SELECT * FROM customer WHERE";
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        return customer;
     }
 
 }
