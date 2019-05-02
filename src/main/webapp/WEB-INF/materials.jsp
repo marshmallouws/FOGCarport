@@ -131,9 +131,9 @@
                     currentProduct.price = $('#materials_productPrice').val();
                     currentProduct.height = $('#materials_productHeight').val();
                     currentProduct.length = $('#materials_productLength').val();
-                    currentProduct.width = $('#materials_productWidth').val();                 
+                    currentProduct.width = $('#materials_productWidth').val();     
+                    $('#materials_saveSpinner').css("display", "inline-block");
                     $.post("byggecenter?view=mats&c=save", {product: JSON.stringify(currentProduct)}, function (data) {
-                        $('#materials_saveSpinner').css("display", "inline-block");
                         if (data === "error") {
                             $('#materials_saveMsg_icon').removeClass("ui-icon-circle-check");
                             $('#materials_saveMsg_icon').addClass("ui-icon-alert");
