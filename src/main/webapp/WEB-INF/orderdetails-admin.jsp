@@ -1,3 +1,4 @@
+<%@page import="entity.Customer"%>
 <%@page import="entity.Employee"%>
 <%@page import="java.util.List"%>
 <%@page import="entity.Order"%>
@@ -16,6 +17,7 @@
     List<Integer> shedSelectLength = (List<Integer>) request.getAttribute("shedSelectLength");
     List<Integer> roofSelectAngle = (List<Integer>) request.getAttribute("roofSelectAngle");
     List<Employee> employees = (List<Employee>) request.getAttribute("employees");
+    Customer customer = (Customer) request.getAttribute("customer");
 %>
 <body>
     <div class="container">
@@ -68,27 +70,27 @@
 
                     <div class="form-group">
                         <label for="fullname">Navn</label>
-                        <input type="text" class="form-control" name="fullname" id="fullname">
+                        <input type="text" class="form-control" name="fullname" id="fullname" value="<%= customer.getName() %>">
                     </div>
 
                     <div class="form-group">
                         <label for="address">Adresse</label>
-                        <input type="text" class="form-control" name="address" id="address">
+                        <input type="text" class="form-control" name="address" id="address" value="<%= customer.getAddress() %>">
                     </div>
 
                     <div class="form-group">
                         <label for="zip">Postnummer</label>
-                        <input type="text" class="form-control" name="zip" id="zip">
+                        <input type="text" class="form-control" name="zip" id="zip" value="<%= customer.getZip() %>">
                     </div>
 
                     <div class="form-group">
                         <label for="phone">Telefon</label>
-                        <input type="text" class="form-control" name="phone" id="phone">
+                        <input type="text" class="form-control" name="phone" id="phone" value="<%= customer.getPhone() %>">
                     </div>
 
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="text" class="form-control" name="email" id="email">
+                        <input type="text" class="form-control" name="email" id="email" value="<%= customer.getEmail() %>">
                     </div>
 
                     <div class="form-group">

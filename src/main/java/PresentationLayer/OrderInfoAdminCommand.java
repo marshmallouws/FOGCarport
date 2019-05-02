@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import entity.Customer;
 import entity.Order;
 import entity.Employee;
 import java.io.IOException;
@@ -89,7 +90,9 @@ public class OrderInfoAdminCommand extends Command {
         
         int orderID = Integer.parseInt(request.getParameter("orderID"));
         Order orderToShow = lf.getOrder(orderID);
+        Customer customer = lf.getCustomer(orderToShow.getCustomerId());
         
+        request.setAttribute("customer", customer);
         request.setAttribute("order", orderToShow);
         
         request.getRequestDispatcher("/WEB-INF/orderdetails-admin.jsp").forward(request, response);
