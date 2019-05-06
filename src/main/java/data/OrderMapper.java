@@ -45,6 +45,7 @@ public class OrderMapper implements OrderInterface {
         }
     }
 
+    //Might not be used
     @Override
     public List<Order> getOrders() {
         List<Order> orders = new ArrayList<>();
@@ -68,7 +69,9 @@ public class OrderMapper implements OrderInterface {
                 double salesPrice = rs.getDouble("sales_price");
                 int custId = rs.getInt("cust_id");
 
-                Order o = new Order(id, emplID, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice, custId);
+                UserMapper u = new UserMapper();
+                Employee e = u.getEmployee(emplID);
+                Order o = new Order(id, e, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice, custId);
                 orders.add(o);
             }
 
@@ -97,12 +100,11 @@ public class OrderMapper implements OrderInterface {
                 int shedWidth = rs.getInt("shed_width");
                 int roofAngle = rs.getInt("roof_angle");
                 String date = rs.getString("o_date");
-                int emplID = rs.getInt("emp_id");
                 String status = rs.getString("o_status");
                 double salesPrice = rs.getDouble("sales_price");
                 int custId = rs.getInt("cust_id");
 
-                Order o = new Order(id, emplID, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice, custId);
+                Order o = new Order(id, null, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice, custId);
                 orders.add(o);
             }
 
@@ -144,6 +146,42 @@ public class OrderMapper implements OrderInterface {
             e.printStackTrace();
         }
         return orders;
+    }
+
+    public ArrayList<Order> getOwnOrders(int emplId) {
+        ArrayList<Order> orders = new ArrayList<>();
+        try {
+            Connection con = Connector.connection();
+            String query = "SELECT * FROM c_order WHERE emp_id = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int height = rs.getInt("height");
+                int length = rs.getInt("length");
+                int width = rs.getInt("width");
+                int shedLength = rs.getInt("shed_length");
+                int shedWidth = rs.getInt("shed_width");
+                int roofAngle = rs.getInt("roof_angle");
+                String date = rs.getString("o_date");
+                int emplID = rs.getInt("emp_id");
+                String status = rs.getString("o_status");
+                double salesPrice = rs.getDouble("sales_price");
+                int custId = rs.getInt("cust_id");
+
+                UserMapper u = new UserMapper();
+                Employee e = u.getEmployee(emplID);
+                Order o = new Order(id, e, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice, custId);
+                orders.add(o);
+            }
+
+        } catch (ClassNotFoundException | SQLException ex) {
+
+        }
+
+        return orders;
+
     }
 
     @Override
@@ -241,7 +279,7 @@ public class OrderMapper implements OrderInterface {
                 ps.setInt(6, order.getRoofAngle());
                 ps.setInt(7, order.employeeId());
                 ps.setInt(8, order.getId());
-                
+
             }
 
             if (ps.executeUpdate() == 1) {
@@ -256,7 +294,7 @@ public class OrderMapper implements OrderInterface {
 
         return o;
     }
-    
+
     @Override
     public ArrayList<Order> getOldOrders() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

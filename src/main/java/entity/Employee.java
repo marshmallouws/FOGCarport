@@ -15,11 +15,17 @@ public class Employee {
     private String password;
     //private String password;
     
+    //This needs to be removed
     public Employee(int id, String initials, String password) {
         this.id = id;
         this.initials = initials;
         this.password = password;
-    }   
+    }
+    
+    public Employee(int id, String initials) {
+        this.id = id;
+        this.initials = initials;
+    }
 
     public int getId() {
         return id;

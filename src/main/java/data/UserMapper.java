@@ -14,8 +14,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -24,7 +22,7 @@ import java.util.logging.Logger;
 public class UserMapper implements UserInterface {
 
     public Employee logIn(String username, String password) throws LogInException {
-        
+
         Employee user = null;
         try {
             String query = "SELECT username, pass, id FROM c_user WHERE username = ? AND pass = ?";
@@ -43,8 +41,8 @@ public class UserMapper implements UserInterface {
             throw new LogInException();
         }
 
-        return user; 
-    } 
+        return user;
+    }
 
     @Override
     public List<Employee> getEmployees() {
@@ -54,7 +52,7 @@ public class UserMapper implements UserInterface {
             String query = "SELECT * FROM employee";
             PreparedStatement ps = Connector.connection().prepareStatement(query);
             ResultSet rs = ps.executeQuery();
-            
+
             while (rs.next()) {
                 employees.add(new Employee(rs.getInt("id"), rs.getString("initials"), rs.getString("passw")));
             }
@@ -65,10 +63,10 @@ public class UserMapper implements UserInterface {
 
         return employees;
     }
-    
+
     public int createCustomer(Customer customer) {
         int id = 0;
-        
+
         try {
             Connection con = Connector.connection();
             String query = "INSERT INTO customer (cname, email, address, zip, phone) "
@@ -79,42 +77,61 @@ public class UserMapper implements UserInterface {
             ps.setString(3, customer.getAddress());
             ps.setInt(4, customer.getZip());
             ps.setInt(5, customer.getPhone());
-            
-            
+
             ps.executeUpdate();
-            
+
             ResultSet rs = ps.getGeneratedKeys();
-            
+
             if (rs.next()) {
                 id = rs.getInt(1);
             }
-            
+
         } catch (ClassNotFoundException | SQLException ex) {
-            
+
         }
         return id;
     }
-    
+
     @Override
     public Customer getCustomer(int customerID) {
         Customer customer = null;
-        
+
         try {
             Connection con = Connector.connection();
             String query = "SELECT * FROM customer WHERE id = " + customerID + ";";
-            
+
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
-            
+
             while (rs.next()) {
                 customer = new Customer(rs.getInt("id"), rs.getString("cname"), rs.getString("email"), rs.getString("address"), rs.getInt("zip"), rs.getInt("phone"));
             }
-            
+
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
         }
-        
+
         return customer;
+    }
+
+    public Employee getEmployee(int emplId) {
+        Employee empl = null;
+        try {
+            Connection con = Connector.connection();
+            String query = "SELECT * FROM employee WHERE id = ?";
+
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                empl = new Employee(rs.getInt("id"), rs.getString("initials"));
+            }
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return empl;
     }
 
 }

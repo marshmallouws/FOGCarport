@@ -12,6 +12,7 @@ package entity;
 public class Order {
 
     private int id;
+    private Employee empl;
     private int employeeId;
     private int customerId;
     private int height; //Will be calculated from the angle of the roof
@@ -45,7 +46,18 @@ public class Order {
         this.status = status;
         this.customerId = customerId;
     }
-
+    
+    //New for employee object
+    public Order(int id, Employee empl, int height, int width, int length, 
+            int shedLength, int shedWidth, int roofAngle, String date, String status, double salesPrice, int customerId) {
+        this(height, length, width, shedLength, shedWidth, roofAngle);
+        this.id = id;
+        this.empl = empl;
+        this.date = date;
+        this.status = status;
+        this.customerId = customerId;
+    }
+    
     // No date (is it used?)
     public Order(int id, int employeeId, int height, int width, int lenght, int shedLength, int shedWidth, int roofAngle) {
         this.id = id;
@@ -56,6 +68,10 @@ public class Order {
         this.shedLength = shedLength;
         this.shedWidth = shedWidth;
         this.roofAngle = roofAngle;
+    }
+
+    public Order(int id, int height, int width, int length, int shedLength, int shedWidth, int roofAngle, String date, String status, double salesPrice, int custId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public int getId() {
@@ -104,6 +120,10 @@ public class Order {
     
     public int getCustomerId() {
         return customerId;
+    }
+    
+    public Employee getEmpl() {
+        return empl;
     }
 
 }
