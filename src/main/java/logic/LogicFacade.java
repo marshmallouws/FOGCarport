@@ -8,7 +8,6 @@ package logic;
 import com.google.gson.Gson;
 import entity.Order;
 import entity.Employee;
-import java.util.ArrayList;
 import data.LogInException;
 import data.UpdateException;
 import entity.Customer;
@@ -104,4 +103,8 @@ public class LogicFacade {
         }
     }
     //Testing something
+    
+    public Employee getEmployee(int id) {
+        return new data.UserMapper().getEmployee(id);
+    }
 }

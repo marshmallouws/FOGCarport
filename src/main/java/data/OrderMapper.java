@@ -45,37 +45,63 @@ public class OrderMapper implements OrderInterface {
         }
     }
 
+    private ResultSet getResult(String query, int... id) throws SQLException, ClassNotFoundException {
+        ResultSet rs = null;
+
+        Connection con = Connector.connection();
+        PreparedStatement ps = con.prepareStatement(query);
+        
+        for(int i = 0; i < id.length; i++) {
+            ps.setInt(i+1, id[i]);
+        }
+        
+        rs = ps.executeQuery();
+
+        return rs;
+    }
+
+    private List<Order> order(ResultSet rs) throws SQLException {
+        List<Order> orders = new ArrayList<>();
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            int height = rs.getInt("height");
+            int length = rs.getInt("length");
+            int width = rs.getInt("width");
+            int shedLength = rs.getInt("shed_length");
+            int shedWidth = rs.getInt("shed_width");
+            int roofAngle = rs.getInt("roof_angle");
+            String date = rs.getString("o_date");
+            int emplID = rs.getInt("emp_id");
+            String status = rs.getString("o_status");
+            double salesPrice = rs.getDouble("sales_price");
+            int custId = rs.getInt("cust_id");
+            Employee e = null;
+
+            if (emplID != 0) {
+                e = getEmployee(emplID);
+            }
+
+            Order o = new Order(id, e, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice, custId);
+            orders.add(o);
+        }
+        return orders;
+    }
+
+    private Employee getEmployee(int id) {
+        UserMapper u = new UserMapper();
+        return u.getEmployee(id);
+    }
+
     //Might not be used
     @Override
     public List<Order> getOrders() {
         List<Order> orders = new ArrayList<>();
         try {
-            Connection con = Connector.connection();
             String query = "SELECT * FROM c_order";
-            PreparedStatement ps = con.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = getResult(query);
+            orders = order(rs);
 
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                int height = rs.getInt("height");
-                int length = rs.getInt("length");
-                int width = rs.getInt("width");
-                int shedLength = rs.getInt("shed_length");
-                int shedWidth = rs.getInt("shed_width");
-                int roofAngle = rs.getInt("roof_angle");
-                String date = rs.getString("o_date");
-                int emplID = rs.getInt("emp_id");
-                String status = rs.getString("o_status");
-                double salesPrice = rs.getDouble("sales_price");
-                int custId = rs.getInt("cust_id");
-
-                UserMapper u = new UserMapper();
-                Employee e = u.getEmployee(emplID);
-                Order o = new Order(id, e, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice, custId);
-                orders.add(o);
-            }
-
-        } catch (Exception e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return orders;
@@ -86,133 +112,50 @@ public class OrderMapper implements OrderInterface {
     public List<Order> getOrdersUnassigned() {
         List<Order> orders = new ArrayList<>();
         try {
-            Connection con = Connector.connection();
             String query = "SELECT * FROM c_order WHERE emp_id IS NULL";
-            PreparedStatement ps = con.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                int height = rs.getInt("height");
-                int length = rs.getInt("length");
-                int width = rs.getInt("width");
-                int shedLength = rs.getInt("shed_length");
-                int shedWidth = rs.getInt("shed_width");
-                int roofAngle = rs.getInt("roof_angle");
-                String date = rs.getString("o_date");
-                String status = rs.getString("o_status");
-                double salesPrice = rs.getDouble("sales_price");
-                int custId = rs.getInt("cust_id");
-
-                Order o = new Order(id, null, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice, custId);
-                orders.add(o);
-            }
-
-        } catch (Exception e) {
+            ResultSet rs = getResult(query);
+            orders = order(rs);
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return orders;
-
     }
 
     @Override
-    public ArrayList<Order> getUnfinishedOrders() {
-        ArrayList<Order> orders = new ArrayList<>();
+    public List<Order> getUnfinishedOrders() {
+        List<Order> orders = new ArrayList<>();
         try {
-            Connection con = Connector.connection();
             String query = "SELECT * FROM c_order WHERE o_status != 'delivered'";
-            PreparedStatement ps = con.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                int height = rs.getInt("height");
-                int length = rs.getInt("length");
-                int width = rs.getInt("width");
-                int shedLength = rs.getInt("shed_length");
-                int shedWidth = rs.getInt("shed_width");
-                int roofAngle = rs.getInt("roof_angle");
-                String date = rs.getString("o_date");
-                int emplID = rs.getInt("emp_id");
-                String status = rs.getString("o_status");
-                double salesPrice = rs.getDouble("sales_price");
-                int custId = rs.getInt("cust_id");
-
-                Order o = new Order(id, emplID, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice, custId);
-                orders.add(o);
-            }
-
-        } catch (Exception e) {
+            ResultSet rs = getResult(query);
+            orders = order(rs);
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return orders;
     }
-
-    public ArrayList<Order> getOwnOrders(int emplId) {
-        ArrayList<Order> orders = new ArrayList<>();
+    
+    @Override
+    public List<Order> getOwnOrders(int emplId) {
+        List<Order> orders = new ArrayList<>();
         try {
-            Connection con = Connector.connection();
             String query = "SELECT * FROM c_order WHERE emp_id = ?";
-            PreparedStatement ps = con.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                int height = rs.getInt("height");
-                int length = rs.getInt("length");
-                int width = rs.getInt("width");
-                int shedLength = rs.getInt("shed_length");
-                int shedWidth = rs.getInt("shed_width");
-                int roofAngle = rs.getInt("roof_angle");
-                String date = rs.getString("o_date");
-                int emplID = rs.getInt("emp_id");
-                String status = rs.getString("o_status");
-                double salesPrice = rs.getDouble("sales_price");
-                int custId = rs.getInt("cust_id");
-
-                UserMapper u = new UserMapper();
-                Employee e = u.getEmployee(emplID);
-                Order o = new Order(id, e, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice, custId);
-                orders.add(o);
-            }
-
-        } catch (ClassNotFoundException | SQLException ex) {
-
+            ResultSet rs = getResult(query, emplId);
+            orders = order(rs);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
-
         return orders;
-
     }
 
     @Override
     public Order getOrder(int id) {
         Order o = null;
         try {
-            Connection con = Connector.connection();
             String query = "SELECT * FROM c_order WHERE id = ?";
-            PreparedStatement ps = con.prepareStatement(query);
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                int ids = rs.getInt("id");
-                int height = rs.getInt("height");
-                int length = rs.getInt("length");
-                int width = rs.getInt("width");
-                int shedLength = rs.getInt("shed_length");
-                int shedWidth = rs.getInt("shed_width");
-                int roofAngle = rs.getInt("roof_angle");
-                String date = rs.getString("o_date");
-                int emplID = rs.getInt("emp_id");
-                String status = rs.getString("o_status");
-                double salesPrice = rs.getDouble("sales_price");
-                int custId = rs.getInt("cust_id");
-
-                o = new Order(ids, emplID, height, width, length, shedLength, shedWidth, roofAngle, date, status, salesPrice, custId);
-            }
-
-        } catch (Exception e) {
-            //Do something
+            ResultSet rs = getResult(query, id);
+            o = order(rs).get(0);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
         return o;
     }
@@ -228,8 +171,10 @@ public class OrderMapper implements OrderInterface {
             ps.setInt(2, order.getId());
 
             ps.executeUpdate();
+
         } catch (Exception ex) {
-            Logger.getLogger(OrderMapper.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OrderMapper.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 

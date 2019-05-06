@@ -22,7 +22,6 @@ import java.util.List;
 public class UserMapper implements UserInterface {
 
     public Employee logIn(String username, String password) throws LogInException {
-
         Employee user = null;
         try {
             String query = "SELECT username, pass, id FROM c_user WHERE username = ? AND pass = ?";
@@ -56,11 +55,9 @@ public class UserMapper implements UserInterface {
             while (rs.next()) {
                 employees.add(new Employee(rs.getInt("id"), rs.getString("initials"), rs.getString("passw")));
             }
-
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
         }
-
         return employees;
     }
 

@@ -36,18 +36,7 @@ public class Order {
         this.customerId = customerId;
     }
     
-    //For fetching order from db
-    public Order(int id, int employeeId, int height, int width, int length,
-            int shedLength, int shedWidth, int roofAngle, String date, String status, double salesPrice, int customerId) {
-        this(height, length, width, shedLength, shedWidth, roofAngle);
-        this.id = id;
-        this.employeeId = employeeId;
-        this.date = date;
-        this.status = status;
-        this.customerId = customerId;
-    }
-    
-    //New for employee object
+    //For fetching data from db
     public Order(int id, Employee empl, int height, int width, int length, 
             int shedLength, int shedWidth, int roofAngle, String date, String status, double salesPrice, int customerId) {
         this(height, length, width, shedLength, shedWidth, roofAngle);
@@ -68,10 +57,6 @@ public class Order {
         this.shedLength = shedLength;
         this.shedWidth = shedWidth;
         this.roofAngle = roofAngle;
-    }
-
-    public Order(int id, int height, int width, int length, int shedLength, int shedWidth, int roofAngle, String date, String status, double salesPrice, int custId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public int getId() {
