@@ -19,6 +19,11 @@ public class Product {
     private boolean active;
     private int stock;
     
+    private int variant_id;
+    private int category_id;
+    private int thickness;
+    private String name;
+    
     //For creating new product
     public Product (Category category, int height, int length, int width, double price, int stock) {
         this.category = category;
@@ -36,6 +41,19 @@ public class Product {
         this.id = id;
         this.active = active;
 
+    }
+    
+    // new simple
+    public Product (int id, int variant_id, int category_id, int thickness, int width, int length, double price, int stock, String name)  {
+        this.id = id;
+        this.variant_id = variant_id;
+        this.category_id = category_id;
+        this.thickness = thickness;
+        this.width = width;
+        this.length = length;
+        this.price = price;
+        this.stock = stock;
+        this.name = name;
     }
 
     public double getPrice() {
@@ -69,4 +87,10 @@ public class Product {
     public int getStock() {
         return stock;
     }
+
+    public String getName() {
+        return name;
+    }
+    
+    
 }
