@@ -31,7 +31,7 @@ public class UpdateOrderCommand extends Command {
         String _shedLength = request.getParameter("shedLength");
         String _roofAngle = request.getParameter("roofAngle");
         String _employeeID = request.getParameter("employee");
-        
+        // Should also contain status and sales price.
         String fullname = request.getParameter("fullname");
         
         try {

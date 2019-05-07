@@ -43,7 +43,14 @@
                     <td><%= o.getShedLength()%></td>
                     <td><%= o.getShedWidth()%></td>
                     <td><%= o.getRoofAngle()%></td>
-                    <td><%= o.employeeId() %></td>
+                    <td><% 
+                        if(o.getEmpl() == null) {
+                            out.println("Ikke tildelt");
+                        } else {
+                            o.getEmpl().getInitials();
+                        }
+                        
+                        %></td>
                     <td><%= o.getDate()%></td>
                     <td><form method="POST" action="byggecenter?view=orderinfo&orderID=<%= o.getId()%>"><button type="submit">Vis</button></form></td>
                     <td><form method="POST" action="byggecenter?view=assignorder"><input type="hidden" name="orderID" value="<%= o.getId()%>"><button type="submit">Assign</button></form></td>
@@ -79,7 +86,7 @@
                     <td><%= o.getShedLength()%></td>
                     <td><%= o.getShedWidth()%></td>
                     <td><%= o.getRoofAngle()%></td>
-                    <td><%= o.employeeId() %></td>
+                    <td><%= "Ikke tildelt" %></td>
                     <td><%= o.getDate()%></td>
                     <td><form method="POST" action="byggecenter?view=orderinfo&orderID=<%= o.getId()%>"><button type="submit">Vis</button></form></td>
                     <td><form method="POST" action="byggecenter?view=assignorder"><input type="hidden" name="orderID" value="<%= o.getId()%>"><button type="submit">Assign</button></form></td>

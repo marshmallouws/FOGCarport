@@ -12,6 +12,7 @@ package entity;
 public class Order {
 
     private int id;
+    private Employee empl;
     private int employeeId;
     private int customerId;
     private int height; //Will be calculated from the angle of the roof
@@ -35,17 +36,17 @@ public class Order {
         this.customerId = customerId;
     }
     
-    //For fetching order from db
-    public Order(int id, int employeeId, int height, int width, int length,
+    //For fetching data from db
+    public Order(int id, Employee empl, int height, int width, int length, 
             int shedLength, int shedWidth, int roofAngle, String date, String status, double salesPrice, int customerId) {
         this(height, length, width, shedLength, shedWidth, roofAngle);
         this.id = id;
-        this.employeeId = employeeId;
+        this.empl = empl;
         this.date = date;
         this.status = status;
         this.customerId = customerId;
     }
-
+    
     // No date (is it used?)
     public Order(int id, int employeeId, int height, int width, int lenght, int shedLength, int shedWidth, int roofAngle) {
         this.id = id;
@@ -104,6 +105,10 @@ public class Order {
     
     public int getCustomerId() {
         return customerId;
+    }
+    
+    public Employee getEmpl() {
+        return empl;
     }
 
 }
