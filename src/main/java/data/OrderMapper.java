@@ -8,6 +8,7 @@ package data;
 import entity.Customer;
 import entity.Order;
 import entity.Employee;
+import entity.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -260,5 +261,14 @@ public class OrderMapper implements OrderInterface {
     @Override
     public ArrayList<Order> getOldOrders() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public List<Product> getCarportList(Order order) {
+        List<Product> products = new ArrayList();
+        
+        // stolper
+        
+        return products;
+        
     }
 }
