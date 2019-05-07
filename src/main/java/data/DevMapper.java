@@ -118,6 +118,17 @@ public class DevMapper {
         return lengths;
     }
 
+    public int calcSpaer(Order order) {
+        // umiddelbart kan en carport ikke være breddere end længden på et spær. Ellers skal vi i hvert fald tilføje noget ekstra til at holde, som ved remmen.
+        int count = 10;
+        int gap = order.getWidth() / count;
+        while (gap >= 60) {
+            count += 5;
+            gap = order.getWidth() / count;
+        }
+        return count;
+    }
+
     public List<Product> getRemme(Order order) {
         List<Product> products = new ArrayList();
         try {
@@ -177,7 +188,7 @@ public class DevMapper {
                 products.add(new Product(id, variant_id, category_id, thickness, width, length, price, stock, name));
 
                 int qty = calcStolper(order);
-                double amount = qty * product.getPrice();
+                double amount = qty * product.getPrice() * (product.getLength() / 100);
 
                 odetails.add(new Odetail(product, qty, amount));
 
@@ -205,15 +216,40 @@ public class DevMapper {
                     product = new Product(id, variant_id, category_id, thickness, width, length, price, stock, name);
 
                     int qty = 2; // én i hver side
-                    double amount = qty * product.getPrice();
-                    
+                    double amount = qty * product.getPrice() * (product.getLength() / 100);
+
                     odetails.add(new Odetail(product, qty, amount));
                 }
             }
-            
 
+            //SPÆR
+            query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, products_test.thickness, products_test.width, length, price, stock, products_test.product_name FROM carports.product_variants JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id JOIN products_test ON product_variants.product_id = products_test.id WHERE category_id = ? AND length = ?;";
+            ps = con.prepareStatement(query);
+            ps.setInt(1, 8); // category id
+            ps.setInt(2, order.getWidth()); // bredde på carport
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                    int id = rs.getInt("product_id");
+                    int variant_id = rs.getInt("id");
+                    int category_id = rs.getInt("category_id");
+                    int thickness = rs.getInt("thickness");
+                    int width = rs.getInt("width");
+                    int length = rs.getInt("length");
+                    double price = rs.getDouble("price");
+                    int stock = rs.getInt("stock");
+                    String name = rs.getString("product_name");
+
+                    product = new Product(id, variant_id, category_id, thickness, width, length, price, stock, name);
+
+                    int qty = calcSpaer(order);
+                    double amount = qty * product.getPrice() * (product.getLength() / 100);
+
+                    odetails.add(new Odetail(product, qty, amount));
+                }
+            
             for (Odetail o : odetails) {
-                System.out.println(o.getProduct().getName() + " " + o.getProduct().getLength() + " " + o.getQty() + " " + o.getAmount());
+                System.out.println(o.getProduct().getName() + " " + o.getProduct().getLength() + " cm. " + o.getQty() + " stk. " + o.getAmount() + " kr. ");
             }
 
         } catch (ClassNotFoundException | SQLException ex) {
@@ -232,7 +268,7 @@ public class DevMapper {
         //System.out.println(new File(".").getAbsolutePath());
 
         //System.out.println(new DevMapper().loadZipcodesFromFile(file));
-        Order order = new Order(0, 0, 900, 200, 200, 0);
+        Order order = new Order(0, 600, 900, 200, 200, 0);
         new DevMapper().buildCarport(order);
 
     }

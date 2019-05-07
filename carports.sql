@@ -104,7 +104,8 @@ INSERT INTO categories_test (id, category_name) VALUES
 (4, "Oversternbrædder"),
 (5, "Beklædning"),
 (6, "Vandbræt"),
-(7, "Tagplader");
+(7, "Tagplader"),
+(8, "Spær");
 
 CREATE TABLE products_test (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -136,7 +137,8 @@ INSERT INTO products_in_categories (category_id, product_id) VALUES
     (4, 2),
     (5, 8),
     (6, 8),
-    (7, 9);
+    (7, 9),
+    (8, 5);
 
 CREATE TABLE product_variants (
 	id INT AUTO_INCREMENT PRIMARY KEY,
