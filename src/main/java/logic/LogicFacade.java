@@ -11,6 +11,7 @@ import entity.Employee;
 import data.LogInException;
 import data.UpdateException;
 import entity.Customer;
+import entity.Odetail;
 import entity.Product;
 import java.util.List;
 
@@ -108,7 +109,7 @@ public class LogicFacade {
         return new data.UserMapper().getEmployee(id);
     }
     
-    public List<Product> buildCarport(Order order) {
+    public List<Odetail> buildCarport(Order order) {
         return new data.DevMapper().buildCarport(order);
     }
 }

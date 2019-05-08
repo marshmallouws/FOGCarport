@@ -52,6 +52,9 @@ CREATE TABLE c_order(
         REFERENCES customer(id)
 );
 
+INSERT INTO c_order (id, height, length, width, shed_length, shed_width, roof_angle) VALUES
+(1, 0, 870, 720, 200, 200, 0);
+
 CREATE TABLE category(
 	id INT AUTO_INCREMENT PRIMARY KEY,
     cat_name VARCHAR(30) NOT NULL,

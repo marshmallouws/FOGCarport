@@ -251,9 +251,9 @@ public class DevMapper {
         return products;
     }
 
-    public List<Product> buildCarport(Order order) {
+    public List<Odetail> buildCarport(Order order) {
         List<Odetail> odetails = new ArrayList();
-        List<Product> products = new ArrayList();
+        //List<Product> products = new ArrayList();
         Product product;
         String query;
         PreparedStatement ps;
@@ -280,7 +280,6 @@ public class DevMapper {
                 String name = rs.getString("product_name");
 
                 product = new Product(id, variant_id, category_id, thickness, width, length, price, stock, name);
-                products.add(new Product(id, variant_id, category_id, thickness, width, length, price, stock, name));
 
                 int qty = calcStolper(order);
                 double amount = qty * product.getPrice() * (product.getLength() / 100);
@@ -409,7 +408,9 @@ public class DevMapper {
         }
 
         //beklædning
-        return products;
+        
+        
+        return odetails;
     }
 
     public static void main(String[] args) {
