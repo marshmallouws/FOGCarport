@@ -46,8 +46,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="roofMaterial">Tag</label>
-                    <select class="form-control" name="roofMaterial" id="roofMaterial">
+                    <label for="roofType">Tag</label>
+                    <select class="form-control" name="roofType" id="roofType">
                         <option value=0>Vælg tag</option>
                         <% for (Product roof : roofTypes) { %>
                         <option value=<%= roof.getId() %>><%= roof.getName() %></option>

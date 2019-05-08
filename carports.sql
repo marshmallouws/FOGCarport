@@ -38,6 +38,7 @@ CREATE TABLE c_order(
     shed_length INT,
     shed_width INT,
     roof_angle INT,
+    roof_type INT,
     emp_id INT,
     cust_id INT, #Needs to be changed to 'not null'
     o_date DATETIME DEFAULT NOW(),
@@ -226,9 +227,9 @@ INSERT INTO product_variants (id, product_id, length, price, stock) VALUES
 (60, 8, 600, 78.98, 888),
 
 #tagplader
-(61, 9, 150, 39.99, 888),
-(62, 9, 180, 39.99, 888),
-(63, 9, 210, 39.99, 888),
+(61, 9, 150, 59.95, 888),
+(62, 9, 180, 59.95, 888),
+(63, 9, 210, 59.95, 888),
 
 #ekstra remme
 (64, 5, 240, 199.95, 888),
@@ -236,7 +237,18 @@ INSERT INTO product_variants (id, product_id, length, price, stock) VALUES
 (66, 5, 660, 199.95, 888),
 (67, 5, 690, 199.95, 888),
 (68, 5, 720, 199.95, 888),
-(69, 5, 750, 199.95, 888);
+(69, 5, 750, 199.95, 888),
+
+#ekstra tagplader
+(70, 10, 150, 59.95, 888),
+(71, 10, 180, 59.95, 888),
+(72, 10, 210, 59.95, 888),
+(73, 11, 150, 59.95, 888),
+(74, 11, 180, 59.95, 888),
+(75, 11, 210, 59.95, 888),
+(76, 12, 150, 39.99, 888),
+(77, 12, 180, 39.99, 888),
+(78, 12, 210, 39.99, 888);
 
 CREATE TABLE odetail(
 	id INT AUTO_INCREMENT PRIMARY KEY,
