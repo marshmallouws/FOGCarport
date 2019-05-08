@@ -107,4 +107,8 @@ public class LogicFacade {
     public Employee getEmployee(int id) {
         return new data.UserMapper().getEmployee(id);
     }
+    
+    public List<Product> buildCarport(Order order) {
+        return new data.DevMapper().buildCarport(order);
+    }
 }

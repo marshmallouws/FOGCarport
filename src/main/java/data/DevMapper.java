@@ -14,8 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -117,6 +115,76 @@ public class DevMapper {
         }
         return lengths;
     }
+    
+    public List<Integer> calcUnderSternLength(Order order) {
+        List<Integer> lengths = new ArrayList();
+        int length = order.getLenght();
+        
+        int max = 0;
+        for (Product p : getUnderStern(order)) {
+            if (p.getLength() > max) {
+                max = p.getLength();
+            }
+        }
+
+        int min = max;
+        for (Product p : getUnderStern(order)) {
+            if (p.getLength() < min) {
+                min = p.getLength();
+            }
+        }
+        
+        while (length > 0) {
+
+            if (length > max) {
+                lengths.add(max);
+                length -= max;
+            } else if (length < min) {
+                lengths.add(min);
+                length -= min;
+            } else {
+                lengths.add(length);
+                length -= length;
+            }
+        }
+        
+        return lengths;
+    }
+    
+    public List<Integer> calcUnderSternWidth(Order order) {
+        List<Integer> lengths = new ArrayList();
+        int width = order.getWidth();
+        
+        int max = 0;
+        for (Product p : getUnderStern(order)) {
+            if (p.getLength() > max) {
+                max = p.getLength();
+            }
+        }
+
+        int min = max;
+        for (Product p : getUnderStern(order)) {
+            if (p.getLength() < min) {
+                min = p.getLength();
+            }
+        }
+        
+        while (width > 0) {
+
+            if (width > max) {
+                lengths.add(max);
+                width -= max;
+            } else if (width < min) {
+                lengths.add(min);
+                width -= min;
+            } else {
+                lengths.add(width);
+                width -= width;
+            }
+        }
+        
+        return lengths;
+    }
 
     public int calcSpaer(Order order) {
         // umiddelbart kan en carport ikke være breddere end længden på et spær. Ellers skal vi i hvert fald tilføje noget ekstra til at holde, som ved remmen.
@@ -134,6 +202,33 @@ public class DevMapper {
         try {
             Connection con = Connector.connection();
             String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, products_test.thickness, products_test.width, length, price, stock, products_test.product_name FROM carports.product_variants JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id JOIN products_test ON product_variants.product_id = products_test.id WHERE category_id = 2;";
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("product_id");
+                int variant_id = rs.getInt("id");
+                int category_id = rs.getInt("category_id");
+                int thickness = rs.getInt("thickness");
+                int width = rs.getInt("width");
+                int length = rs.getInt("length");
+                double price = rs.getDouble("price");
+                int stock = rs.getInt("stock");
+                String name = rs.getString("product_name");
+
+                products.add(new Product(id, variant_id, category_id, thickness, width, length, price, stock, name));
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+        }
+        return products;
+    }
+    
+    public List<Product> getUnderStern(Order order) {
+        List<Product> products = new ArrayList();
+        try {
+            Connection con = Connector.connection();
+            String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, products_test.thickness, products_test.width, length, price, stock, products_test.product_name FROM carports.product_variants JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id JOIN products_test ON product_variants.product_id = products_test.id WHERE category_id = 3;";
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
 
@@ -248,6 +343,63 @@ public class DevMapper {
                     odetails.add(new Odetail(product, qty, amount));
                 }
             
+            //UNDERSTERNBRÆDDER - LENGTH
+            for (Integer len : calcUnderSternLength(order)) {
+                query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, products_test.thickness, products_test.width, length, price, stock, products_test.product_name FROM carports.product_variants JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id JOIN products_test ON product_variants.product_id = products_test.id WHERE category_id = ? AND length = ?;";
+                ps = con.prepareStatement(query);
+                ps.setInt(1, 3); // category id
+                ps.setInt(2, len); // længde fra calcUnderSternLength
+                rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    int id = rs.getInt("product_id");
+                    int variant_id = rs.getInt("id");
+                    int category_id = rs.getInt("category_id");
+                    int thickness = rs.getInt("thickness");
+                    int width = rs.getInt("width");
+                    int length = rs.getInt("length");
+                    double price = rs.getDouble("price");
+                    int stock = rs.getInt("stock");
+                    String name = rs.getString("product_name");
+
+                    product = new Product(id, variant_id, category_id, thickness, width, length, price, stock, name);
+
+                    int qty = 2; // én i hver side
+                    double amount = qty * product.getPrice() * (product.getLength() / 100);
+
+                    odetails.add(new Odetail(product, qty, amount));
+                }
+            }
+            
+            //UNDERSTERNBRÆDDER - WIDTH
+            for (Integer len : calcUnderSternWidth(order)) {
+                query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, products_test.thickness, products_test.width, length, price, stock, products_test.product_name FROM carports.product_variants JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id JOIN products_test ON product_variants.product_id = products_test.id WHERE category_id = ? AND length = ?;";
+                ps = con.prepareStatement(query);
+                ps.setInt(1, 3); // category id
+                ps.setInt(2, len); // længde fra calcUnderSternWidth
+                rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    int id = rs.getInt("product_id");
+                    int variant_id = rs.getInt("id");
+                    int category_id = rs.getInt("category_id");
+                    int thickness = rs.getInt("thickness");
+                    int width = rs.getInt("width");
+                    int length = rs.getInt("length");
+                    double price = rs.getDouble("price");
+                    int stock = rs.getInt("stock");
+                    String name = rs.getString("product_name");
+
+                    product = new Product(id, variant_id, category_id, thickness, width, length, price, stock, name);
+
+                    int qty = 2; // én i hver side
+                    double amount = qty * product.getPrice() * (product.getLength() / 100);
+
+                    odetails.add(new Odetail(product, qty, amount));
+                }
+            }
+            
+            // FINAL
             for (Odetail o : odetails) {
                 System.out.println(o.getProduct().getName() + " " + o.getProduct().getLength() + " cm. " + o.getQty() + " stk. " + o.getAmount() + " kr. ");
             }
@@ -256,7 +408,6 @@ public class DevMapper {
             ex.printStackTrace();
         }
 
-        //understernbrædder
         //beklædning
         return products;
     }
@@ -268,9 +419,8 @@ public class DevMapper {
         //System.out.println(new File(".").getAbsolutePath());
 
         //System.out.println(new DevMapper().loadZipcodesFromFile(file));
-        Order order = new Order(0, 600, 900, 200, 200, 0);
+        Order order = new Order(0, 720, 870, 200, 200, 0);
         new DevMapper().buildCarport(order);
-
     }
 
 }
