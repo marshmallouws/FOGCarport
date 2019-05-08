@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -200,10 +202,19 @@ public class DevMapper {
         return count;
     }
 
-    public Map<Integer, Integer> calcRoofFlat(Order order) {
+    public Map<Integer, Integer> calcRoofFlat(Order order) throws FOGException {
         Map<Integer, Integer> map = new HashMap();
         List<Product> roofs = getRoofSpecificType(order);
-        int width = roofs.get(0).getWidth();
+        int width;
+        
+        try {
+        width = roofs.get(0).getWidth();    
+        } catch(IndexOutOfBoundsException ex) {
+            throw new FOGException(ex.getMessage());
+        }
+        
+        
+        
         int carportLength = order.getLenght();
         int carportWidth = order.getWidth();
         int rows = 0;
@@ -360,7 +371,7 @@ public class DevMapper {
         return products;
     }
 
-    public List<Odetail> buildCarport(Order order) {
+    public List<Odetail> buildCarport(Order order) throws FOGException {
         List<Odetail> odetails = new ArrayList();
         Product product;
         String query;
@@ -527,40 +538,44 @@ public class DevMapper {
                 }
             }
 
-            //ROOF
-            for (Map.Entry<Integer, Integer> entry : calcRoofFlat(order).entrySet()) {
-                query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, products_test.product_name FROM carports.product_variants\n"
-                    + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
-                    + "JOIN products_test ON product_variants.product_id = products_test.id\n"
-                    + "JOIN categories_test ON products_in_categories.category_id = categories_test.id\n"
-                    + "WHERE category_id = ? AND product_variants.product_id = ? AND length = ?;";
-                
-                ps = con.prepareStatement(query);
-                ps.setInt(1, 7); // category id
-                ps.setInt(2, order.getRoofType()); // type af tagplade
-                ps.setInt(3, entry.getKey()); // længde på tagplade
-                rs = ps.executeQuery();
-                
-                if (rs.next()) {
-                    int id = rs.getInt("product_id");
-                    int variant_id = rs.getInt("id");
-                    Category category = new Category(rs.getInt("category_id"), rs.getString("category_name"));
-                    int thickness = rs.getInt("thickness");
-                    int width = rs.getInt("width");
-                    int length = rs.getInt("length");
-                    double price = rs.getDouble("price");
-                    int stock = rs.getInt("stock");
-                    String name = rs.getString("product_name");
-
-                    product = new Product(id, variant_id, category, thickness, width, length, price, stock, name);
-
-                    int qty = entry.getValue(); // én i hver side
-                    double amount = qty * product.getPrice() * (product.getLength() / 100);
-
-                    String comment = "Tagplader	monteres på spær";
-                    odetails.add(new Odetail(product, order.getId(), qty, amount, comment));
+            try {
+                //ROOF
+                for (Map.Entry<Integer, Integer> entry : calcRoofFlat(order).entrySet()) {
+                    query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, products_test.product_name FROM carports.product_variants\n"
+                            + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
+                            + "JOIN products_test ON product_variants.product_id = products_test.id\n"
+                            + "JOIN categories_test ON products_in_categories.category_id = categories_test.id\n"
+                            + "WHERE category_id = ? AND product_variants.product_id = ? AND length = ?;";
+                    
+                    ps = con.prepareStatement(query);
+                    ps.setInt(1, 7); // category id
+                    ps.setInt(2, order.getRoofType()); // type af tagplade
+                    ps.setInt(3, entry.getKey()); // længde på tagplade
+                    rs = ps.executeQuery();
+                    
+                    if (rs.next()) {
+                        int id = rs.getInt("product_id");
+                        int variant_id = rs.getInt("id");
+                        Category category = new Category(rs.getInt("category_id"), rs.getString("category_name"));
+                        int thickness = rs.getInt("thickness");
+                        int width = rs.getInt("width");
+                        int length = rs.getInt("length");
+                        double price = rs.getDouble("price");
+                        int stock = rs.getInt("stock");
+                        String name = rs.getString("product_name");
+                        
+                        product = new Product(id, variant_id, category, thickness, width, length, price, stock, name);
+                        
+                        int qty = entry.getValue(); // én i hver side
+                        double amount = qty * product.getPrice() * (product.getLength() / 100);
+                        
+                        String comment = "Tagplader monteres på spær";
+                        odetails.add(new Odetail(product, order.getId(), qty, amount, comment));
+                    }
+                    
                 }
-                
+            } catch (FOGException ex) {                
+                throw new FOGException(ex.getMessage());
             }
 
             // FINAL
@@ -584,9 +599,17 @@ public class DevMapper {
 
         System.out.println(new DevMapper().loadZipcodesFromFile(file));
         Order order = new Order(0, 720, 870, 200, 200, 0, 12);
-        new DevMapper().buildCarport(order);
+        try {
+            new DevMapper().buildCarport(order);
+        } catch (FOGException ex) {
+            ex.printStackTrace();
+        }
 
-        new DevMapper().calcRoofFlat(order);
+        try {
+            new DevMapper().calcRoofFlat(order);
+        } catch (FOGException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }
