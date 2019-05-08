@@ -55,6 +55,12 @@ public class Product {
         this.stock = stock;
         this.name = name;
     }
+    
+    // for showing types of roof (at the moment)
+    public Product (int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public double getPrice() {
         return price;

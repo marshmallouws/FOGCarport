@@ -3,6 +3,7 @@
     Created on : Apr 23, 2019, 10:52:48 AM
     Author     : caspe
 --%>
+<%@page import="entity.Product"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
@@ -10,6 +11,7 @@
     List<Integer> carportSelectLength = (List<Integer>) request.getAttribute("carportSelectLength");
     List<Integer> shedSelectWidth = (List<Integer>) request.getAttribute("shedSelectWidth");
     List<Integer> shedSelectLength = (List<Integer>) request.getAttribute("shedSelectLength");
+    List<Product> roofTypes = (List<Product>) request.getAttribute("roofTypes");
 %>
 <!DOCTYPE html>
 <html>
@@ -47,7 +49,9 @@
                     <label for="roofMaterial">Tag</label>
                     <select class="form-control" name="roofMaterial" id="roofMaterial">
                         <option value=0>Vælg tag</option>
-                        <option value="Plasttrapezplader">Plasttrapezplader</option>
+                        <% for (Product roof : roofTypes) { %>
+                        <option value=<%= roof.getId() %>><%= roof.getName() %></option>
+                        <% } %>
                     </select>
                 </div>
                     

@@ -123,7 +123,10 @@ INSERT INTO products_test (id, product_name, thickness, width) VALUES
 (6, "Plastmo Bundskruer 200 stk", 0, 0),
 (7, "97x97 mm. trykimp. Stolpe", 97, 97),
 (8, "19x100 mm. trykimp. Brædt", 19, 100),
-(9, "Plastmo Ecolite blåtonet", 5, 90);
+(9, "Plastmo Ecolite blåtonet", 5, 90),
+(10, "Plastmo Ecolite grøntonet", 5, 90),
+(11, "Plastmo Ecolite rødtonet", 5, 90),
+(12, "Plastmo Ecolite klar", 5, 90);
 
 CREATE TABLE products_in_categories (
 	category_id INT(8) NOT NULL,
@@ -138,6 +141,9 @@ INSERT INTO products_in_categories (category_id, product_id) VALUES
     (5, 8),
     (6, 8),
     (7, 9),
+    (7, 10),
+    (7, 11),
+    (7, 12),
     (8, 5);
 
 CREATE TABLE product_variants (

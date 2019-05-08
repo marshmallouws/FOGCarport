@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -190,7 +191,7 @@ public class ProductMapper implements ProductDAOInterface {
         }
         return p;
     }
-    
+
     public ArrayList<Category> getCategories() {
         ArrayList<Category> cat = new ArrayList();
         try {
@@ -245,15 +246,15 @@ public class ProductMapper implements ProductDAOInterface {
     public boolean saveProduct(Product product) {
         try {
             Connection con = Connector.connection();
-            String query = "UPDATE product SET "+
-                    "height=?,length=?,width=?,price=?,active=? "+
-                    "WHERE id=?";
+            String query = "UPDATE product SET "
+                    + "height=?,length=?,width=?,price=?,active=? "
+                    + "WHERE id=?";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, product.getHeight());
             ps.setInt(2, product.getLength());
             ps.setInt(3, product.getWidth());
             ps.setDouble(4, product.getPrice());
-            ps.setBoolean(5,product.isActive());
+            ps.setBoolean(5, product.isActive());
             ps.setInt(6, product.getId());
             ps.executeUpdate();
             return true;
@@ -261,6 +262,29 @@ public class ProductMapper implements ProductDAOInterface {
             ex.printStackTrace();
             return false;
         }
+    }
+
+    public List<Product> getRoofTypes() {
+        List<Product> roofs = new ArrayList();
+
+        try {
+            Connection con = Connector.connection();
+            String query = "SELECT * FROM products_in_categories\n"
+                    + "JOIN products_test ON products_in_categories.product_id = products_test.id\n"
+                    + "WHERE category_id = 7;";
+            
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                roofs.add(new Product(rs.getInt("product_id"), rs.getString("product_name")));
+            }
+            
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return roofs;
     }
 
 }
