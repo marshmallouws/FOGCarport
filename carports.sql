@@ -52,9 +52,6 @@ CREATE TABLE c_order(
         REFERENCES customer(id)
 );
 
-INSERT INTO c_order (id, height, length, width, shed_length, shed_width, roof_angle) VALUES
-(1, 0, 870, 720, 200, 200, 0);
-
 CREATE TABLE category(
 	id INT AUTO_INCREMENT PRIMARY KEY,
     cat_name VARCHAR(30) NOT NULL,
@@ -225,7 +222,15 @@ INSERT INTO product_variants (id, product_id, length, price, stock) VALUES
 #tagplader
 (61, 9, 150, 39.99, 888),
 (62, 9, 180, 39.99, 888),
-(63, 9, 210, 39.99, 888);
+(63, 9, 210, 39.99, 888),
+
+#ekstra remme
+(64, 5, 240, 199.95, 888),
+(65, 5, 630, 199.95, 888),
+(66, 5, 660, 199.95, 888),
+(67, 5, 690, 199.95, 888),
+(68, 5, 720, 199.95, 888),
+(69, 5, 750, 199.95, 888);
 
 CREATE TABLE odetail(
 	id INT AUTO_INCREMENT PRIMARY KEY,

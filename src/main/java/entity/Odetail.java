@@ -10,12 +10,15 @@ public class Odetail {
     private int order_id;
     private int qty;
     private double amount;
+    private String comment;
 
-    // simple with no id and order id
-    public Odetail(Product product, int qty, double amount) {
+    // simple with no id
+    public Odetail(Product product, int order_id, int qty, double amount, String comment) {
         this.product = product;
+        this.order_id = order_id;
         this.qty = qty;
         this.amount = amount;
+        this.comment = comment;
     }
 
     public int getId() {
@@ -37,6 +40,12 @@ public class Odetail {
     public double getAmount() {
         return amount;
     }
+
+    public String getComment() {
+        return comment;
+    }
+    
+    
     
     
     

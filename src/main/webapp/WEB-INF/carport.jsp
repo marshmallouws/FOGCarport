@@ -4,38 +4,49 @@
     Author     : Casper
 --%>
 
+<%@page import="entity.Order"%>
 <%@page import="entity.Odetail"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <% List<Odetail> odetails = (List<Odetail>) request.getAttribute("carport"); %>
+<% Order order = (Order) request.getAttribute("order"); %>
 
 <jsp:include page="header.jsp"></jsp:include>
     <body>
-        <h1>Hello World!</h1>
+        <div class="container">
+        <h1>Stykliste</h1>
+        
+        <p>Ordrenummer: <%= order.getId() %></p>
+        <p>Kunde: <%= order.getCustomerId() %></p>
+        <p>Bestilling: Carport <%= order.getWidth() + " x " + order.getLenght() %> </p>
         
         <table class="table">
             <thead>
                     <tr>
-                        <th>id</th>
-                        <th>Product</th>
+                        <th>Varenummer</th>
+                        <th>Placering</th>
                         <th>Navn</th>
-                        <th>orderID</th>
-                        <th>Qty</th>
-                        <th>Amount</th>
+                        <th>Længde</th>
+                        <th>Antal</th>
+                        <th>Beløb</th>
+                        <th>Beskrivelse</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% for (Odetail o : odetails) { %>
                     <tr>
-                        <td><%= o.getId() %></td>
-                        <td><%= o.getProduct() %></td>
+                        <td><%= o.getProduct().getVariant_id() %></td>
+                        <td><%= o.getProduct().getCategory().getName() %></td>
                         <td><%= o.getProduct().getName() %></td>
-                        <td><%= o.getOrder_id() %></td>
-                        <td><%= o.getQty() %></td>
-                        <td><%= o.getAmount() %></td>
+                        <td><%= o.getProduct().getLength() %> cm</td>
+                        <td><%= o.getQty() %> stk</td>
+                        <td><%= o.getAmount() %> kr.</td>
+                        <td><%= o.getComment() %></td>
                     </tr>
                     <% } %>
                 </tbody>
         </table>
+                
+        </div><!-- container end -->
     </body>
 </html>

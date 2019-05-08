@@ -25,6 +25,7 @@ public class CarportProductsCommand extends Command {
         
         List<Odetail> odetails = lf.buildCarport(order);
         
+        request.setAttribute("order", order);
         request.setAttribute("carport", odetails);
         
         request.getRequestDispatcher("/WEB-INF/carport.jsp").forward(request, response);
