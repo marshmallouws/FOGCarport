@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -232,21 +230,22 @@ public class DevMapper {
 
         while (carportWidth > 0) {
 
-            if (carportWidth > max) {
+            if (carportWidth >= max) {
                 cols++;
                 carportWidth -= max;
                 System.out.println(max);
                 map.put(max, map.getOrDefault(max, 0) + 1);
-            } else if (carportWidth < min) {
+            } else if (carportWidth <= min) {
                 cols++;
                 carportWidth -= min;
                 System.out.println(min);
                 map.put(min, map.getOrDefault(min, 0) + 1);
             } else {
                 cols++;
-                carportWidth -= carportWidth;
                 System.out.println(carportWidth);
                 map.put(carportWidth, map.getOrDefault(carportWidth, 0) + 1);
+                carportWidth -= carportWidth;
+                
             }
         }
 
@@ -583,7 +582,7 @@ public class DevMapper {
         File file = new File(path);
         //System.out.println(new File(".").getAbsolutePath());
 
-        //System.out.println(new DevMapper().loadZipcodesFromFile(file));
+        System.out.println(new DevMapper().loadZipcodesFromFile(file));
         Order order = new Order(0, 720, 870, 200, 200, 0, 12);
         new DevMapper().buildCarport(order);
 
