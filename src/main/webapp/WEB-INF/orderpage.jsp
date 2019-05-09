@@ -17,6 +17,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width , initial-scale=1" />
         <title>Byg din carport! - Fog</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -27,8 +28,21 @@
         <script src="3dview/visual.js"></script>
     </head>
     <body>
-        <div class="header"><img src="3dview/images/fog-logo.png" /></div>
         <div class="orderpage_wrapper">
+            <div class="header">
+                <nav class="navbar navbar-dark" style="flex-flow: row nowrap;justify-content: flex-start;">
+                    <a class="navbar-brand" href="./"><img height="70" src="3dview/images/fog-logo.png" /></a>
+                    <div id="navbarHeader">
+                        <div class="navbar-nav" style="flex-direction: row;">
+                            <a class="nav-item nav-link" href="./">Forside</a>
+                            <a class="nav-item nav-link active" href="./byggecenter?view=orderpage">Bestil Carport</a>
+                            <a class="nav-item nav-link" href="#">Priser</a>
+                        </div>
+                    </div>
+                </nav>
+
+
+            </div>
             <div id="canvasWrapper">
                 <div id="canvasArea">
                     <div id="cLoadScreenContainer">
@@ -49,118 +63,125 @@
                         </svg>
                     </a>
                     <canvas id="renderCanvas"></canvas>
+                    <div class="canvasFooter">
+                        <p>This is a school project. This site is not affiliated with JohannesFog®.
+                            <small>Copyright© 2019 vl48@github.</small> <br>
+                            <small>*Carporten vist i 3D er en skitse og giver kun et billede af hvordan din carport <i>kan</i> se ud. Materialer og mål kan variere.</small>
+                        </p>
+                    </div>
                 </div>
             </div>
 
 
 
-        <div class="container options-wrapper">
-            <h1>Orderpage</h1>
+            <div class="container sidebar-wrapper">
+                <div class="options_wrapper">
+                    <h1>Byg selv</h1>
 
-            <form method="POST" action="byggecenter?view=addorder">
-                <div class="form-group">
-                    <label for="carportWidth">Carport bredde</label>
-                    <select id="widthIn" class="form-control" name="carportWidth" id="carportWidth">
-                        <option value=0>Vælg bredde</option>
-                        <% for (int width : carportSelectWidth) {%>
-                        <option value=<%= width%> <%if (width == 360) {%>selected<%}%>><%= width%> cm</option>
-                        <% } %>
-                    </select>
+                    <form method="POST" action="byggecenter?view=addorder">
+                        <div class="form-group">
+                            <label for="carportWidth">Carport bredde</label>
+                            <select id="widthIn" class="form-control" name="carportWidth" id="carportWidth"  required>
+                                <option value=0>Vælg bredde</option>
+                                <% for (int width : carportSelectWidth) {%>
+                                <option value=<%= width%> <%if (width == 360) {%>selected<%}%>><%= width%> cm</option>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="carportLength">Carport længde</label>
+                            <select id="lengthIn" class="form-control" name="carportLength" id="carportLength"  required>
+                                <option value=0>Vælg længde</option>
+                                <% for (int length : carportSelectLength) {%>
+                                <option value=<%= length%> <%if (length == 720) {%>selected<%}%>><%= length%> cm</option>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="roofAngle">Tag-vinkel</label>
+                            <select id="roofAngleIn" class="form-control" name="roofAngle" id="roofAngle"  required>
+                                <option value=0>Ingen rejsning</option>
+                                <option value="15">15 grader</option>
+                                <option value="20">20 grader</option>
+                                <option value="25" selected="selected">25 grader</option>
+                                <option value="30">30 grader</option>
+                                <option value="35">35 grader</option>
+                                <option value="40">40 grader</option>
+                                <option value="45">45 grader</option>
+                            </select>
+                        </div>
+                        <div id="flatRoofType" class="form-group" style="display:none;">
+                            <label for="roofType">Tag</label>
+                            <select class="form-control" name="roofType" id="roofType">
+                                <option value=0>Vælg tag</option>
+                                <% int i = 1;
+                                    for (Product roof : roofTypes) {%>
+                                <option value=<%= roof.getId()%> <%if (i++ == 1) {%>selected<%}%>><%= roof.getName()%></option>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="shedWidth">Redskabsrum bredde:</label>
+                            <select id="shedWidthIn" class="form-control" name="shedWidth" id="shedWidth"  required>
+                                <option value=0>Ønsker ikke redskabsrum</option>
+                                <% for (int width : shedSelectWidth) {%>
+                                <option value=<%= width%> <%if (width == 330) {%>selected<%}%>><%= width%> cm</option>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="shedLength">Redskabsrum længde:</label>
+                            <select id="shedLengthIn" class="form-control" name="shedLength" id="shedLength"  required>
+                                <option value=0>Ønsker ikke redskabsrum</option>
+                                <% for (int length : shedSelectLength) {%>
+                                <option value=<%= length%> <%if (length == 210) {%>selected<%}%>><%= length%> cm</option>
+                                <% }%>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="height">Højde</label>
+                            <input id="heightIn" class="form-control" name="carportHeight" type="number" value="305" min="225" max="500"  required>
+                        </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="carportLength">Carport længde</label>
-                    <select id="lengthIn" class="form-control" name="carportLength" id="carportLength">
-                        <option value=0>Vælg længde</option>
-                        <% for (int length : carportSelectLength) {%>
-                        <option value=<%= length%> <%if (length == 720) {%>selected<%}%>><%= length%> cm</option>
-                        <% } %>
-                    </select>
+                <div class="customer_wrapper">
+                    <h2>Klar til at bestille?</h2>
+                    <div class="form-group">
+                        <label for="fullname">Navn</label>
+                        <input type="text" class="form-control" placeholder="Indtast navn.." name="fullname" id="fullname"  required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Adresse</label>
+                        <input type="text" class="form-control" placeholder="Indtast adresse.." name="address" id="address"  required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="zip">Postnummer</label>
+                        <input type="text" class="form-control" placeholder="Indtast postnummer.." name="zip" id="zip"  required> 
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Telefon</label>
+                        <input type="text" class="form-control" placeholder="Indtast telefonnummer.." name="phone" id="phone"  required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control" placeholder="Indtast email.." name="email" id="email"  required>
+                    </div>
+
+                    <!--               <div class="form-group">
+                                       <label for="message">Evt. bemærkninger</label>
+                                       <textarea class="form-control" name="message" id="message"></textarea>
+                                   </div>
+                    -->
+                    <button type="submit" class="btn btn-success order-btn">Bestil Carport*</button>    
                 </div>
+                </form>
 
-                <div class="form-group">
-                    <label for="roofType">Tag</label>
-                    <select class="form-control" name="roofType" id="roofType">
-                        <option value=0>Vælg tag</option>
-                        <% for (Product roof : roofTypes) {%>
-                        <option value=<%= roof.getId()%>><%= roof.getName()%></option>
-                        <% } %>
-                    </select>
-                </div>
+            </div><!-- container end -->
 
-                <div class="form-group">
-                    <label for="roofAngle">Tag-vinkel</label>
-                    <select id="roofAngleIn" class="form-control" name="roofAngle" id="roofAngle">
-                        <option value=0>Ingen rejsning</option>
-                        <option value="15">15 grader</option>
-                        <option value="20">20 grader</option>
-                        <option value="25" selected="selected">25 grader</option>
-                        <option value="30">30 grader</option>
-                        <option value="35">35 grader</option>
-                        <option value="40">40 grader</option>
-                        <option value="45">45 grader</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="shedWidth">Redskabsrum bredde:</label>
-                    <select id="shedWidthIn" class="form-control" name="shedWidth" id="shedWidth">
-                        <option value=0>Ønsker ikke redskabsrum</option>
-                        <% for (int width : shedSelectWidth) {%>
-                        <option value=<%= width%> <%if (width == 330) {%>selected<%}%>><%= width%> cm</option>
-                        <% } %>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="shedLength">Redskabsrum længde:</label>
-                    <select id="shedLengthIn" class="form-control" name="shedLength" id="shedLength">
-                        <option value=0>Ønsker ikke redskabsrum</option>
-                        <% for (int length : shedSelectLength) {%>
-                        <option value=<%= length%> <%if (length == 210) {%>selected<%}%>><%= length%> cm</option>
-                        <% }%>
-                    </select>
-                </div>
-
-                <label>Højde</label>
-                <input id="heightIn" type="number" value="305" min="225" max="500">
-
-                <div class="form-group">
-                    <label for="fullname">Navn</label>
-                    <input type="text" class="form-control" name="fullname" id="fullname">
-                </div>
-
-                <div class="form-group">
-                    <label for="address">Adresse</label>
-                    <input type="text" class="form-control" name="address" id="address">
-                </div>
-
-                <div class="form-group">
-                    <label for="zip">Postnummer</label>
-                    <input type="text" class="form-control" name="zip" id="zip">
-                </div>
-
-                <div class="form-group">
-                    <label for="phone">Telefon</label>
-                    <input type="text" class="form-control" name="phone" id="phone">
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="text" class="form-control" name="email" id="email">
-                </div>
-
-                <!--               <div class="form-group">
-                                   <label for="message">Evt. bemærkninger</label>
-                                   <textarea class="form-control" name="message" id="message"></textarea>
-                               </div>
-                -->
-                <button type="submit" class="btn btn-success">Bestil Carport</button>    
-                
-            </form>
-
-        </div><!-- container end -->
-        
         </div>
     </body>
 </html>

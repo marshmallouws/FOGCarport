@@ -30,19 +30,83 @@ function startVisual() {
     window.addEventListener('resize', function () {
         engine.resize();
     });
+
+    $("#widthIn, #lengthIn, #roofType").change(function () {
+        if ($(this).val() > 0)
+            updateScene();
+    });
+    $("#shedWidthIn, #shedLengthIn").change(function () {
+        updateScene();
+    });
+    $("#roofAngleIn").change(function () {
+        if($(this).val()<=0){
+            $("#flatRoofType").slideDown("fast");
+        } else {
+            $("#flatRoofType").slideUp("fast");
+        }
+        updateScene();
+    });
 }
 
 function updateScene() {
-    engine.displayLoadingUI();
-    width = (document.getElementById("widthIn").value / 100) * 1.2;
-    length = (document.getElementById("lengthIn").value / 100) * 2;
+    var wIn = document.getElementById("widthIn");
+    var lIn = document.getElementById("lengthIn");
+    var shedLin = document.getElementById("shedLengthIn");
+    var shedWin = document.getElementById("shedWidthIn")
+    var roofTin = document.getElementById("roofType");
+    width = (wIn.value / 100) * 1.2;
+    length = (lIn.value / 100) * 2;
     height = (document.getElementById("heightIn").value / 100) * 2;
-    shedLength = (document.getElementById("shedLengthIn").value / 100) * 2;
-    shedWidth = (document.getElementById("shedWidthIn").value / 100) * 1.2;
-//shed = document.getElementById("shedIn").checked;
-    shed = shedLength === 0 || shedWidth === 0 ? false : true;
+    shedLength = (shedLin.value / 100) * 2;
+    shedWidth = (shedWin.value / 100) * 1.2;
+    //shed = document.getElementById("shedIn").checked;
+    shed = shedLength < 0.5 || shedWidth < 0.5 ? false : true;
     roofAngle = document.getElementById("roofAngleIn").value;
-    roof = roofAngle === 0 ? false : true;
+    roof = roofAngle < 5 ? false : true;
+    roofType = roofTin.value;
+    
+    ////////// check if shed is too big
+    if (shed && shedWidth > width) {
+        shedWin.style.backgroundColor = "#e67e7e";
+        $('#shedWidthIn > option').each(function () {
+            if ($(this).val() < wIn.value) {
+                $(this).css("background-color", "white");
+            } else {
+                $(this).css("background-color", "");
+            }
+        });
+        return;
+    } else {
+        shedWin.style.backgroundColor = "";
+    }
+    if (shed && shedLength > length) {
+        shedLin.style.backgroundColor = "#e67e7e";
+        $('#shedLengthIn > option').each(function () {
+            if ($(this).val() < lIn.value) {
+                $(this).css("background-color", "white");
+            } else {
+                $(this).css("background-color", "");
+            }
+        });
+        return;
+    } else {
+        shedLin.style.backgroundColor = "";
+    }
+    if (!roof && roofType<=0) {
+        roofTin.style.backgroundColor = "#e67e7e";
+        $('#roofType > option').each(function () {
+            if ($(this).val() > 0) {
+                $(this).css("background-color", "white");
+            } else {
+                $(this).css("background-color", "");
+            }
+        });
+        return;
+    } else {
+        roofTin.style.backgroundColor = "";
+    }
+    //////////////////////////
+    engine.displayLoadingUI();
     scene = createScene();
 }
 
@@ -72,7 +136,7 @@ var createScene = function () {
     camera.setTarget(new BABYLON.Vector3(length / 2, height / 2.5, 0));
     camera.radius = length + height;
     // Attach the camera to the canvas.
-    //camera.attachControl(canvas, false);
+    camera.attachControl(canvas, false);
 
     // Create a basic light, aiming 0,1,0 - meaning, to the sky.
     var _light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);
@@ -123,6 +187,10 @@ var createScene = function () {
         roofmat.diffuseTexture.hasAlpha = false;
         roofmat.backFaceCulling = false;
         roofmat.diffuseTexture.uScale = 20;
+            var roofColor = $('#roofType').find(":selected").text();
+            if(roofColor.includes("blå"))roofmat.diffuseColor = new BABYLON.Color3(0.32, 0.36, 0.44);
+            if(roofColor.includes("grøn"))roofmat.diffuseColor = new BABYLON.Color3(0.36, 0.44, 0.36);
+            if(roofColor.includes("rød"))roofmat.diffuseColor = new BABYLON.Color3(0.44, 0.36, 0.32);
     }
 
     concretemat = new BABYLON.StandardMaterial("ground", scene);
@@ -203,7 +271,7 @@ var createScene = function () {
     treesTask.onSuccess = function (task) {
         var spriteManagerTrees = new BABYLON.SpriteManager("treesManager", task.texture, 500, 950, scene);
         //trees at random positions
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 100; i++) {
             var tree = new BABYLON.Sprite("tree", spriteManagerTrees);
             var pos = getRandomSpritePosition(false);
             tree.position.x = pos[0];
@@ -218,7 +286,7 @@ var createScene = function () {
     bushTask.onSuccess = function (task) {
         var spriteManagerBush = new BABYLON.SpriteManager("bushManager", task.texture, 500, 950, scene);
         //bushes at random positions
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 100; i++) {
             var bush = new BABYLON.Sprite("tree", spriteManagerBush);
             var pos = getRandomSpritePosition(true);
             bush.position.x = pos[0];
@@ -229,7 +297,8 @@ var createScene = function () {
         }
     }
 
-    assetsManager.load();
+    assetsManager.load();   
+        $(".sidebar-wrapper").css("z-index","9990");
 
     // Return the created scene.
     return scene;
