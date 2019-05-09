@@ -125,9 +125,9 @@ INSERT INTO products_test (id, product_name, thickness, width) VALUES
 (7, "97x97 mm. trykimp. Stolpe", 97, 97),
 (8, "19x100 mm. trykimp. Brædt", 19, 100),
 (9, "Plastmo Ecolite blåtonet", 5, 90),
-(10, "Plastmo Ecolite grøntonet", 5, 90),
-(11, "Plastmo Ecolite rødtonet", 5, 90),
-(12, "Plastmo Ecolite klar", 5, 90);
+(10, "Plastmo Ecolite grøntonet", 5, 900),
+(11, "Plastmo Ecolite rødtonet", 5, 900),
+(12, "Plastmo Ecolite klar", 5, 900);
 
 CREATE TABLE products_in_categories (
 	category_id INT(8) NOT NULL,
