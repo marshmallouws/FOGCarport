@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import data.FOGException;
 import data.UpdateException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public abstract class Command {
 
-    public abstract void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
+    public abstract void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException;
 
     public static Command from(HttpServletRequest request) {
         Command c;

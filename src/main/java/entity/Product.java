@@ -44,15 +44,21 @@ public class Product {
     }
     
     // new simple
-    public Product (int id, int variant_id, int category_id, int thickness, int width, int length, double price, int stock, String name)  {
+    public Product (int id, int variant_id, Category category, int thickness, int width, int length, double price, int stock, String name)  {
         this.id = id;
         this.variant_id = variant_id;
-        this.category_id = category_id;
+        this.category = category;
         this.thickness = thickness;
         this.width = width;
         this.length = length;
         this.price = price;
         this.stock = stock;
+        this.name = name;
+    }
+    
+    // for showing types of roof (at the moment)
+    public Product (int id, String name) {
+        this.id = id;
         this.name = name;
     }
 
@@ -91,6 +97,13 @@ public class Product {
     public String getName() {
         return name;
     }
-    
+
+    public int getVariant_id() {
+        return variant_id;
+    }
+
+    public int getCategory_id() {
+        return category_id;
+    }
     
 }

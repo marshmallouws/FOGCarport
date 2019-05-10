@@ -22,6 +22,7 @@ public class AddOrderCommand extends Command {
         String _shedWidth = request.getParameter("shedWidth");
         String _shedLength = request.getParameter("shedLength");
         String _roofAngle = request.getParameter("roofAngle");
+        String _roofType = request.getParameter("roofType");
 
         String fullname = request.getParameter("fullname");
         String address = request.getParameter("address");
@@ -52,8 +53,9 @@ public class AddOrderCommand extends Command {
             int shedWidth = Integer.parseInt(_shedWidth);
             int shedLength = Integer.parseInt(_shedLength);
             int roofAngle = Integer.parseInt(_roofAngle);
+            int roofType = Integer.parseInt(_roofType);
 
-            Order order = new Order(height, carportWidth, carportLength, shedWidth, shedLength, roofAngle);
+            Order order = new Order(height, carportWidth, carportLength, shedWidth, shedLength, roofAngle, roofType);
             boolean success = lf.createOrder(order, c);
 
             request.setAttribute("success", success);

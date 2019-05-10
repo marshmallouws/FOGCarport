@@ -38,6 +38,7 @@ CREATE TABLE c_order(
     shed_length INT,
     shed_width INT,
     roof_angle INT,
+    roof_type INT,
     emp_id INT,
     cust_id INT, #Needs to be changed to 'not null'
     o_date DATETIME DEFAULT NOW(),
@@ -51,9 +52,6 @@ CREATE TABLE c_order(
 		FOREIGN KEY(cust_id)
         REFERENCES customer(id)
 );
-
-INSERT INTO c_order (id, height, length, width, shed_length, shed_width, roof_angle) VALUES
-(1, 0, 870, 720, 200, 200, 0);
 
 CREATE TABLE category(
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -126,7 +124,10 @@ INSERT INTO products_test (id, product_name, thickness, width) VALUES
 (6, "Plastmo Bundskruer 200 stk", 0, 0),
 (7, "97x97 mm. trykimp. Stolpe", 97, 97),
 (8, "19x100 mm. trykimp. Brædt", 19, 100),
-(9, "Plastmo Ecolite blåtonet", 5, 90);
+(9, "Plastmo Ecolite blåtonet", 5, 90),
+(10, "Plastmo Ecolite grøntonet", 5, 900),
+(11, "Plastmo Ecolite rødtonet", 5, 900),
+(12, "Plastmo Ecolite klar", 5, 900);
 
 CREATE TABLE products_in_categories (
 	category_id INT(8) NOT NULL,
@@ -141,6 +142,9 @@ INSERT INTO products_in_categories (category_id, product_id) VALUES
     (5, 8),
     (6, 8),
     (7, 9),
+    (7, 10),
+    (7, 11),
+    (7, 12),
     (8, 5);
 
 CREATE TABLE product_variants (
@@ -223,9 +227,28 @@ INSERT INTO product_variants (id, product_id, length, price, stock) VALUES
 (60, 8, 600, 78.98, 888),
 
 #tagplader
-(61, 9, 150, 39.99, 888),
-(62, 9, 180, 39.99, 888),
-(63, 9, 210, 39.99, 888);
+(61, 9, 150, 59.95, 888),
+(62, 9, 180, 59.95, 888),
+(63, 9, 210, 59.95, 888),
+
+#ekstra remme
+(64, 5, 240, 199.95, 888),
+(65, 5, 630, 199.95, 888),
+(66, 5, 660, 199.95, 888),
+(67, 5, 690, 199.95, 888),
+(68, 5, 720, 199.95, 888),
+(69, 5, 750, 199.95, 888),
+
+#ekstra tagplader
+(70, 10, 150, 59.95, 888),
+(71, 10, 180, 59.95, 888),
+(72, 10, 210, 59.95, 888),
+(73, 11, 150, 59.95, 888),
+(74, 11, 180, 59.95, 888),
+(75, 11, 210, 59.95, 888),
+(76, 12, 150, 39.99, 888),
+(77, 12, 180, 39.99, 888),
+(78, 12, 210, 39.99, 888);
 
 CREATE TABLE odetail(
 	id INT AUTO_INCREMENT PRIMARY KEY,

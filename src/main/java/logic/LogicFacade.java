@@ -6,6 +6,7 @@
 package logic;
 
 import com.google.gson.Gson;
+import data.FOGException;
 import entity.Order;
 import entity.Employee;
 import data.LogInException;
@@ -109,11 +110,15 @@ public class LogicFacade {
         return new data.UserMapper().getEmployee(id);
     }
     
-    public List<Odetail> buildCarport(Order order) {
+    public List<Odetail> buildCarport(Order order) throws FOGException {
         return new data.DevMapper().buildCarport(order);
     }
     
     public List<Order> getOwnOrders(int emplId) {
         return new data.OrderMapper().getOwnOrders(emplId);
+    }
+    
+    public List<Product> getRoofTypes() {
+        return new data.ProductMapper().getRoofTypes();
     }
 }
