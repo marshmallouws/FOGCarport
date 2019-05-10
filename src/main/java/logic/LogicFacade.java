@@ -114,10 +114,6 @@ public class LogicFacade {
         return new data.DevMapper().buildCarport(order);
     }
     
-    public List<Order> getOwnOrders(int emplId) {
-        return new data.OrderMapper().getOwnOrders(emplId);
-    }
-    
     public List<Product> getRoofTypes() {
         return new data.ProductMapper().getRoofTypes();
     }
