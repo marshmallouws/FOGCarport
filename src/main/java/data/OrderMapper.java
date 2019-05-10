@@ -8,6 +8,7 @@ package data;
 import entity.Customer;
 import entity.Order;
 import entity.Employee;
+import entity.Odetail;
 import entity.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -183,7 +184,7 @@ public class OrderMapper implements OrderInterface {
     public void assignOrder(int orderID, int employeeID) {
         try {
             Connection con = Connector.connection();
-            String query = "UPDATE c_order SET userid = ? WHERE id = ?";
+            String query = "UPDATE c_order SET emp_id = ? WHERE id = ?";
             PreparedStatement ps = con.prepareStatement(query);
 
             ps.setInt(1, employeeID);
@@ -253,5 +254,66 @@ public class OrderMapper implements OrderInterface {
         
         return products;
         
+ }
+    @Override
+    public void createOdetail(List<Odetail> odetails) {
+        try {
+            Connection con = Connector.connection();
+            con.setAutoCommit(false);
+            String query = "INSERT INTO `odetails` (prod_id, order_id, amount) "
+                    + "VALUES (?, ?, ?)";
+            PreparedStatement ps = con.prepareStatement(query);
+            
+            for (Odetail od : odetails) {
+                ps.setInt(1, od.getProduct().getId());
+                ps.setInt(2, od.getOrder_id());
+                ps.setInt(3, od.getQty());  
+                ps.executeUpdate();
+            }
+            
+            con.commit();
+            con.setAutoCommit(true);
+            
+        } catch (SQLException | ClassNotFoundException e) {
+ 
+            try {
+                Connection con = Connector.connection();
+                con.rollback();
+            } catch (SQLException | ClassNotFoundException e1) {
+                System.out.println("Could not rollback updates");
+            }
+            
+        }
+
     }
+
+    @Override
+    public void editOdetails(int orderID, List<Odetail> details) {
+       try {
+            Connection con = Connector.connection();
+            con.setAutoCommit(false);
+            String query = "UPDATE `odetails` SET prod_id = ?, amount = ? WHERE order_id = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            
+            for (Odetail od : details) {
+                ps.setInt(1, od.getProduct().getId());
+                ps.setInt(2, od.getQty());  
+                ps.executeUpdate();
+            }
+            
+            con.commit();
+            con.setAutoCommit(true);
+            
+        } catch (SQLException | ClassNotFoundException e) {
+ 
+            try {
+                Connection con = Connector.connection();
+                con.rollback();
+            } catch (SQLException | ClassNotFoundException e1) {
+                System.out.println("Could not rollback updates");
+            }
+            
+        } 
+    }
+    
 }

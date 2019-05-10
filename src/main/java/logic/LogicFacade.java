@@ -112,4 +112,8 @@ public class LogicFacade {
     public List<Odetail> buildCarport(Order order) {
         return new data.DevMapper().buildCarport(order);
     }
+    
+    public List<Order> getOwnOrders(int emplId) {
+        return new data.OrderMapper().getOwnOrders(emplId);
+    }
 }

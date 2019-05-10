@@ -4,19 +4,23 @@
     Author     : Casper
 --%>
 
+<%@page import="entity.Employee"%>
 <%@page import="java.util.List"%>
 <%@page import="entity.Order"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<% List<Order> allOrders = (List<Order>) request.getAttribute("allOrders"); %>
-<% List<Order> unassignedOrders = (List<Order>) request.getAttribute("unassignedOrders"); %>
-
+<% List<Order> myOrders = (List<Order>) request.getAttribute("myOrders"); %>
+<% List<Order> unassignedOrders = (List<Order>) request.getAttribute("unassignedOrders");
+    String currLogged = ((Employee)session.getAttribute("user")).getInitials();
+%>
 <jsp:include page="header.jsp"></jsp:include>
 
     <div class="container">
         <body>
             <h1>Backend Page</h1>
+            
+            <h3>Logged in as: <%=currLogged%></h3>
 
-            <h3>Alle Ordrer</h3>
+            <h3>Mine ordrer</h3>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -34,7 +38,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                <% for (Order o : allOrders) {%>
+                <% for (Order o : myOrders) {%>
                 <tr>
                     <td><%= o.getId()%></td>
                     <td><%= o.getLenght()%></td>
@@ -55,7 +59,7 @@
                     <td><form method="POST" action="byggecenter?view=orderinfo&orderID=<%= o.getId()%>"><button type="submit">Vis</button></form></td>
                     <td><form method="POST" action="byggecenter?view=assignorder"><input type="hidden" name="orderID" value="<%= o.getId()%>"><button type="submit">Assign</button></form></td>
                 </tr>
-                <% }%>
+                <%}%>
             </tbody>
         </table>
 

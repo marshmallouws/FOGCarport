@@ -8,6 +8,7 @@ package data;
 import entity.Customer;
 import entity.Order;
 import entity.Employee;
+import entity.Odetail;
 
 import java.util.List;
 
@@ -26,6 +27,8 @@ public interface OrderInterface {
     public void assignOrder(Employee user, Order order);
     public void assignOrder(int orderID, int employeeID);
     public Order updateOrder(Order order) throws UpdateException;
+    public void createOdetail(List<Odetail> odetails);
+    public void editOdetails(int orderID, List<Odetail> detail);
     
     
 }
