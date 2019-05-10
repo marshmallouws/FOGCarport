@@ -81,6 +81,8 @@ public class OrderMapper implements OrderInterface {
             int custId = rs.getInt("cust_id");
             Employee e = null;
 
+            System.out.println(emplID);
+            
             if (emplID != 0) {
                 e = getEmployee(emplID);
             }

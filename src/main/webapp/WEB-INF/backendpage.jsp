@@ -48,13 +48,7 @@
                     <td><%= o.getShedLength()%></td>
                     <td><%= o.getShedWidth()%></td>
                     <td><%= o.getRoofAngle()%></td>
-                    <td><% 
-                        if(o.getEmpl() == null) {
-                            out.println("Ikke tildelt");
-                        } else {
-                            o.getEmpl().getInitials();
-                        }
-                        
+                    <td><% o.getEmpl().getInitials();
                         %></td>
                     <td><%= o.getDate()%></td>
                     <td><form method="POST" action="byggecenter?view=orderinfo&orderID=<%= o.getId()%>"><button type="submit">Vis</button></form></td>

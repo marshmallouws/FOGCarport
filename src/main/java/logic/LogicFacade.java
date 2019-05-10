@@ -117,4 +117,9 @@ public class LogicFacade {
     public List<Product> getRoofTypes() {
         return new data.ProductMapper().getRoofTypes();
     }
+    
+    public List<Order> getOwnOrders(int emplId) {
+        return new data.OrderMapper().getOwnOrders(emplId);
+    }
+
 }
