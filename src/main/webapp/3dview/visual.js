@@ -64,7 +64,9 @@ function updateScene() {
     roofAngle = document.getElementById("roofAngleIn").value;
     roof = roofAngle < 5 ? false : true;
     roofType = roofTin.value;
-    
+        
+    if(width<=0||length<=0||height<=0)
+        return;
     ////////// check if shed is too big
     if (shed && shedWidth > width) {
         shedWin.style.backgroundColor = "#e67e7e";

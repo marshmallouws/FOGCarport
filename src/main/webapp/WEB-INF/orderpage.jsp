@@ -76,7 +76,7 @@
 
             <div class="container sidebar-wrapper">
                 <div class="options_wrapper">
-                    <h1>Byg selv</h1>
+                    <h2>Quick-Byg</h2>
 
                     <form method="POST" action="byggecenter?view=addorder">
                         <div class="form-group">
