@@ -5,10 +5,12 @@
  */
 package data;
 
+import entity.Category;
 import entity.Customer;
 import entity.Order;
 import entity.Employee;
 import entity.Odetail;
+import entity.Product;
 
 import java.util.List;
 
@@ -17,7 +19,7 @@ import java.util.List;
  * @author Bitten
  */
 public interface OrderInterface {
-    public boolean createOrder(Order order, Customer customer);
+    public int createOrder(Order order, Customer customer);
     public List<Order> getOrders();
     public List<Order> getOrdersUnassigned();
     public List<Order> getUnfinishedOrders();
@@ -28,7 +30,10 @@ public interface OrderInterface {
     public void assignOrder(int orderID, int employeeID);
     public Order updateOrder(Order order) throws UpdateException;
     public void createOdetail(List<Odetail> odetails);
-    public void editOdetails(int orderID, List<Odetail> detail);
+    public void editOdetails(List<Odetail> detail);
+    public List<Odetail> getOdetails(int orderID);
+    public Product getProduct(int prod_id);
+    public Category getCategory(int prod_id);
     
     
 }

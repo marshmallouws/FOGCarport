@@ -21,15 +21,26 @@ public class BackendPageCommand extends Command {
         
         HttpSession session = request.getSession();
         
-        LogicFacade logic = new LogicFacade();
-        List<Order> myOrders = logic.getOwnOrders(((Employee)session.getAttribute("user")).getId());
-        List<Order> unassignedOrders = logic.getOrdersUnassigned();
         
+        Employee currLogged = (Employee)session.getAttribute("user");
         
-        request.setAttribute("myOrders", myOrders);
-        request.setAttribute("unassignedOrders", unassignedOrders);
+        if (currLogged == null) {
+            
+            response.sendRedirect("");
+            
+        } else {
         
-        request.getRequestDispatcher("/WEB-INF/backendpage.jsp").forward(request, response);
+            LogicFacade logic = new LogicFacade();
+            List<Order> myOrders = logic.getOwnOrders(((Employee)session.getAttribute("user")).getId());
+            List<Order> unassignedOrders = logic.getOrdersUnassigned();
+
+
+            request.setAttribute("myOrders", myOrders);
+            request.setAttribute("unassignedOrders", unassignedOrders);
+
+            request.getRequestDispatcher("/WEB-INF/backendpage.jsp").forward(request, response);
+        
+        }
         
     }
     

@@ -30,6 +30,8 @@ CREATE TABLE customer(
         REFERENCES zipcodes(zip)
 );
 
+
+
 CREATE TABLE c_order(
 	id INT AUTO_INCREMENT PRIMARY KEY,
     height INT NOT NULL,
@@ -272,10 +274,12 @@ CREATE TABLE odetail(
 	id INT AUTO_INCREMENT PRIMARY KEY,
     prod_id INT NOT NULL,
     order_id INT NOT NULL,
-    amount INT NOT NULL,
-    CONSTRAINT prod_odetails
+    qty INT NOT NULL,
+    amount DOUBLE NOT NULL,
+    cmt VARCHAR(250) NOT NULL,
+    CONSTRAINT prod_odetail
 		FOREIGN KEY(prod_id)
-        REFERENCES product(id),
+        REFERENCES product_variants(id),
 	CONSTRAINT order_odetail
 		FOREIGN KEY(order_id)
         REFERENCES c_order(id)

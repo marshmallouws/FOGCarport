@@ -35,11 +35,12 @@ public class Product {
     }
     
     //For fetching products from database
-    public Product (int id, Category category, int height, int length, 
-            int width, double price, boolean active, int stock) {
+    public Product (int id, int variant_id, Category category, int height, int length, int width, double price, boolean active, int stock, String name) {
         this(category, height, length, width, price, stock);
         this.id = id;
+        this.variant_id = variant_id;
         this.active = active;
+        this.name = name;
 
     }
     

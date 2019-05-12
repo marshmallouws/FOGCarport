@@ -269,7 +269,7 @@ public class DevMapper {
         return lengths;
     }
 
-    private int calcSpaer(Order order) {
+    public int calcSpaer(Order order) {
         // umiddelbart kan en carport ikke være breddere end længden på et spær. Ellers skal vi i hvert fald tilføje noget ekstra til at holde, som ved remmen.
         int count = 10;
         int gap = order.getWidth() / count;
@@ -599,7 +599,7 @@ public class DevMapper {
         return products;
     }
 
-    private Product buildProduct(ResultSet rs) throws SQLException {
+    public Product buildProduct(ResultSet rs) throws SQLException {
         int id = rs.getInt("product_id");
         int variant_id = rs.getInt("id");
         Category category = new Category(rs.getInt("category_id"), rs.getString("category_name"));
@@ -1150,30 +1150,30 @@ public class DevMapper {
         File file = new File(path);
         //System.out.println(new File(".").getAbsolutePath());
 
-        //System.out.println(new DevMapper().loadZipcodesFromFile(file));
+        System.out.println(new DevMapper().loadZipcodesFromFile(file));
         Order order = new Order(270, 720, 720, 200, 200, 10, 12);
 
-        new DevMapper().calcRoofAngledLength(order);
-        System.out.println(new DevMapper().calcSpaerAngledHorizontal(new DevMapper().calcRoofAngledLength(order)));
-
-        try {
-            new DevMapper().buildCarport(order);
-        } catch (FOGException ex) {
-            ex.printStackTrace();
-        }
-        System.out.println("end");
-
-        try {
-            System.out.println(new DevMapper().calcShed(order));
-        } catch (FOGException ex) {
-            Logger.getLogger(DevMapper.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        try {
-            System.out.println(new DevMapper().validateCarport(new Carport(new DevMapper().buildCarport(order)), order));
-        } catch (FOGException ex) {
-            Logger.getLogger(DevMapper.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        new DevMapper().calcRoofAngledLength(order);
+//        System.out.println(new DevMapper().calcSpaerAngledHorizontal(new DevMapper().calcRoofAngledLength(order)));
+//
+//        try {
+//            new DevMapper().buildCarport(order);
+//        } catch (FOGException ex) {
+//            ex.printStackTrace();
+//        }
+//        System.out.println("end");
+//
+//        try {
+//            System.out.println(new DevMapper().calcShed(order));
+//        } catch (FOGException ex) {
+//            Logger.getLogger(DevMapper.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        try {
+//            System.out.println(new DevMapper().validateCarport(new Carport(new DevMapper().buildCarport(order)), order));
+//        } catch (FOGException ex) {
+//            Logger.getLogger(DevMapper.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
     }
 

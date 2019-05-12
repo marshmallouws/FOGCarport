@@ -63,7 +63,7 @@ public class ProductMapper implements ProductDAOInterface {
 
                 Category cat = getCategory(catId);
 
-                p.add(new Product(id, cat, height, length, width, price, active, stock));
+                p.add(new Product(id, 0, cat, height, length, width, price, active, stock, "")); // bruger gamle db, men ny constructor. skal laves om :)
             }
         } catch (SQLException | ClassNotFoundException ex) {
             ex.printStackTrace();
@@ -100,20 +100,27 @@ public class ProductMapper implements ProductDAOInterface {
         Product product = null;
         try {
             Connection con = Connector.connection();
-            String query = "SELECT * FROM product WHERE id = ?";
+            //String query = "SELECT * FROM product WHERE id = ?";
+            String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, products_test.product_name FROM carports.product_variants\n"
+                    + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
+                    + "JOIN products_test ON product_variants.product_id = products_test.id\n"
+                    + "JOIN categories_test ON products_in_categories.category_id = categories_test.id\n"
+                    + "WHERE product_variants.id = ?;";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, id);
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Category c = getCategory(rs.getInt("cat_id"));
-                product = new Product(id, c, rs.getInt("height"), rs.getInt("length"),
-                        rs.getInt("width"), rs.getDouble("price"), rs.getBoolean("active"),
-                        rs.getInt("stock"));
+//                Category c = getCategory(rs.getInt("cat_id"));
+//                product = new Product(id, 0, c, rs.getInt("height"), rs.getInt("length"),
+//                        rs.getInt("width"), rs.getDouble("price"), rs.getBoolean("active"),
+//                        rs.getInt("stock"), ""); // bruger gamle db, men ny constructor. skal laves om :)
+
+                product = new DevMapper().buildProduct(rs);
             }
 
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ProductMapper.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         return product;
     }
@@ -140,7 +147,7 @@ public class ProductMapper implements ProductDAOInterface {
 
                 Category cat = getCategory(catId);
 
-                p.add(new Product(id, cat, height, length, width, price, active, stock));
+                p.add(new Product(id, 0, cat, height, length, width, price, active, stock, "")); // bruger gamle db, men ny constructor. skal laves om :)
             }
         } catch (SQLException | ClassNotFoundException ex) {
             ex.printStackTrace();
@@ -184,7 +191,7 @@ public class ProductMapper implements ProductDAOInterface {
 
                 Category cat = getCategory(catId);
 
-                p.add(new Product(id, cat, height, length, width, price, active, stock));
+                p.add(new Product(id, 0, cat, height, length, width, price, active, stock, "")); // bruger gamle db, men ny constructor. skal laves om :)
             }
         } catch (SQLException | ClassNotFoundException ex) {
             ex.printStackTrace();
@@ -196,16 +203,23 @@ public class ProductMapper implements ProductDAOInterface {
         ArrayList<Category> cat = new ArrayList();
         try {
             Connection con = Connector.connection();
-            String query = "SELECT * FROM category;";
+            //String query = "SELECT * FROM category;";
+            String query = "SELECT id, category_name FROM categories_test;";
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
+//                int id = rs.getInt("id");
+//                String name = rs.getString("cat_name");
+//                boolean height = rs.getBoolean("height");
+//                boolean length = rs.getBoolean("width");
+//                boolean width = rs.getBoolean("width");
+
                 int id = rs.getInt("id");
-                String name = rs.getString("cat_name");
-                boolean height = rs.getBoolean("height");
-                boolean length = rs.getBoolean("width");
-                boolean width = rs.getBoolean("width");
+                String name = rs.getString("category_name");
+                boolean height = true;
+                boolean length = true;
+                boolean width = true;
 
                 cat.add(new Category(id, name, height, width, length));
             }
@@ -220,21 +234,28 @@ public class ProductMapper implements ProductDAOInterface {
         ArrayList<Product> prod = new ArrayList();
         try {
             Connection con = Connector.connection();
-            String query = "SELECT * FROM product WHERE cat_id=?;";
+            //String query = "SELECT * FROM product WHERE cat_id=?;";
+            String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, products_test.product_name FROM carports.product_variants\n"
+                    + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
+                    + "JOIN products_test ON product_variants.product_id = products_test.id\n"
+                    + "JOIN categories_test ON products_in_categories.category_id = categories_test.id\n"
+                    + "WHERE category_id = ?;";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, category_id);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("id");
-                int height = rs.getInt("height");
-                int length = rs.getInt("width");
-                int width = rs.getInt("width");
-                double price = rs.getDouble("price");
-                boolean active = rs.getBoolean("active");
-                int stock = rs.getInt("stock");
+//                int id = rs.getInt("id");
+//                int height = rs.getInt("height");
+//                int length = rs.getInt("width");
+//                int width = rs.getInt("width");
+//                double price = rs.getDouble("price");
+//                boolean active = rs.getBoolean("active");
+//                int stock = rs.getInt("stock");
 
-                prod.add(new Product(id, getCategory(category_id), height, length, width, price, active, stock));
+                prod.add(new DevMapper().buildProduct(rs));
+
+                //prod.add(new Product(id, 0, getCategory(category_id), height, length, width, price, active, stock, "")); // bruger gamle db, men ny constructor. skal laves om :)
             }
 
         } catch (SQLException | ClassNotFoundException ex) {
@@ -272,14 +293,14 @@ public class ProductMapper implements ProductDAOInterface {
             String query = "SELECT * FROM products_in_categories\n"
                     + "JOIN products_test ON products_in_categories.product_id = products_test.id\n"
                     + "WHERE category_id = 7;";
-            
+
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
-            
+
             while (rs.next()) {
                 roofs.add(new Product(rs.getInt("product_id"), rs.getString("product_name")));
             }
-            
+
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
         }

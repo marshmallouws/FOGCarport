@@ -6,12 +6,14 @@
 package PresentationLayer;
 
 import data.FOGException;
+import entity.Odetail;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import logic.LogicFacade;
 
 /**
  *
@@ -22,13 +24,25 @@ public class CarportProductsEditCommand extends Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException {
         
-        String[] id = request.getParameterValues("id[]");
+        LogicFacade logic = new LogicFacade();
+        
+        List<Odetail> odetails = new ArrayList();
+        
+        int orderID = Integer.parseInt(request.getParameter("orderID"));
+        String[] ids = request.getParameterValues("id[]");
         String[] comments = request.getParameterValues("comments[]");
         
-        for (int i = 0; i < comments.length; i++) {
-            System.out.println(id[i]);
-            System.out.println(comments[i]);
+        
+        int counter = 0;
+        for (String i : ids ) {
+            int id = Integer.parseInt(i);
+            odetails.add(new Odetail(id, comments[counter]));
+            counter++;
         }
+        
+        logic.editOdetails(odetails);
+        
+        response.sendRedirect("byggecenter?view=carport&orderID=" + orderID);
         
     }
     

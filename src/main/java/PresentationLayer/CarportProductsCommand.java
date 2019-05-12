@@ -28,10 +28,17 @@ public class CarportProductsCommand extends Command {
         Order order = lf.getOrder(orderID);
         
         List<Odetail> odetails;
+        List<Odetail> odetailsFromDB = lf.getOdetails(orderID);
+        
+        if (odetailsFromDB.isEmpty()) {
+            request.setAttribute("error", "Der findes ingen produkter på denne ordre. Du burde tilføje nogle..");
+            request.getRequestDispatcher("/WEB-INF/carport.jsp").forward(request, response);
+        }
         
         try {
             odetails = lf.buildCarport(order);
-            Carport carport = new Carport(odetails);
+            Carport carport = new Carport(odetailsFromDB);
+            
             request.setAttribute("carport", carport);
         } catch (FOGException ex) {
             throw new FOGException(ex.getMessage());
