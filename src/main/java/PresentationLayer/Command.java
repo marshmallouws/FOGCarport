@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import data.FOGException;
 import data.UpdateException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public abstract class Command {
 
-    public abstract void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
+    public abstract void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException;
 
     public static Command from(HttpServletRequest request) {
         Command c;
@@ -30,6 +31,8 @@ public abstract class Command {
         commands.put("orderinfo", new OrderInfoCommand());
         commands.put("orderinfoadmin", new OrderInfoAdminCommand());
         commands.put("mats", new MaterialPageCommand());
+        commands.put("carport", new CarportProductsCommand());
+        commands.put("carportEdit", new CarportProductsEditCommand());
         
         c = commands.getOrDefault(origin, new UnknownCommand());
 

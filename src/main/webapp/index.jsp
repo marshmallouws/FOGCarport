@@ -16,6 +16,7 @@
         <a href="byggecenter?view=orderpage">Frontend</a>
         <a href="byggecenter?view=backendpage">Backend</a>
         <a href="byggecenter?view=orderinfoadmin&orderID=1">Orderdetails-Admin Test</a>
+        <a href="byggecenter?view=carport&orderID=1">Stykliste Test</a>
         <a href="byggecenter?view=mats">Materiale redigering</a>
         
         <form method="POST" action="byggecenter?view=login">

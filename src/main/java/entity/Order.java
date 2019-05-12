@@ -25,21 +25,24 @@ public class Order {
     private String status;
     private double salesPrice;
     
+    private int roofType;
+    
     //For creating new order in db
-    public Order(int height, int width, int length, int shedLength, int shedWidth, int roofAngle) {
+    public Order(int height, int width, int length, int shedLength, int shedWidth, int roofAngle, int roofType) {
         this.height = height;
         this.width = width;
         this.lenght = length;
         this.shedLength = shedLength;
         this.shedWidth = shedWidth;
         this.roofAngle = roofAngle;
+        this.roofType = roofType;
         this.customerId = customerId;
     }
     
     //For fetching data from db
-    public Order(int id, Employee empl, int height, int width, int length, 
+    public Order(int id, Employee empl, int height, int width, int length, int roofType, 
             int shedLength, int shedWidth, int roofAngle, String date, String status, double salesPrice, int customerId) {
-        this(height, length, width, shedLength, shedWidth, roofAngle);
+        this(height, width, length, shedLength, shedWidth, roofAngle, roofType);
         this.id = id;
         this.empl = empl;
         this.date = date;
@@ -109,6 +112,10 @@ public class Order {
     
     public Employee getEmpl() {
         return empl;
+    }
+
+    public int getRoofType() {
+        return roofType;
     }
 
 }

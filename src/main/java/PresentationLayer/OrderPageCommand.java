@@ -5,12 +5,14 @@
  */
 package PresentationLayer;
 
+import entity.Product;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import logic.LogicFacade;
 
 /**
  *
@@ -20,6 +22,8 @@ public class OrderPageCommand extends Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        LogicFacade logic = new LogicFacade();
         
         int interval = 30;
         
@@ -37,6 +41,7 @@ public class OrderPageCommand extends Command {
         List<Integer> carportSelectLength = new ArrayList();
         List<Integer> shedSelectWidth = new ArrayList();
         List<Integer> shedSelectLength = new ArrayList();
+        List<Product> roofTypes = logic.getRoofTypes();
         
         for (int i = carportMinWidth; i <= carportMaxWidth; i += interval) {
             carportSelectWidth.add(i);
@@ -58,6 +63,8 @@ public class OrderPageCommand extends Command {
         request.setAttribute("carportSelectLength", carportSelectLength);
         request.setAttribute("shedSelectWidth", shedSelectWidth);
         request.setAttribute("shedSelectLength", shedSelectLength);
+        
+        request.setAttribute("roofTypes", roofTypes);
         
         request.getRequestDispatcher("/WEB-INF/orderpage.jsp").forward(request, response);
 

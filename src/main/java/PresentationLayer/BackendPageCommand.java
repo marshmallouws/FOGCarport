@@ -1,11 +1,13 @@
 package PresentationLayer;
 
+import entity.Employee;
 import entity.Order;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import logic.LogicFacade;
 
 /**
@@ -17,12 +19,14 @@ public class BackendPageCommand extends Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
+        HttpSession session = request.getSession();
+        
         LogicFacade logic = new LogicFacade();
-        List<Order> allOrders = logic.getOrders();
+        List<Order> myOrders = logic.getOwnOrders(((Employee)session.getAttribute("user")).getId());
         List<Order> unassignedOrders = logic.getOrdersUnassigned();
         
         
-        request.setAttribute("allOrders", allOrders);
+        request.setAttribute("myOrders", myOrders);
         request.setAttribute("unassignedOrders", unassignedOrders);
         
         request.getRequestDispatcher("/WEB-INF/backendpage.jsp").forward(request, response);
