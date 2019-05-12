@@ -5,6 +5,7 @@
  */
 package data;
 
+import entity.Category;
 import entity.Customer;
 import entity.Order;
 import entity.Employee;
@@ -80,8 +81,6 @@ public class OrderMapper implements OrderInterface {
             double salesPrice = rs.getDouble("sales_price");
             int custId = rs.getInt("cust_id");
             Employee e = null;
-
-            System.out.println(emplID);
             
             if (emplID != 0) {
                 e = getEmployee(emplID);
@@ -269,7 +268,7 @@ public class OrderMapper implements OrderInterface {
             PreparedStatement ps = con.prepareStatement(query);
             
             for (Odetail od : odetails) {
-                ps.setInt(1, od.getProduct().getId());
+                ps.setInt(1, od.getProduct().getVariant_id());
                 ps.setInt(2, od.getOrder_id());
                 ps.setInt(3, od.getQty());  
                 ps.executeUpdate();
@@ -300,7 +299,7 @@ public class OrderMapper implements OrderInterface {
             PreparedStatement ps = con.prepareStatement(query);
             
             for (Odetail od : details) {
-                ps.setInt(1, od.getProduct().getId());
+                ps.setInt(1, od.getProduct().getVariant_id());
                 ps.setInt(2, od.getQty());  
                 ps.executeUpdate();
             }
@@ -318,6 +317,88 @@ public class OrderMapper implements OrderInterface {
             }
             
         } 
+    }
+    
+
+    @Override
+    public Category getCategory(int prod_id) {
+        Category cat = null;
+        
+        try {
+            
+            Connection con = Connector.connection();
+            String query = "SELECT categories_test.id, categories_test.category_name FROM categories_test JOIN products_in_categories ON products_in_categories.category_id = categories_test.id WHERE products_in_categories.product_id = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            
+            ps.setInt(1, prod_id);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                cat = new Category(rs.getInt(1), rs.getString(2));
+            }
+            
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        
+        return cat;
+    }
+    
+    @Override
+    public Product getProduct(int prod_id) {
+        
+        Product prod = null;
+        Category category = null;
+        
+        try {
+            
+            Connection con = Connector.connection();
+            String query = "SELECT product_variants.id, product_variants.product_id, product_variants.length, product_variants.price, product_variants.stock, products_test.product_name, products_test.thickness, products_test.width " +
+            "FROM product_variants " +
+            "JOIN products_test ON product_variants.product_id = products_test.id " +
+            "WHERE product_variants.id = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            
+            ps.setInt(1, prod_id);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                
+                int prodID = rs.getInt("product_id");
+                
+                category = getCategory(prodID);
+                prod = new Product(rs.getInt("id"), category, rs.getInt("thickness"), rs.getInt("length"), rs.getInt("width"), rs.getInt("price"), true, rs.getInt("stock"));
+            }
+        
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        
+        return prod;
+    }
+    
+    @Override
+    public List<Odetail> getOdetails(int orderID) {
+    List<Odetail> details = new ArrayList<>();
+    Product prod = null;
+        try {
+            Connection con = Connector.connection();
+            String query = "SELECT * FROM odetail WHERE order_id = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, orderID);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                
+                prod = getProduct(rs.getInt("prod_id"));
+                
+                details.add(new Odetail(prod, rs.getInt("order_id"), rs.getInt("amount"), prod.getPrice(), ""));
+            }
+            
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return details;
     }
     
 }
