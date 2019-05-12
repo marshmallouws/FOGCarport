@@ -11,11 +11,20 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <% Carport carport = (Carport) request.getAttribute("carport"); %>
 <% Order order = (Order) request.getAttribute("order");%>
+<% String error = (String) request.getAttribute("error"); %>
 
 <jsp:include page="header.jsp"></jsp:include>
     <body>
+
         <div class="container">
-            <h1>Stykliste</h1>
+
+        <% if (error != null) {%>
+        
+        <p><%= error%></p>
+        
+        <% } else {%>
+
+        <h1>Stykliste</h1>
 
         <p>Ordrenummer: <%= order.getId()%></p>
         <p>Kunde: <%= order.getCustomerId()%></p>
@@ -23,46 +32,47 @@
             Bestilling: Carport <%= order.getWidth() + " x " + order.getLenght()%>
             <% if (order.getShedLength() < 0 && order.getShedWidth() < 0) { %>
             uden skur
-            <% }else { %>
-            med skur <%= order.getShedWidth() + " x " + order.getShedLength() %>
-            <% } %>
+            <% } else {%>
+            med skur <%= order.getShedWidth() + " x " + order.getShedLength()%>
+            <% }%>
         </p>
-        <p>Pris: <%= carport.getPrice() %></p>
+        <p>Pris: <%= carport.getPrice()%></p>
 
         <form method="POST" action="byggecenter?view=carportEdit">
+            <input type="hidden" name="orderID" value="<%= order.getId() %>">
             <input type="submit">
-        <table class="table" id="stykliste">
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th>Varenummer</th>
-                    <th>Placering</th>
-                    <th>Navn</th>
-                    <th>Længde</th>
-                    <th>Antal</th>
-                    <th>Beløb</th>
-                    <th>Beskrivelse</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for (Odetail o : carport.getItems() ) {%>
-                <tr>
-                    <input type="hidden" name="id[]" value="<%= o.getId() %>">
-                    <td class="odetailID"><%= o.getId()%></td>
-                    <td><%= o.getProduct().getVariant_id()%></td>
-                    <td><%= o.getProduct().getCategory().getName()%></td>
-                    <td><%= o.getProduct().getName()%></td>
-                    <td><%= o.getProduct().getLength()%> cm</td>
-                    <td><%= o.getQty()%> stk</td>
-                    <td><%= o.getAmount()%> kr.</td>
-                    <td><textarea name="comments[]"><%= o.getComment()%></textarea></td>
-                    <td class="odetailComment"><%= o.getComment()%></td>
-
+            <table class="table" id="stykliste">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>Varenummer</th>
+                        <th>Placering</th>
+                        <th>Navn</th>
+                        <th>Længde</th>
+                        <th>Antal</th>
+                        <th>Beløb</th>
+                        <th>Beskrivelse</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (Odetail o : carport.getItems()) {%>
+                    <tr>
+                <input type="hidden" name="id[]" value="<%= o.getId()%>">
+                <td class="odetailID"><%= o.getId()%></td>
+                <td><%= o.getProduct().getVariant_id()%></td>
+                <td><%= o.getProduct().getCategory().getName()%></td>
+                <td><%= o.getProduct().getName()%></td>
+                <td><%= o.getProduct().getLength()%> cm</td>
+                <td><%= o.getQty()%> stk</td>
+                <td><%= o.getAmount()%> kr.</td>
+                <td><textarea name="comments[]"><%= o.getComment()%></textarea></td>
                 </tr>
                 <% }%>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
         </form>
+
+        <% }%> <!-- end of else statement handling error-->
 
     </div><!-- container end -->
 

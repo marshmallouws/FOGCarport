@@ -21,10 +21,19 @@ public class Odetail {
         this.comment = comment;
     }
     
-    public Odetail(int id, int prod_id, int order_id, int qty) {
+    public Odetail(int id, Product product, int order_id, int qty, double amount, String comment) {
+        this.id = id;
         this.product = product;
         this.order_id = order_id;
         this.qty = qty;
+        this.amount = amount;
+        this.comment = comment;
+    }
+    
+    // for editing
+    public Odetail(int id, String comment) {
+        this.id = id;
+        this.comment = comment;
     }
 
     public int getId() {
@@ -49,6 +58,10 @@ public class Odetail {
 
     public String getComment() {
         return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
     
     

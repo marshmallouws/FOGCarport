@@ -1150,30 +1150,30 @@ public class DevMapper {
         File file = new File(path);
         //System.out.println(new File(".").getAbsolutePath());
 
-        //System.out.println(new DevMapper().loadZipcodesFromFile(file));
+        System.out.println(new DevMapper().loadZipcodesFromFile(file));
         Order order = new Order(270, 720, 720, 200, 200, 10, 12);
 
-        new DevMapper().calcRoofAngledLength(order);
-        System.out.println(new DevMapper().calcSpaerAngledHorizontal(new DevMapper().calcRoofAngledLength(order)));
-
-        try {
-            new DevMapper().buildCarport(order);
-        } catch (FOGException ex) {
-            ex.printStackTrace();
-        }
-        System.out.println("end");
-
-        try {
-            System.out.println(new DevMapper().calcShed(order));
-        } catch (FOGException ex) {
-            Logger.getLogger(DevMapper.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        try {
-            System.out.println(new DevMapper().validateCarport(new Carport(new DevMapper().buildCarport(order)), order));
-        } catch (FOGException ex) {
-            Logger.getLogger(DevMapper.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        new DevMapper().calcRoofAngledLength(order);
+//        System.out.println(new DevMapper().calcSpaerAngledHorizontal(new DevMapper().calcRoofAngledLength(order)));
+//
+//        try {
+//            new DevMapper().buildCarport(order);
+//        } catch (FOGException ex) {
+//            ex.printStackTrace();
+//        }
+//        System.out.println("end");
+//
+//        try {
+//            System.out.println(new DevMapper().calcShed(order));
+//        } catch (FOGException ex) {
+//            Logger.getLogger(DevMapper.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        try {
+//            System.out.println(new DevMapper().validateCarport(new Carport(new DevMapper().buildCarport(order)), order));
+//        } catch (FOGException ex) {
+//            Logger.getLogger(DevMapper.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
     }
 

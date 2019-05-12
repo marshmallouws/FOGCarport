@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,12 +28,12 @@ import java.util.logging.Logger;
 public class OrderMapper implements OrderInterface {
 
     @Override
-    public boolean createOrder(Order order, Customer customer) {
+    public int createOrder(Order order, Customer customer) {
         try {
             Connection con = Connector.connection();
             String SQL = "INSERT INTO `c_order` (height, length, width, shed_length, shed_width, roof_angle, roof_type, cust_id) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement ps = con.prepareStatement(SQL);
+            PreparedStatement ps = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, order.getHeight());
             ps.setInt(2, order.getLenght());
             ps.setInt(3, order.getWidth());
@@ -42,11 +43,18 @@ public class OrderMapper implements OrderInterface {
             ps.setInt(7, order.getRoofType());
             ps.setInt(8, customer.getId());
             ps.executeUpdate();
-            return true;
+
+            ResultSet rs = ps.getGeneratedKeys();
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
         } catch (Exception ex) {
             ex.printStackTrace();
-            return false;
         }
+
+        return 0;
     }
 
     private ResultSet getResult(String query, int... id) throws SQLException, ClassNotFoundException {
@@ -54,11 +62,11 @@ public class OrderMapper implements OrderInterface {
 
         Connection con = Connector.connection();
         PreparedStatement ps = con.prepareStatement(query);
-        
-        for(int i = 0; i < id.length; i++) {
-            ps.setInt(i+1, id[i]);
+
+        for (int i = 0; i < id.length; i++) {
+            ps.setInt(i + 1, id[i]);
         }
-        
+
         rs = ps.executeQuery();
 
         return rs;
@@ -81,7 +89,7 @@ public class OrderMapper implements OrderInterface {
             double salesPrice = rs.getDouble("sales_price");
             int custId = rs.getInt("cust_id");
             Employee e = null;
-            
+
             if (emplID != 0) {
                 e = getEmployee(emplID);
             }
@@ -138,7 +146,7 @@ public class OrderMapper implements OrderInterface {
         }
         return orders;
     }
-    
+
     @Override
     public List<Order> getOwnOrders(int emplId) {
         List<Order> orders = new ArrayList<>();
@@ -249,156 +257,161 @@ public class OrderMapper implements OrderInterface {
     public ArrayList<Order> getOldOrders() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     public List<Product> getCarportList(Order order) {
         List<Product> products = new ArrayList();
-        
+
         // stolper
-        
         return products;
-        
- }
+
+    }
+
     @Override
     public void createOdetail(List<Odetail> odetails) {
         try {
             Connection con = Connector.connection();
             con.setAutoCommit(false);
-            String query = "INSERT INTO `odetails` (prod_id, order_id, amount) "
-                    + "VALUES (?, ?, ?)";
+            String query = "INSERT INTO `odetail` (prod_id, order_id, qty, amount, cmt) "
+                    + "VALUES (?, ?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(query);
-            
+
             for (Odetail od : odetails) {
                 ps.setInt(1, od.getProduct().getVariant_id());
                 ps.setInt(2, od.getOrder_id());
-                ps.setInt(3, od.getQty());  
+                ps.setInt(3, od.getQty());
+                ps.setDouble(4, od.getAmount());
+                ps.setString(5, od.getComment());
                 ps.executeUpdate();
             }
-            
+
             con.commit();
             con.setAutoCommit(true);
-            
+
         } catch (SQLException | ClassNotFoundException e) {
- 
+            e.printStackTrace();
             try {
                 Connection con = Connector.connection();
                 con.rollback();
             } catch (SQLException | ClassNotFoundException e1) {
                 System.out.println("Could not rollback updates");
+                e1.printStackTrace();
             }
-            
+
         }
 
     }
 
     @Override
-    public void editOdetails(int orderID, List<Odetail> details) {
-       try {
+    public void editOdetails(List<Odetail> details) {
+        try {
             Connection con = Connector.connection();
             con.setAutoCommit(false);
-            String query = "UPDATE `odetails` SET prod_id = ?, amount = ? WHERE order_id = ?";
+            //String query = "UPDATE `odetails` SET prod_id = ?, amount = ? WHERE order_id = ?";
+            String query = "UPDATE odetail SET cmt = ? WHERE id = ?;";
             PreparedStatement ps = con.prepareStatement(query);
-            
+
             for (Odetail od : details) {
-                ps.setInt(1, od.getProduct().getVariant_id());
-                ps.setInt(2, od.getQty());  
+//                ps.setInt(1, od.getProduct().getVariant_id());
+//                ps.setInt(2, od.getQty());
+                ps.setString(1, od.getComment());
+                ps.setInt(2, od.getId());
                 ps.executeUpdate();
             }
-            
+
             con.commit();
             con.setAutoCommit(true);
-            
+
         } catch (SQLException | ClassNotFoundException e) {
- 
+
             try {
                 Connection con = Connector.connection();
                 con.rollback();
             } catch (SQLException | ClassNotFoundException e1) {
                 System.out.println("Could not rollback updates");
             }
-            
-        } 
+
+        }
     }
-    
 
     @Override
     public Category getCategory(int prod_id) {
         Category cat = null;
-        
+
         try {
-            
+
             Connection con = Connector.connection();
             String query = "SELECT categories_test.id, categories_test.category_name FROM categories_test JOIN products_in_categories ON products_in_categories.category_id = categories_test.id WHERE products_in_categories.product_id = ?";
             PreparedStatement ps = con.prepareStatement(query);
-            
+
             ps.setInt(1, prod_id);
             ResultSet rs = ps.executeQuery();
-            
+
             while (rs.next()) {
                 cat = new Category(rs.getInt(1), rs.getString(2));
             }
-            
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        
-        return cat;
-    }
-    
-    @Override
-    public Product getProduct(int prod_id) {
-        
-        Product prod = null;
-        Category category = null;
-        
-        try {
-            
-            Connection con = Connector.connection();
-            String query = "SELECT product_variants.id, product_variants.product_id, product_variants.length, product_variants.price, product_variants.stock, products_test.product_name, products_test.thickness, products_test.width " +
-            "FROM product_variants " +
-            "JOIN products_test ON product_variants.product_id = products_test.id " +
-            "WHERE product_variants.id = ?";
-            PreparedStatement ps = con.prepareStatement(query);
-            
-            ps.setInt(1, prod_id);
-            ResultSet rs = ps.executeQuery();
-            
-            while (rs.next()) {
-                
-                int prodID = rs.getInt("product_id");
-                
-                category = getCategory(prodID);
-                prod = new Product(rs.getInt("id"), category, rs.getInt("thickness"), rs.getInt("length"), rs.getInt("width"), rs.getInt("price"), true, rs.getInt("stock"));
-            }
-        
+
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        
+
+        return cat;
+    }
+
+    @Override
+    public Product getProduct(int prod_id) {
+
+        Product prod = null;
+        Category category = null;
+
+        try {
+
+            Connection con = Connector.connection();
+            String query = "SELECT product_variants.id, product_variants.product_id, product_variants.length, product_variants.price, product_variants.stock, products_test.product_name, products_test.thickness, products_test.width "
+                    + "FROM product_variants "
+                    + "JOIN products_test ON product_variants.product_id = products_test.id "
+                    + "WHERE product_variants.id = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+
+            ps.setInt(1, prod_id);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                int prodID = rs.getInt("product_id");
+
+                category = getCategory(prodID);
+                prod = new Product(rs.getInt("product_id"), rs.getInt("id"), category, rs.getInt("thickness"), rs.getInt("length"), rs.getInt("width"), rs.getInt("price"), true, rs.getInt("stock"), rs.getString("product_name"));
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
         return prod;
     }
-    
+
     @Override
     public List<Odetail> getOdetails(int orderID) {
-    List<Odetail> details = new ArrayList<>();
-    Product prod = null;
+        List<Odetail> details = new ArrayList<>();
+        Product prod = null;
         try {
             Connection con = Connector.connection();
             String query = "SELECT * FROM odetail WHERE order_id = ?";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, orderID);
             ResultSet rs = ps.executeQuery();
-            
+
             while (rs.next()) {
-                
+
                 prod = getProduct(rs.getInt("prod_id"));
-                
-                details.add(new Odetail(prod, rs.getInt("order_id"), rs.getInt("amount"), prod.getPrice(), ""));
+
+                details.add(new Odetail(rs.getInt("id"), prod, rs.getInt("order_id"), rs.getInt("qty"), rs.getDouble("amount"), rs.getString("cmt")));
             }
-            
+
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return details;
     }
-    
+
 }

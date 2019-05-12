@@ -1,8 +1,12 @@
 package PresentationLayer;
 
+import data.DevMapper;
+import data.FOGException;
 import entity.Customer;
 import entity.Order;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,7 +51,7 @@ public class AddOrderCommand extends Command {
         }
 
         try {
-            int height = 0; // skal beregnes hvis roofAngle > 0
+            int height = 0; // skal implementeres som på order admin page
             int carportWidth = Integer.parseInt(_carportWidth);
             int carportLength = Integer.parseInt(_carportLength);
             int shedWidth = Integer.parseInt(_shedWidth);
@@ -56,12 +60,22 @@ public class AddOrderCommand extends Command {
             int roofType = Integer.parseInt(_roofType);
 
             Order order = new Order(height, carportWidth, carportLength, shedWidth, shedLength, roofAngle, roofType);
-            boolean success = lf.createOrder(order, c);
-
-            request.setAttribute("success", success);
+            int orderID = lf.createOrder(order, c);
+            
+            
+            if (orderID > 0) {
+                Order orderNew = lf.getOrder(orderID);
+                
+                lf.createOdetail(new DevMapper().buildCarport(orderNew));
+                request.setAttribute("success", true);
+            } else {
+                request.setAttribute("success", false);
+            }
             request.getRequestDispatcher("/WEB-INF/landingpage.jsp").forward(request, response);
 
         } catch (NumberFormatException ex) {
+            ex.printStackTrace();
+        } catch (FOGException ex) {
             ex.printStackTrace();
         }
 

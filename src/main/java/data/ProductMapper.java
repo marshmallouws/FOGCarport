@@ -63,7 +63,7 @@ public class ProductMapper implements ProductDAOInterface {
 
                 Category cat = getCategory(catId);
 
-                p.add(new Product(id, cat, height, length, width, price, active, stock));
+                p.add(new Product(id, 0, cat, height, length, width, price, active, stock, "")); // bruger gamle db, men ny constructor. skal laves om :)
             }
         } catch (SQLException | ClassNotFoundException ex) {
             ex.printStackTrace();
@@ -107,9 +107,9 @@ public class ProductMapper implements ProductDAOInterface {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 Category c = getCategory(rs.getInt("cat_id"));
-                product = new Product(id, c, rs.getInt("height"), rs.getInt("length"),
+                product = new Product(id, 0, c, rs.getInt("height"), rs.getInt("length"),
                         rs.getInt("width"), rs.getDouble("price"), rs.getBoolean("active"),
-                        rs.getInt("stock"));
+                        rs.getInt("stock"), ""); // bruger gamle db, men ny constructor. skal laves om :)
             }
 
         } catch (SQLException | ClassNotFoundException ex) {
@@ -140,7 +140,7 @@ public class ProductMapper implements ProductDAOInterface {
 
                 Category cat = getCategory(catId);
 
-                p.add(new Product(id, cat, height, length, width, price, active, stock));
+                p.add(new Product(id, 0, cat, height, length, width, price, active, stock, "")); // bruger gamle db, men ny constructor. skal laves om :)
             }
         } catch (SQLException | ClassNotFoundException ex) {
             ex.printStackTrace();
@@ -184,7 +184,7 @@ public class ProductMapper implements ProductDAOInterface {
 
                 Category cat = getCategory(catId);
 
-                p.add(new Product(id, cat, height, length, width, price, active, stock));
+                p.add(new Product(id, 0, cat, height, length, width, price, active, stock, "")); // bruger gamle db, men ny constructor. skal laves om :)
             }
         } catch (SQLException | ClassNotFoundException ex) {
             ex.printStackTrace();
@@ -234,7 +234,7 @@ public class ProductMapper implements ProductDAOInterface {
                 boolean active = rs.getBoolean("active");
                 int stock = rs.getInt("stock");
 
-                prod.add(new Product(id, getCategory(category_id), height, length, width, price, active, stock));
+                prod.add(new Product(id, 0, getCategory(category_id), height, length, width, price, active, stock, "")); // bruger gamle db, men ny constructor. skal laves om :)
             }
 
         } catch (SQLException | ClassNotFoundException ex) {

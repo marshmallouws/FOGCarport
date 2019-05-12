@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class LogicFacade {
 
-    public boolean createOrder(Order order, Customer customer) {
+    public int createOrder(Order order, Customer customer) {
         return new data.OrderMapper().createOrder(order, customer);
     }
 
@@ -122,4 +122,14 @@ public class LogicFacade {
         return new data.OrderMapper().getOwnOrders(emplId);
     }
 
+    public List<Odetail> getOdetails(int orderID) {
+        return new data.OrderMapper().getOdetails(orderID);
+    }
+    public void createOdetail(List<Odetail> odetails) {
+        new data.OrderMapper().createOdetail(odetails);
+    }
+    
+    public void editOdetails(List<Odetail> odetails) {
+        new data.OrderMapper().editOdetails(odetails);
+    }
 }
