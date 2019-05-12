@@ -1,6 +1,7 @@
 package PresentationLayer;
 
 import data.FOGException;
+import entity.Carport;
 import entity.Odetail;
 import entity.Order;
 import java.io.IOException;
@@ -27,9 +28,11 @@ public class CarportProductsCommand extends Command {
         Order order = lf.getOrder(orderID);
         
         List<Odetail> odetails;
+        
         try {
             odetails = lf.buildCarport(order);
-            request.setAttribute("carport", odetails);
+            Carport carport = new Carport(odetails);
+            request.setAttribute("carport", carport);
         } catch (FOGException ex) {
             throw new FOGException(ex.getMessage());
         }

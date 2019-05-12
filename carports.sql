@@ -106,7 +106,10 @@ INSERT INTO categories_test (id, category_name) VALUES
 (5, "Beklædning"),
 (6, "Vandbræt"),
 (7, "Tagplader"),
-(8, "Spær");
+(8, "Spær"),
+(9, "Bundskruer"),
+(10, "Universal"),
+(11, "Skruer");
 
 CREATE TABLE products_test (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -127,7 +130,11 @@ INSERT INTO products_test (id, product_name, thickness, width) VALUES
 (9, "Plastmo Ecolite blåtonet", 5, 90),
 (10, "Plastmo Ecolite grøntonet", 5, 900),
 (11, "Plastmo Ecolite rødtonet", 5, 900),
-(12, "Plastmo Ecolite klar", 5, 900);
+(12, "Plastmo Ecolite klar", 5, 900),
+(13, "Plastmo bundskruer", 0, 0),
+(14, "Universal 190 mm", 0, 190),
+(15, "4,5 Skruer", 0, 4.5),
+(16, "4,0 Skruer", 0, 4.0);
 
 CREATE TABLE products_in_categories (
 	category_id INT(8) NOT NULL,
@@ -145,7 +152,11 @@ INSERT INTO products_in_categories (category_id, product_id) VALUES
     (7, 10),
     (7, 11),
     (7, 12),
-    (8, 5);
+    (8, 5),
+    (9, 13),
+    (10, 14),
+    (11, 15),
+    (11, 16);
 
 CREATE TABLE product_variants (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -248,7 +259,14 @@ INSERT INTO product_variants (id, product_id, length, price, stock) VALUES
 (75, 11, 210, 59.95, 888),
 (76, 12, 150, 39.99, 888),
 (77, 12, 180, 39.99, 888),
-(78, 12, 210, 39.99, 888);
+(78, 12, 210, 39.99, 888),
+
+#skruer
+(79, 13, 60, 0.45, 888),
+(80, 14, 50, 0.25, 888),
+(81, 15, 50, 0.13, 888),
+(82, 15, 70, 0.15, 888),
+(83, 16, 50, 0.11, 888);
 
 CREATE TABLE odetail(
 	id INT AUTO_INCREMENT PRIMARY KEY,
