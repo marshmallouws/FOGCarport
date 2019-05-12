@@ -269,7 +269,7 @@ public class DevMapper {
         return lengths;
     }
 
-    private int calcSpaer(Order order) {
+    public int calcSpaer(Order order) {
         // umiddelbart kan en carport ikke være breddere end længden på et spær. Ellers skal vi i hvert fald tilføje noget ekstra til at holde, som ved remmen.
         int count = 10;
         int gap = order.getWidth() / count;

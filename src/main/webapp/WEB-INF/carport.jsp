@@ -29,8 +29,6 @@
         </p>
         <p>Pris: <%= carport.getPrice() %></p>
 
-        <button type="button" class="button btn-primary">Gem</button>
-        <button type="button" class="button btn-success">Send</button>
         <form method="POST" action="byggecenter?view=carportEdit">
             <input type="submit">
         <table class="table" id="stykliste">
@@ -65,17 +63,6 @@
             </tbody>
         </table>
         </form>
-        <button type="button" class="button btn-primary">Gem</button>
-        <button type="button" class="button btn-success">Send</button>
-
-
-        <div id="editBox">
-            <form>
-                <input type="text" name="comment" id="comment">
-                <button type="submit" class="button btn-primary">OK</button>
-            </form>
-            <p>Rediger Beskrivelse</p>
-        </div>
 
     </div><!-- container end -->
 
