@@ -8,23 +8,27 @@ package logic;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.AreaBreak;
+import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
-import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
+import data.FOGException;
+import entity.Category;
+import entity.Employee;
+import entity.Odetail;
 import entity.Order;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,83 +40,60 @@ public class PDFCreater {
 
     LogicFacade l = new LogicFacade();
 
-    public void createPDF(int id) {
+    public void createPDF(Order order) {
+        Document doc = null;
+        PdfDocument pdf = null;
 
         try {
-            PdfWriter writer = new PdfWriter("ordreno" + id + ".pdf");
-            PdfDocument pdf = new PdfDocument(writer);
-            pdf.addNewPage();
-            
-            Document doc = new Document(pdf);
-            doc.add(new Paragraph("Ordre nummer " + id));
+            pdf = new PdfDocument(new PdfWriter("Ordre" + order.getId() + ".pdf"));
+            doc = new Document(pdf);
 
-            doc.close();
-
-        } catch (FileNotFoundException ex) {
-
-        }
-
-    }
-
-    public void createFrontPage(int id) {
-        try {
-            PdfWriter writer = new PdfWriter("ordreno" + id + ".pdf");
-            PdfDocument pdf = new PdfDocument(writer);
-            pdf.addNewPage();
-
-            Document doc = new Document(pdf);
-
-            PdfFont font = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
-
-            Order order = l.getOrder(1);
-            Text info = new Text("Ordre nummer:" + id);
-            Text date = new Text(order.getDate().substring(0, 10));
-
-            Paragraph pi = new Paragraph(info);
-            pi.setTextAlignment(TextAlignment.CENTER);
-            pi.setPadding(100);
-            pi.setFontSize(20);
-
-            Paragraph pd = new Paragraph(date);
-            pd.setTextAlignment(TextAlignment.CENTER);
-            pd.setPaddingTop(10);
-            pd.setFontSize(20);
-
-            doc.add(pi);
-            doc.add(pd);
-            
+            createFrontPage(order, doc, pdf);
             createFooter(doc);
             
             pdf.addNewPage(PageSize.A4);
             doc.add(new AreaBreak());
-            body(doc, pdf);
-            
-                        
+
+            createMaterialList(order, doc);
+
+            //TODO: Observe if header is correct when adding new pages
             try {
-                header("VÆREBRO\nCARPORTE", 25, pdf, doc);
+                createHeader("VÆREBRO\nCARPORTE", 25, pdf, doc);
             } catch (Exception ex) {
-                // IGNORE THIS BITCH
+                // IGNORE THIS
             }
-            
-            doc.close();
 
         } catch (FileNotFoundException ex) {
 
-        } catch (IOException e) {
-
+        } finally {
+            // lets guard it from null pointer exception
+            if (doc != null) {
+                doc.close();
+            }
         }
+
     }
     
-    private void body(Document doc, PdfDocument pdfDoc) {
-        Text inf = new Text("Husk at kontrollere styklisten inden du går i gang");
-        Paragraph p = new Paragraph(inf);
-        p.setPaddingTop(100);
-     
-        doc.add(p);
+    public void createFrontPage(Order order, Document doc, PdfDocument pdf) {
+
+        Text info = new Text("Ordre nummer:" + order.getId());
+        Text date = new Text(order.getDate().substring(0, 10));
+
+        Paragraph pi = new Paragraph(info);
+        pi.setTextAlignment(TextAlignment.CENTER);
+        pi.setPadding(100);
+        pi.setFontSize(20);
+
+        Paragraph pd = new Paragraph(date);
+        pd.setTextAlignment(TextAlignment.CENTER);
+        pd.setPaddingTop(10);
+        pd.setFontSize(20);
+
+        doc.add(pi);
+        doc.add(pd);
     }
-    
-    
-    private void header(String title, int fontsize, PdfDocument pdfDoc, Document doc) throws Exception {
+
+    private void createHeader(String title, int fontsize, PdfDocument pdfDoc, Document doc) throws Exception {
         Paragraph header = new Paragraph(title)
                 .setFont(PdfFontFactory.createFont(FontConstants.HELVETICA))
                 .setFontSize(fontsize);
@@ -128,12 +109,12 @@ public class PDFCreater {
                 x = pdfDoc.getPage(i).getPageSize().getHeight() / 2;
                 y = pdfDoc.getPage(i).getPageSize().getRight() - 20;
             }
- 
+
             doc.showTextAligned(header, x, y, i, TextAlignment.CENTER, VerticalAlignment.BOTTOM, 0);
         }
     }
 
-    public void createFooter(Document doc) {
+    private void createFooter(Document doc) {
         try {
             String imageFile = "logo.png";
             ImageData data = ImageDataFactory.create(imageFile);
@@ -145,10 +126,81 @@ public class PDFCreater {
         }
     }
 
+    private void createMaterialList(Order order, Document doc) {
+        Text inf = new Text("Husk at kontrollere styklisten inden du går i gang");
+        Paragraph p = new Paragraph(inf);
+        p.setPaddingTop(100);
+
+        doc.add(p);
+
+        List<Odetail> details = null;
+        float[] pointColumnWidths = {137F, 90F, 90F, 137F};
+        Table table = new Table(pointColumnWidths);
+        try {
+            details = l.buildCarport(order);
+        } catch (FOGException ex) {
+            Logger.getLogger(PDFCreater.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        Cell c1 = new Cell();
+        c1.add("Beskrivelse").setBold();
+
+        Cell c2 = new Cell();
+        c2.add("Længde").setBold();
+
+        Cell c3 = new Cell();
+        c3.add("Antal").setBold();
+
+        Cell c4 = new Cell();
+        c4.add("Kommentar").setBold();
+
+        table.addCell(c1);
+        table.addCell(c2);
+        table.addCell(c3);
+        table.addCell(c4);
+
+        doc.add(table);
+
+        List<Category> categories = l.getCategorieslist();
+        
+        for (Category cat : categories) {
+            Table t = new Table(pointColumnWidths);
+            String title = cat.getName();
+
+            boolean printTitle = true;
+
+            for (Odetail o : details) {
+
+                if (printTitle) {
+                    t.addCell(new Cell(1, 4).add(title).setBold());
+                    printTitle = false;
+                }
+
+                if (o.getProduct().getCategory().getName().equals(title)) {
+
+                    t.addCell(new Cell().add(o.getProduct().getName()));
+                    t.addCell(new Cell().add(String.valueOf(o.getProduct().getLength())));
+                    t.addCell(new Cell().add(String.valueOf(o.getQty())));
+                    t.addCell(new Cell().add(o.getComment()));
+                } else {
+                    break;
+                }
+            }
+            
+            doc.add(t);
+        }
+        
+
+    }
+
     public static void main(String[] args) {
 
         PDFCreater p = new PDFCreater();
-        p.createFrontPage(1);
+        LogicFacade l = new LogicFacade();
+        Employee empl = new Employee(1, "aaa", "bbb");
+        Order order = l.getOrder(3);
+        //Order order = l.getOrder(1);
+        p.createPDF(order);
 
     }
 }

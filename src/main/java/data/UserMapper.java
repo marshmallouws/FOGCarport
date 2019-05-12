@@ -138,8 +138,10 @@ public class UserMapper implements UserInterface {
         try {
             Connection con = Connector.connection();
             String query = "SELECT * FROM employee WHERE id = ?";
+            
 
             PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, emplId);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
