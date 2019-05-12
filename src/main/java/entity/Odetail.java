@@ -20,6 +20,12 @@ public class Odetail {
         this.amount = amount;
         this.comment = comment;
     }
+    
+    public Odetail(int id, int prod_id, int order_id, int qty) {
+        this.product = product;
+        this.order_id = order_id;
+        this.qty = qty;
+    }
 
     public int getId() {
         return id;

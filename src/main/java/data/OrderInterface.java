@@ -5,10 +5,12 @@
  */
 package data;
 
+import entity.Category;
 import entity.Customer;
 import entity.Order;
 import entity.Employee;
 import entity.Odetail;
+import entity.Product;
 
 import java.util.List;
 
@@ -29,6 +31,9 @@ public interface OrderInterface {
     public Order updateOrder(Order order) throws UpdateException;
     public void createOdetail(List<Odetail> odetails);
     public void editOdetails(int orderID, List<Odetail> detail);
+    public List<Odetail> getOdetails(int orderID);
+    public Product getProduct(int prod_id);
+    public Category getCategory(int prod_id);
     
     
 }
