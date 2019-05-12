@@ -599,7 +599,7 @@ public class DevMapper {
         return products;
     }
 
-    private Product buildProduct(ResultSet rs) throws SQLException {
+    public Product buildProduct(ResultSet rs) throws SQLException {
         int id = rs.getInt("product_id");
         int variant_id = rs.getInt("id");
         Category category = new Category(rs.getInt("category_id"), rs.getString("category_name"));
