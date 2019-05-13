@@ -84,6 +84,9 @@ a.light-link {
 .page-wrapper {
     max-width:1180px;
     margin: auto;
+}
+
+.menu-spacer {
     margin-top:100px;
 }
 

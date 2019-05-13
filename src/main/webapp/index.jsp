@@ -34,7 +34,7 @@
         </div>
 
         <div class="alt-wrapper">
-            <div class="page-wrapper" style="margin-top:0;">
+            <div class="page-wrapper">
                 <div class="row">
                     <div class="col">
                         <img class="col-icon" src="images/w_data.png">
@@ -66,7 +66,7 @@
             </div>
         </div>
 
-        <div class="page-wrapper" style="margin-top:30px;">
+        <div class="page-wrapper" style="margin-top:30px;margin-bottom:35px;">
             <h3>BESKYT BILEN MED EN CARPORT</h3><p>
                 Det kan beskrives som en delvist lukket overdækning af bilen, som enten er fritstående eller bygget som en del af huset. 
                 For de fleste, og specielt dem der elsker biler, er den uundværlig. </p><p>
@@ -77,12 +77,12 @@
                 Så gå på jagt og lad dig inspirere af vores store udvalg.
             </p>
 
-            <div class="pricerunner" style="margin-top:15px;">
+            <div class="pricerunner" style="margin-top:35px;">
                 <div class="row">
                     <div class="col-8">
                         <h4 style="text-align: left;text-transform: uppercase;">Købsgaranti fra Pricerunner</h4>
                         <p>Når du handler hos Johannes Fog, er du omfattet af PriceRunner Købsgaranti. Dermed er du sikret op til 50.000 kroner, hvis noget skulle gå galt i forbindelse med dit køb.
-                            Købsgarantien koster intet og gælder for alle registrerede brugere på PriceRunner. <a href="#"><strong>Se mere her</strong></a></p>
+                            Købsgarantien koster intet og gælder for alle registrerede brugere på PriceRunner. <a href="#fakelink"><strong>Se mere her</strong></a></p>
                     </div>
                     <div clsas="col-4">
                         <img style="width:100%;display: block; margin-left: auto; margin-right: auto;" alt="" src="images/buying-protection-pricerunner.png">
@@ -90,11 +90,10 @@
                 </div>
             </div>
         </div>
-
-
-
-
-        <h1>Hello World!</h1>
+    </div>
+    <div class="separator"></div>
+    <div class="page-wrapper">
+        <h5>For Ansatte</h5>
         <a href="byggecenter?view=orderpage">Frontend</a>
         <a href="byggecenter?view=backendpage">Backend</a>
         <a href="byggecenter?view=orderinfoadmin&orderID=1">Orderdetails-Admin Test</a>
