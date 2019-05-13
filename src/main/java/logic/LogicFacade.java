@@ -175,7 +175,7 @@ public class LogicFacade {
     }
 
     public List<Odetail> buildCarport(Order order) throws FOGException {
-        return new data.DevMapper().buildCarport(order);
+        return new data.Builder().carportBuilder(new data.Builder().carportBlueprint(order), order);
     }
 
     public List<Product> getRoofTypes() {

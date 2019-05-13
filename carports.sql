@@ -155,8 +155,8 @@ INSERT INTO products_in_categories (category_id, product_id) VALUES
     (7, 11),
     (7, 12),
     (8, 5),
-    (9, 13),
-    (10, 14),
+    (11, 13),
+    (11, 14),
     (11, 15),
     (11, 16);
 

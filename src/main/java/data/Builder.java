@@ -385,6 +385,13 @@ public class Builder {
             addProductToBuild(reqs, order, calcSpaerMap(catID, prodID, order.getLenght(), (int) calcRoofAngledLength(order), true), catID, prodID, comment);
 
         }
+        
+        // Bundskruer
+        comment = "Skruer til tagplader";
+        length = 60;
+        catID = 11;
+        prodID = 13;
+        addProductToBuild(reqs, order, calcScrews(7, length, 8, reqs), catID, prodID, comment);
 
         // Beklædning af skur sider
         if (order.getShedLength() > 0 && order.getShedWidth() > 0) {
@@ -397,6 +404,18 @@ public class Builder {
             catID = 5;
             prodID = 8;
             addProductToBuild(reqs, order, calcSurfaceMap(order.getWidth(), order.getHeight(), catID, prodID, order, 2), catID, prodID, comment);
+            
+            // Skruer til ydrebeklædning
+            comment = "Til montering af yderste beklædning";
+            length = 70;
+            catID = 11;
+            prodID = 15;
+            addProductToBuild(reqs, order, calcScrews(5, length, 6 , reqs), catID, prodID, comment);
+            
+            // skruer til inderbeklædning
+            comment = "Til montering af inderste beklædning";
+            length = 50;
+            addProductToBuild(reqs, order, calcScrews(5, length, 8, reqs), catID, prodID, comment);
         }
 
         return reqs;
@@ -431,7 +450,14 @@ public class Builder {
                     Product product = buildProduct(rs);
 
                     int qty = r.getQty();
-                    double amount = qty * product.getPrice() * (product.getLength() / 100);
+                    double amount;
+                    // skruer
+                    if (product.getCategory().getId() == 11) {
+                        amount = qty * product.getPrice();
+                    } else {
+                        amount = qty * product.getPrice() * (product.getLength() / 100);
+                    }
+                    
                     String comment = r.getComment();
                     odetails.add(new Odetail(product, order.getId(), qty, amount, comment));
 
@@ -496,7 +522,26 @@ public class Builder {
     private Map<Integer, Integer> calcStolperMap(Order order) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    private Map<Integer, Integer> calcScrews(int productCatID, int screwLength, int ratio, List<Orequest> blueprint) {
+        Map<Integer, Integer> map = new HashMap();
+        
+        for (Orequest o : blueprint) {
+            if (o.getProduct().getCategory_id() == productCatID) {
+                map.put(screwLength, map.getOrDefault(screwLength, 0) + o.getQty() * ratio);
+            }
+        }
+        
+        // value * ratio
+//            for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+//                map.put(entry.getKey(), entry.getValue() * ratio);
+//            }
+        
+        
+        return map;
+    }
 
+    // Længden på siden af taget
     private double calcRoofAngledLength(Order order) {
 
         double degree = order.getRoofAngle();
