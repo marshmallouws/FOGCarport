@@ -120,35 +120,34 @@ public class DevMapper {
         return min;
 
     }
-
-    private Map<Integer, Integer> calcRemmeMap(Order order) {
-        int categoryID = 2;
-        int productID = 5; // skal hentes dynamisk fra ordren, hvis anden type kan benyttes
+    
+    private Map<Integer, Integer> calcWoodsMap(int categoryID, int productID, int length) {
+        // skal hentes dynamisk fra ordren, hvis anden type kan benyttes
         Map<Integer, Integer> map = new HashMap();
-        List<Product> remme = getProductsAllForBuild(categoryID, productID);
+        List<Product> woods = getProductsAllForBuild(categoryID, productID);
 
-        int length = order.getLenght();
-        int max = calcMaxLength(remme);
-        int min = calcMinLength(remme);
+        int len = length;
+        int max = calcMaxLength(woods);
+        int min = calcMinLength(woods);
 
-        while (length > 0) {
-            if (length > max) {
+        while (len > 0) {
+            if (len > max) {
                 map.put(max, map.getOrDefault(max, 0) + 1);
-                length -= max;
-            } else if (length < min) {
-                map.put(max, map.getOrDefault(min, 0) + 1);
-                length -= min;
+                len -= max;
+            } else if (len < min) {
+                map.put(min, map.getOrDefault(min, 0) + 1);
+                len -= min;
             } else {
-                for (Product p : remme) {
-                    if (p.getLength() > length) {
+                for (Product p : woods) {
+                    if (p.getLength() > len) {
                         map.put(p.getLength(), map.getOrDefault(p.getLength(), 0) + 1);
-                        length -= p.getLength();
+                        len -= p.getLength();
                         break;
                     }
                 }
             }
         }
-
+        
         return map;
     }
 
@@ -481,7 +480,7 @@ public class DevMapper {
         List<Product> products = new ArrayList();
         try {
             Connection con = Connector.connection();
-            String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, products_test.product_name FROM carports.product_variants\n"
+            String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, active, products_test.product_name FROM carports.product_variants\n"
                     + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
                     + "JOIN products_test ON product_variants.product_id = products_test.id\n"
                     + "JOIN categories_test ON products_in_categories.category_id = categories_test.id\n"
@@ -501,8 +500,9 @@ public class DevMapper {
                 double price = rs.getDouble("price");
                 int stock = rs.getInt("stock");
                 String name = rs.getString("product_name");
+                boolean active = rs.getBoolean("active");
 
-                products.add(new Product(id, variant_id, category, thickness, width, length, price, stock, name));
+                products.add(new Product(id, variant_id, category, thickness, width, length, price, stock, name, active));
             }
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
@@ -520,14 +520,15 @@ public class DevMapper {
         double price = rs.getDouble("price");
         int stock = rs.getInt("stock");
         String name = rs.getString("product_name");
+        boolean active = rs.getBoolean("active");
 
-        return new Product(id, variant_id, category, thickness, width, length, price, stock, name);
+        return new Product(id, variant_id, category, thickness, width, length, price, stock, name, active);
     }
 
     private void addStolper(List<Odetail> odetails, Order order) {
         try {
             Connection con = Connector.connection();
-            String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, products_test.product_name FROM carports.product_variants\n"
+            String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, active, products_test.product_name FROM carports.product_variants\n"
                     + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
                     + "JOIN products_test ON product_variants.product_id = products_test.id\n"
                     + "JOIN categories_test ON products_in_categories.category_id = categories_test.id\n"
@@ -611,16 +612,16 @@ public class DevMapper {
 
     }
 
-    private List<Orequest> addProductToBuild(List<Orequest> reqs, Order order, Map<Integer, Integer> lengths, int categoryID, String comment) {
+    private List<Orequest> addProductToBuild(List<Orequest> reqs, Order order, Map<Integer, Integer> lengths, int categoryID, int productID, String comment) {
         int catID = categoryID;
 
         for (Map.Entry<Integer, Integer> entry : lengths.entrySet()) {
             int lengthMin = entry.getKey();
             int lengthMax = entry.getKey();
-            int productID = 5;
-            int width = 195;
+            int prodID = productID;
+            int width = 195; // bliver pt. ikke benyttet, nødløsning til søm
 
-            Product product = new Product(catID, productID, lengthMin, lengthMax, width);
+            Product product = new Product(catID, prodID, lengthMin, lengthMax, width);
 
             int qty = entry.getValue();
             double amount = qty * product.getPrice() * (product.getLength() / 100);
@@ -736,7 +737,7 @@ public class DevMapper {
 
                 if (rs.next()) {
                     Product product = buildProduct(rs);
-                    int qty = entry.getValue(); // én i hver side
+                    int qty = entry.getValue();
                     double amount = qty * product.getPrice() * (product.getLength() / 100);
                     String comment = "Tagplader monteres på spær";
                     odetails.add(new Odetail(product, order.getId(), qty, amount, comment));
@@ -1040,17 +1041,39 @@ public class DevMapper {
     // NEW - Not finished
     public List<Orequest> carportBlueprint(Order order) {
         String comment;
+        int catID;
+        int prodID;
+        int length;
         List<Orequest> reqs = new ArrayList();
 
         //Remme
         comment = "Remme i sider, sadles ned i stolper";
-        addProductToBuild(reqs, order, calcRemmeMap(order), 2, comment);
+        catID = 2;
+        prodID = 5;
+        length = order.getLenght();
+        //addProductToBuild(reqs, order, calcRemmeMap(order), catID, prodID, comment);
+        addProductToBuild(reqs, order, calcWoodsMap(catID, prodID, length), catID, prodID, comment);
 
         // Stolper
-        // Remme
+        comment = "Stolper";
+        catID = 1;
+        //ddProductToBuild(reqs, order, calcStolperMap(order), catID, comment);
+
         // Spær
+        comment = "";
+
         // Understernbrædder siderne
+        comment = "Understernbrædder siderne";
+        catID = 3;
+        prodID = 1;
+        length  = order.getLenght();
+        addProductToBuild(reqs, order, calcWoodsMap(catID, prodID, length), catID, prodID, comment);
+
         // Understernbrædder for- og bagende
+        comment = "Understernbrædder for- og bagende";
+        length = order.getWidth();
+        addProductToBuild(reqs, order, calcWoodsMap(catID, prodID, length), catID, prodID, comment);
+        
         // Tag fladt
         if (order.getRoofAngle() == 0) {
         } else {
@@ -1074,20 +1097,19 @@ public class DevMapper {
         try {
             con = Connector.connection();
             for (Orequest r : request) {
-                query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, products_test.product_name FROM carports.product_variants\n"
+                query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, active, products_test.product_name FROM carports.product_variants\n"
                         + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
                         + "JOIN products_test ON product_variants.product_id = products_test.id\n"
                         + "JOIN categories_test ON products_in_categories.category_id = categories_test.id\n"
-                        + "WHERE category_id = ? AND (length BETWEEN ? AND ?) AND product_variants.product_id = ? AND width = ?;";
+                        + "WHERE category_id = ? AND (length BETWEEN ? AND ?) AND product_variants.product_id = ?;";
 
                 ps = con.prepareStatement(query);
                 ps.setInt(1, r.getProduct().getCategory_id());
                 ps.setInt(2, r.getProduct().getLengthMin());
                 ps.setInt(3, r.getProduct().getLengthMax());
                 ps.setInt(4, r.getProduct().getId());
-                ps.setInt(5, r.getProduct().getWidth());
                 rs = ps.executeQuery();
-
+                
                 if (rs.next()) {
                     Product product = buildProduct(rs);
 
@@ -1199,7 +1221,7 @@ public class DevMapper {
         //System.out.println(new File(".").getAbsolutePath());
 
         //System.out.println(new DevMapper().loadZipcodesFromFile(file));
-        Order order = new Order(270, 720, 720, 200, 200, 10, 12);
+        Order order = new Order(270, 1900, 1900, 200, 200, 10, 12);
 
 //        new DevMapper().calcRoofAngledLength(order);
 //        System.out.println(new DevMapper().calcSpaerAngledHorizontal(new DevMapper().calcRoofAngledLength(order)));
@@ -1212,8 +1234,10 @@ public class DevMapper {
 //        System.out.println("end");
         List<Orequest> blueprint = new DevMapper().carportBlueprint(order);
         for (Odetail o : new DevMapper().carportBuilder(blueprint, order)) {
-            System.out.println(o.getProduct().getName() + " " + o.getProduct().getLength() + " cm. " + o.getQty() + " stk. " + o.getAmount() + " kr. " + " " + o.getComment());
+            System.out.println(o.getProduct().getName() + " " + o.getProduct().getLength() + " cm. " + o.getQty() + " stk. " + o.getAmount() + " kr. " + " " + o.getComment() + " " + o.getProduct().isActive());
         }
+
+        //System.out.println(new DevMapper().calcRemmeMap(order));
 
         //System.out.println(new DevMapper().calcRemmeMap(order));
 //

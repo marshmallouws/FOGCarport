@@ -47,7 +47,7 @@ public class Product {
     }
     
     // new simple
-    public Product (int id, int variant_id, Category category, int thickness, int width, int length, double price, int stock, String name)  {
+    public Product (int id, int variant_id, Category category, int thickness, int width, int length, double price, int stock, String name, boolean active)  {
         this.id = id;
         this.variant_id = variant_id;
         this.category = category;
@@ -57,6 +57,7 @@ public class Product {
         this.price = price;
         this.stock = stock;
         this.name = name;
+        this.active = active;
     }
     
     // for showing types of roof (at the moment)
@@ -72,8 +73,14 @@ public class Product {
         this.lengthMin = lengthMin;
         this.lengthMax = lengthMax;
         this.width = width;
-    } 
-
+    }
+    
+    // For displaying all products in a category (not all variants)
+    public Product (int id, Category category, String name) {
+        this.id = id;
+        this.category = category;
+        this.name = name;
+    }
     public double getPrice() {
         return price;
     }

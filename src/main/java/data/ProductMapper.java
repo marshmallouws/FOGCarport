@@ -5,16 +5,19 @@
  */
 package data;
 
+import com.sun.org.apache.bcel.internal.generic.Select;
 import entity.Category;
 import entity.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Generated;
 
 /**
  *
@@ -101,7 +104,7 @@ public class ProductMapper implements ProductDAOInterface {
         try {
             Connection con = Connector.connection();
             //String query = "SELECT * FROM product WHERE id = ?";
-            String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, products_test.product_name FROM carports.product_variants\n"
+            String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, active, products_test.product_name FROM carports.product_variants\n"
                     + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
                     + "JOIN products_test ON product_variants.product_id = products_test.id\n"
                     + "JOIN categories_test ON products_in_categories.category_id = categories_test.id\n"
@@ -264,6 +267,64 @@ public class ProductMapper implements ProductDAOInterface {
         return prod;
     }
 
+    public ArrayList<Product> getProductVariantsList(int categoryID, int productID) {
+        ArrayList<Product> prod = new ArrayList();
+        try {
+            Connection con = Connector.connection();
+            //String query = "SELECT * FROM product WHERE cat_id=?;";
+            String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, active, products_test.product_name FROM carports.product_variants\n"
+                    + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
+                    + "JOIN products_test ON product_variants.product_id = products_test.id\n"
+                    + "JOIN categories_test ON products_in_categories.category_id = categories_test.id\n"
+                    + "WHERE category_id = ? AND products_in_categories.product_id = ?;";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, categoryID);
+            ps.setInt(2, productID);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+//                int id = rs.getInt("id");
+//                int height = rs.getInt("height");
+//                int length = rs.getInt("width");
+//                int width = rs.getInt("width");
+//                double price = rs.getDouble("price");
+//                boolean active = rs.getBoolean("active");
+//                int stock = rs.getInt("stock");
+
+                prod.add(new DevMapper().buildProduct(rs));
+
+                //prod.add(new Product(id, 0, getCategory(category_id), height, length, width, price, active, stock, "")); // bruger gamle db, men ny constructor. skal laves om :)
+            }
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        return prod;
+    }
+    
+    public List<Product> getProductsInCategories(int categoryID) {
+        List<Product> products = new ArrayList();
+        try {
+            Connection con = Connector.connection();
+            String query = "SELECT * FROM products_in_categories\n"
+                    + "JOIN products_test ON products_test.id = products_in_categories.product_id\n"
+                    + "JOIN categories_test ON categories_test.id = products_in_categories.category_id\n"
+                    + "WHERE category_id = ?;";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, categoryID);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                products.add(new Product(rs.getInt("product_id"), new Category(rs.getInt("category_id"), rs.getString("category_name")), rs.getString("product_name")));
+            }
+            return products;
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return products;
+    }
+
     public boolean saveProduct(Product product) {
         try {
             Connection con = Connector.connection();
@@ -280,6 +341,51 @@ public class ProductMapper implements ProductDAOInterface {
             ps.executeUpdate();
             return true;
         } catch (SQLException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+    
+    public int createProduct(Product product) {
+        try {
+            int id = 0;
+            Connection con = Connector.connection();
+            con.setAutoCommit(false); // implement transactions with categoryID
+            String query = "INSERT INTO products_test (product_name, thickness, width) VALUES (?,?,?);";
+            PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, product.getName());
+            ps.setInt(2, product.getThickness());
+            ps.setInt(3, product.getWidth());
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            
+            if (rs.next()) {
+                id = rs.getInt(1);
+                
+                query = "INSERT INTO";
+                
+            }
+            
+            return id;
+        } catch (ClassNotFoundException | SQLException ex) {
+            ex.printStackTrace();
+            return 0;
+        }
+    }
+    
+    public boolean updateProductVariant(Product product) {
+        try {
+            Connection con = Connector.connection();
+            String query = "UPDATE product_variants SET price = ?, stock = ?, active = ? WHERE id = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setDouble(1, product.getPrice());
+            ps.setInt(2, product.getStock());
+            ps.setBoolean(3, product.isActive());
+            ps.setInt(4, product.getVariant_id()); //
+            ps.executeUpdate();
+            return true;
+            
+        } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
             return false;
         }

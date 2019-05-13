@@ -165,7 +165,8 @@ CREATE TABLE product_variants (
     product_id INT(8) NOT NULL,
     length INT(8) NOT NULL,
     price DOUBLE,
-    stock INT(8)
+    stock INT(8),
+    active BOOLEAN DEFAULT TRUE
 );
 
 INSERT INTO product_variants (id, product_id, length, price, stock) VALUES
