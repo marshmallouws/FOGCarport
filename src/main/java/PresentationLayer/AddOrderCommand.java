@@ -23,6 +23,7 @@ public class AddOrderCommand extends Command {
 
         String _carportWidth = request.getParameter("carportWidth");
         String _carportLength = request.getParameter("carportLength");
+        String _carportHeight = request.getParameter("carportHeight");
         String _shedWidth = request.getParameter("shedWidth");
         String _shedLength = request.getParameter("shedLength");
         String _roofAngle = request.getParameter("roofAngle");
@@ -51,7 +52,7 @@ public class AddOrderCommand extends Command {
         }
 
         try {
-            int height = 0; // skal implementeres som på order admin page
+            int height = Integer.parseInt(_carportHeight); // skal implementeres som på order admin page
             int carportWidth = Integer.parseInt(_carportWidth);
             int carportLength = Integer.parseInt(_carportLength);
             int shedWidth = Integer.parseInt(_shedWidth);
