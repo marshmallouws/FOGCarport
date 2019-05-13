@@ -340,7 +340,7 @@ public class OrderMapper implements OrderInterface {
         try {
 
             Connection con = Connector.connection();
-            String query = "SELECT categories_test.id, categories_test.category_name FROM categories_test JOIN products_in_categories ON products_in_categories.category_id = categories_test.id WHERE products_in_categories.product_id = ?";
+            String query = "SELECT categories.id, categories.category_name FROM categories JOIN products_in_categories ON products_in_categories.category_id = categories.id WHERE products_in_categories.product_id = ?";
             PreparedStatement ps = con.prepareStatement(query);
 
             ps.setInt(1, prod_id);
@@ -366,9 +366,9 @@ public class OrderMapper implements OrderInterface {
         try {
 
             Connection con = Connector.connection();
-            String query = "SELECT product_variants.id, product_variants.product_id, product_variants.length, product_variants.price, product_variants.stock, products_test.product_name, products_test.thickness, products_test.width "
+            String query = "SELECT product_variants.id, product_variants.product_id, product_variants.length, product_variants.price, product_variants.stock, products.product_name, products.thickness, products.width "
                     + "FROM product_variants "
-                    + "JOIN products_test ON product_variants.product_id = products_test.id "
+                    + "JOIN products ON product_variants.product_id = products.id "
                     + "WHERE product_variants.id = ?";
             PreparedStatement ps = con.prepareStatement(query);
 

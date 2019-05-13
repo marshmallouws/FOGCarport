@@ -150,7 +150,7 @@ public class DevMapper {
         File file = new File(path);
         //System.out.println(new File(".").getAbsolutePath());
 
-        //System.out.println(new DevMapper().loadZipcodesFromFile(file));
+        System.out.println(new DevMapper().loadZipcodesFromFile(file));
     }
 
 }

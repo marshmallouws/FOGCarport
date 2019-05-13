@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -29,17 +27,6 @@ public class Builder {
         for (Odetail o : new Builder().carportBuilder(blueprint, order)) {
             System.out.println(o.getProduct().getName() + " " + o.getProduct().getLength() + " cm. " + o.getQty() + " stk. " + o.getAmount() + " kr. " + " " + o.getComment() + " " + o.getProduct().isActive());
         }
-    }
-
-    public int calcSpaer(Order order) {
-        // umiddelbart kan en carport ikke være breddere end længden på et spær. Ellers skal vi i hvert fald tilføje noget ekstra til at holde, som ved remmen.
-        int count = 10;
-        int gap = order.getWidth() / count;
-        while (gap >= 60) {
-            count += 5;
-            gap = order.getWidth() / count;
-        }
-        return count;
     }
 
     // width afgør hvor mange rækker
@@ -92,7 +79,6 @@ public class Builder {
     }
 
     private Map<Integer, Integer> calcWoodsMap(int categoryID, int productID, int length) {
-        // skal hentes dynamisk fra ordren, hvis anden type kan benyttes
         Map<Integer, Integer> map = new HashMap();
         List<Product> woods = getProductsAllForBuild(categoryID, productID);
 
@@ -263,10 +249,10 @@ public class Builder {
         List<Product> products = new ArrayList();
         try {
             Connection con = Connector.connection();
-            String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, active, products_test.product_name FROM carports.product_variants\n"
+            String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories.category_name, products.thickness, products.width, length, price, stock, product_variants.active, products.product_name FROM carports.product_variants\n"
                     + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
-                    + "JOIN products_test ON product_variants.product_id = products_test.id\n"
-                    + "JOIN categories_test ON products_in_categories.category_id = categories_test.id\n"
+                    + "JOIN products ON product_variants.product_id = products.id\n"
+                    + "JOIN categories ON products_in_categories.category_id = categories.id\n"
                     + "WHERE category_id = ? AND product_variants.product_id = ?;";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, categoryID);
@@ -289,6 +275,7 @@ public class Builder {
             }
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
+            
         }
         return products;
     }
@@ -433,10 +420,10 @@ public class Builder {
         try {
             con = Connector.connection();
             for (Orequest r : request) {
-                query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, active, products_test.product_name FROM carports.product_variants\n"
+                query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories.category_name, products.thickness, products.width, length, price, stock, product_variants.active, products.product_name FROM carports.product_variants\n"
                         + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
-                        + "JOIN products_test ON product_variants.product_id = products_test.id\n"
-                        + "JOIN categories_test ON products_in_categories.category_id = categories_test.id\n"
+                        + "JOIN products ON product_variants.product_id = products.id\n"
+                        + "JOIN categories ON products_in_categories.category_id = categories.id\n"
                         + "WHERE category_id = ? AND (length BETWEEN ? AND ?) AND product_variants.product_id = ?;";
 
                 ps = con.prepareStatement(query);
@@ -531,12 +518,6 @@ public class Builder {
                 map.put(screwLength, map.getOrDefault(screwLength, 0) + o.getQty() * ratio);
             }
         }
-        
-        // value * ratio
-//            for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-//                map.put(entry.getKey(), entry.getValue() * ratio);
-//            }
-        
         
         return map;
     }

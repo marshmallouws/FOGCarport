@@ -5,6 +5,7 @@
  */
 package entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,6 +40,28 @@ public class Carport {
             total += o.getAmount();
         }
         return total;
+    }
+    
+    public List<Odetail> getWoodsList() {
+        List<Odetail> woods = new ArrayList();
+        for (Odetail o : items) {
+            // screws
+            if (o.getProduct().getCategory().getId() != 11) {
+                woods.add(o);
+            }
+        }
+        return woods;
+    }
+    
+    public List<Odetail> getScrewsList() {
+        List<Odetail> screws = new ArrayList();
+        for (Odetail o : items) {
+            // screws
+            if (o.getProduct().getCategory().getId() == 11) {
+                screws.add(o);
+            }
+        }
+        return screws;
     }
     
     

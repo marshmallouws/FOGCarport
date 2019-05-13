@@ -55,52 +55,12 @@ CREATE TABLE c_order(
         REFERENCES customer(id)
 );
 
-CREATE TABLE category(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-    cat_name VARCHAR(30) NOT NULL,
-    height BOOLEAN,
-    length BOOLEAN,
-    width BOOLEAN
-    # Booleans are for checking whether or not the given measurement is required for inserting new element
-);
-
-INSERT INTO category (id, cat_name, height, length, width) VALUES
-(1, "Stolper", true, true, true),
-(2, "Remme", true, true, true),
-(3, "Sternbrædder", true, true, true),
-(4, "Understernbrædder", true, true, true),
-(5, "Oversternbrædder", true, true, true),
-(6, "Beklædning", true, true, true ),
-(7, "Spær", true, true, true),
-(8, "Tagplader", true, true, true);
-
-CREATE TABLE product(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-    product_name VARCHAR(42) NOT NULL,
-    cat_id INT NOT NULL,
-    height INT,
-    length INT,
-    width INT,
-    price DOUBLE,
-    stock INT,
-    active BOOLEAN DEFAULT TRUE,
-    CONSTRAINT cat_prod
-		FOREIGN KEY(cat_id)
-        REFERENCES category(id)
-);
-
-INSERT INTO product (id, product_name, cat_id, height, length, width, price, stock, active) VALUES
-(1, "97x97 mm. trykimp. Stolpe", 1, 0, 300, 97, 888.95, 99, true),
-(2, "45x195 mm. spærtræ ubh.", 2, 0, 600, 195, 888.95, 99, true),
-(3, "45x195 mm. spærtræ ubh.", 2, 0, 480, 195, 888.95, 99, true),
-(4, "19x100 mm. trykimp. Brædt", 2, 0, 480, 195, 888.95, 99, true);
-
-CREATE TABLE categories_test (
+CREATE TABLE categories (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     category_name VARCHAR(22) NOT NULL
 );
 
-INSERT INTO categories_test (id, category_name) VALUES
+INSERT INTO categories (id, category_name) VALUES
 (1, "Stolper"),
 (2, "Remme"),
 (3, "Understernbrædder"),
@@ -113,14 +73,15 @@ INSERT INTO categories_test (id, category_name) VALUES
 (10, "Universal"),
 (11, "Skruer");
 
-CREATE TABLE products_test (
+CREATE TABLE products (
 	id INT AUTO_INCREMENT PRIMARY KEY,
     product_name VARCHAR(42) NOT NULL,
     thickness INT(8) NOT NULL,
-    width INT(8) NOT NULL
+    width INT(8) NOT NULL,
+    active BOOLEAN DEFAULT TRUE
 );
 
-INSERT INTO products_test (id, product_name, thickness, width) VALUES
+INSERT INTO products (id, product_name, thickness, width) VALUES
 (1, "25x200 mm. trykimp. Brædt", 25, 200),
 (2, "25x125 mm. trykimp. Brædt", 25, 125),
 (3, "38x73 mm. Lægte ubh.", 38, 73),

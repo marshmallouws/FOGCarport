@@ -225,7 +225,7 @@
                       name: prod_name,
                       thickness: prod_thick,
                       width: prod_width,
-                      catID: prod_catID
+                      category_id: prod_catID
                     };
                     
                     console.log(prodNew);
