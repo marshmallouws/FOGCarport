@@ -176,7 +176,7 @@
                                        <textarea class="form-control" name="message" id="message"></textarea>
                                    </div>
                     -->
-                    <button type="submit" class="btn btn-success order-btn">Bestil Carport*</button>    
+                    <button id="getOffer_btn" type="submit" class="btn btn-success order-btn">Bestil Tilbud*</button>    
                 </div>
                 </form>
 

@@ -77,6 +77,10 @@ body {
     height:4rem;
 }
 
+.order-btn:disabled {
+    cursor: not-allowed;
+}
+
 #canvasWrapper{
     position:absolute;
     top:0;

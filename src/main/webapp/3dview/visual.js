@@ -14,6 +14,19 @@ cLoadScreen.prototype.hideLoadingUI = function () {
 };
 
 
+function orderButtonDisabled(disabled){
+    if(disabled){
+        $('#getOffer_btn').prop("disabled", true);
+        $('#getOffer_btn').removeClass("btn-success");
+        $('#getOffer_btn').addClass("btn-danger");
+    } else {
+        $('#getOffer_btn').prop("disabled", false);
+        $('#getOffer_btn').addClass("btn-success");
+        $('#getOffer_btn').removeClass("btn-danger");
+    }
+}
+
+
 var canvas;
 var engine;
 var scene;
@@ -32,8 +45,10 @@ function startVisual() {
     });
 
     $("#widthIn, #lengthIn, #roofType").change(function () {
-        if ($(this).val() > 0)
-            updateScene();
+        if ($(this).val() > 0) {
+            updateScene(); } else {
+            orderButtonDisabled(true);
+            }
     });
     $("#shedWidthIn, #shedLengthIn").change(function () {
         updateScene();
@@ -59,14 +74,15 @@ function updateScene() {
     height = (document.getElementById("heightIn").value / 100) * 2;
     shedLength = (shedLin.value / 100) * 2;
     shedWidth = (shedWin.value / 100) * 1.2;
-    //shed = document.getElementById("shedIn").checked;
     shed = shedLength < 0.5 || shedWidth < 0.5 ? false : true;
     roofAngle = document.getElementById("roofAngleIn").value;
     roof = roofAngle < 5 ? false : true;
     roofType = roofTin.value;
         
-    if(width<=0||length<=0||height<=0)
+    if(width<=0||length<=0||height<=0){
+        orderButtonDisabled(true);
         return;
+    }
     ////////// check if shed is too big
     if (shed && shedWidth > width) {
         shedWin.style.backgroundColor = "#e67e7e";
@@ -110,6 +126,7 @@ function updateScene() {
     //////////////////////////
     engine.displayLoadingUI();
     scene = createScene();
+    orderButtonDisabled(false);
 }
 
 var roofAngle = 0;
