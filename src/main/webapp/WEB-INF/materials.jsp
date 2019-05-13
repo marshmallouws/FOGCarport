@@ -86,11 +86,49 @@
                 });
 
                 $('#materials_catSelect').one('change', function () {
+                    $('#materials_prodSelect_wrapper').slideDown("fast");
                     $('#materials_matSelect_wrapper').slideDown("fast");
+
                 });
 
+// Pick Category
                 $('#materials_catSelect').change(function () {
-                    $.get("byggecenter?view=mats&c=products&id=" + $(this).val(), function (jsonResp) {
+                    /*
+                     $.get("byggecenter?view=mats&c=products&id=" + $(this).val(), function (jsonResp) {
+                     var jsonObj = JSON.parse(jsonResp);
+                     var list = $('#materials_matSelect');
+                     list.val("");
+                     $('#materials_matEdit_wrapper').slideUp("fast");
+                     $('option[data-option]', list).remove();
+                     $.each(jsonObj, function (key, value) { // Iterate over the JSON array.
+                     var optionTag = $("<option data-option>").text(value.category.name + " #" + value.id + " " + value.height + "x" + value.length + "x" + value.width).appendTo(list);
+                     optionTag.val(value.variant_id);
+                     console.log(value);
+                     optionTag.appendTo(list);
+                     });
+                     });
+                     */
+
+                    $.get("byggecenter?view=mats&c=productsInCat&categoryID=" + $(this).val(), function (jsonResp) {
+                        var jsonObj = JSON.parse(jsonResp);
+                        var list = $('#materials_prodSelect');
+                        list.val("");
+                        //$('#materials_prodSelect_wrapper').slideUp("fast");
+                        $('option[data-option]', list).remove();
+                        $.each(jsonObj, function (key, value) { // Iterate over the JSON array.
+                            var optionTag = $("<option data-option>").text(value.category.name + " #" + value.id + " " + value.name).appendTo(list);
+                            optionTag.val(value.id);
+                            optionTag.appendTo(list);
+                        });
+                    });
+
+                });
+
+                // Pick Product
+                $('#materials_prodSelect').change(function () {
+                    //$.get("byggecenter?view=mats&c=products&id=" + $(this).val(), function (jsonResp) {
+                    $.get("byggecenter?view=mats&c=products&categoryID=" + $('#materials_catSelect').val() + "&productID=" + $(this).val(), function (jsonResp) {
+                        console.log($('#materials_catSelect').val());
                         var jsonObj = JSON.parse(jsonResp);
                         var list = $('#materials_matSelect');
                         list.val("");
@@ -98,7 +136,7 @@
                         $('option[data-option]', list).remove();
                         $.each(jsonObj, function (key, value) { // Iterate over the JSON array.
                             var optionTag = $("<option data-option>").text(value.category.name + " #" + value.id + " " + value.height + "x" + value.length + "x" + value.width).appendTo(list);
-                            optionTag.val(value.id);
+                            optionTag.val(value.variant_id);
                             optionTag.appendTo(list);
                         });
                     });
@@ -124,6 +162,18 @@
                     });
                 });
 
+                // load cat again - better way?
+                $.get("byggecenter?view=mats&c=categories", function (jsonResp) {
+                    var jsonObj = JSON.parse(jsonResp);
+                    var list = $('#materials_catSelect_input');
+                    $('option[data-option]', list).remove();
+                    $.each(jsonObj, function (key, value) { // Iterate over the JSON array.
+                        var optionTag = $("<option data-option>").text(value.name);
+                        optionTag.val(value.id);
+                        optionTag.appendTo(list);
+                    });
+                });
+
                 var cProduct;
                 $('#materials_saveBtn').click(function () {
                     var currentProduct = cProduct;
@@ -131,7 +181,7 @@
                     currentProduct.price = $('#materials_productPrice').val();
                     currentProduct.height = $('#materials_productHeight').val();
                     currentProduct.length = $('#materials_productLength').val();
-                    currentProduct.width = $('#materials_productWidth').val();     
+                    currentProduct.width = $('#materials_productWidth').val();
                     $('#materials_saveSpinner').css("display", "inline-block");
                     $.post("byggecenter?view=mats&c=save", {product: JSON.stringify(currentProduct)}, function (data) {
                         if (data === "error") {
@@ -165,6 +215,28 @@
                             });
                 });
 
+                $('#materials_createNewBtn').click(function () {
+                    var prod_name = $("#product_name_input").val();
+                    var prod_thick = $("#product_thick_input").val();
+                    var prod_width = $("#product_width_input").val();
+                    var prod_catID = $("#materials_catSelect_input").val();
+                    
+                    var prodNew = {
+                      name: prod_name,
+                      thickness: prod_thick,
+                      width: prod_width,
+                      catID: prod_catID
+                    };
+                    
+                    console.log(prodNew);
+                    
+                    $.post("byggecenter?view=mats&c=create", {product: JSON.stringify(prodNew)}, function (data) {
+                        if (data == "error") {
+                            
+                        }
+                });
+            });
+
                 function setupProductEdit(jsonResp) {
                     var jsonObj = JSON.parse(jsonResp);
                     cProduct = jsonObj;
@@ -174,11 +246,11 @@
                     $('#materials_productPrice').val(jsonObj.price);
                     //mål
                     $('#materials_productHeight').val(jsonObj.height);
-                    $('#materials_productHeight').attr("disabled", !jsonObj.category.height);
+                    //$('#materials_productHeight').attr("disabled", !jsonObj.category.height);
                     $('#materials_productLength').val(jsonObj.length);
-                    $('#materials_productLength').attr("disabled", !jsonObj.category.length);
+                    //$('#materials_productLength').attr("disabled", !jsonObj.category.length);
                     $('#materials_productWidth').val(jsonObj.width);
-                    $('#materials_productWidth').attr("disabled", !jsonObj.category.width);
+                    //$('#materials_productWidth').attr("disabled", !jsonObj.category.width);
                     //save
                     $('#materials_saveBtn').val(jsonObj.id);
                 }
@@ -190,18 +262,33 @@
             <div id="materials_ui_wrapper">
                 <!-- Edit materials -->
                 <div id="materials_editUI">
+
                     <div class="materials_select_wrapper">
                         Kategori:
                         <select id="materials_catSelect" class="form-control">
                             <option value="" disabled selected>Vælg kategori</option>
                         </select>
                     </div>
+
+                    <!-- 
+                    <button id="materials_createCategoryBtn" class="btn btn-success">Opret kategori</button>
+                    -->
+
+                    <div id="materials_prodSelect_wrapper" class="materials_select_wrapper" style="display:none;">
+                        Produkter:
+                        <select id="materials_prodSelect" class="form-control">
+                            <option value="" disabled selected>Vælg produkt</option>
+                        </select>
+                    </div>
+
                     <div id="materials_matSelect_wrapper" class="materials_select_wrapper" style="display:none;">
                         Materiale:
                         <select id="materials_matSelect" class="form-control">
                             <option value="" disabled selected>Vælg materiale</option>
                         </select>
                     </div>
+
+
                     <div id="materials_matEdit_wrapper" style="display:none;">
                         <h2 id="materials_matEdit_name"></h2>
                         <div id="materials_matEdit_form">
@@ -239,7 +326,17 @@
 
                 <!-- create materials -->
                 <div id="materials_createUI" style="display:none;">
-                    Not yet implemented.
+                    <select id="materials_catSelect_input" class="form-control">
+                        <option value="" disabled selected>Vælg kategori</option>
+                    </select>
+                    Navn<input id="product_name_input" class="form-control" type="text" name="prodname">
+                    Tykkelse<input id="product_thick_input" class="form-control" type="number" name="prodthick">
+                    Bredde<input id="product_width_input" class="form-control" type="number" name="prodwidth">
+
+
+
+                    <button id="materials_createNewBtn" class="btn btn-info">Opret Produkt</button>
+
                 </div>
                 <!-- create end -->
             </div>
