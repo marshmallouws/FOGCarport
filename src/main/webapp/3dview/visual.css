@@ -1,0 +1,182 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 09-May-2019, 16:37:39
+    Author     : vl48
+*/
+
+body {
+    overflow-y:hidden;
+}
+
+.navbar {
+        max-width:100% !important;
+    margin:0 !important;
+}
+
+.orderpage_wrapper {
+    position:relative;
+    min-width:18rem;
+}
+
+.container {
+    padding-left:0;
+    padding-right:0;
+}
+
+.sidebar-wrapper {
+    width:18rem;
+    padding-top:70px;
+    padding-bottom:20px;
+    height:100vh;
+    overflow-y: scroll;
+    position:absolute;
+    top:0;
+    right:0;
+    background-color:#3c3c3c;
+}
+
+.options_wrapper {
+    padding:15px;
+    background-color:#FFF;
+
+}
+
+.options_wrapper .form-group {
+    margin-bottom:0.6rem;
+}
+
+.customer_wrapper {
+    padding:15px;
+    color:#FFF;
+}
+
+.customer_wrapper .form-control {
+    border: 1px solid #495057;
+    background-color: #ced4da;
+}
+
+.order-btn {
+    width:100%;
+    margin-top:10px;
+    height:4rem;
+}
+
+.order-btn:disabled {
+    cursor: not-allowed;
+}
+
+#canvasWrapper{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    min-height:100%;
+}
+#canvasArea {
+    position:relative;
+}
+#canvasArea, #renderCanvas, #cLoadScreenContainer {
+    width   : 100%;
+    height  : 100%;
+    text-align:center;
+    height:100vh;
+    outline:none;
+}
+
+#renderCanvas {
+    cursor:grab;
+    padding-right:18rem;
+}
+
+#canvasArea img.watermark {
+    position: absolute;
+    pointer-events: none;
+    padding-left:20px;
+    padding-bottom:20px;
+    bottom:0;
+    min-width:30px;
+    z-index: 5;
+}
+
+#canvasArea a.reset {
+    pointer-events: auto;
+    position: absolute;
+    margin-right:20px;
+    margin-bottom:20px;
+    right:18rem;
+    bottom:0;
+    width:30px;
+    z-index:5;
+}
+
+#canvasArea a.reset svg {
+    fill: #FFF;
+}
+#canvasArea a.reset svg:hover {
+    width:32px;
+    cursor: pointer;
+}
+
+#cLoadScreenContainer {
+    background-color:#163856;
+    position: absolute;
+    display:none;
+    padding-right:18rem;
+    top:0;
+    left:0;
+    z-index: 999;
+}
+
+#cLoadScreenContainer .center {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+#cLoadScreenContainer img {
+    vertical-align: middle;
+}
+
+#cLoadScreenContainer svg {
+    position: absolute;
+    left:0;
+    top:0;
+    padding-right: 18rem;
+}
+
+.canvasFooter {
+    height:70px;
+    width:100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: #014079;
+    z-index: 1;
+    text-align:left;
+}
+
+.canvasFooter p {
+    color :#DEDEDE;
+    padding-left: 10rem;
+    padding-top: 0.6rem;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #014079; 
+}
+
+::-webkit-scrollbar-thumb {
+    background: #5ea0dc;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #abd2f5;
+}

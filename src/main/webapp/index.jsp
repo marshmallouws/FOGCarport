@@ -8,10 +8,12 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Index</title>
+        <%@ include file="/WEB-INF/parts/headmeta.jspf" %>
+        <title>Fog</title>
     </head>
     <body>
+        <%@ include file="/WEB-INF/parts/navigation.jspf" %>
+        <div class="page-wrapper">
         <h1>Hello World!</h1>
         <a href="byggecenter?view=orderpage">Frontend</a>
         <a href="byggecenter?view=backendpage">Backend</a>
@@ -24,6 +26,6 @@
             <input type="password" name="password" id="password" placeholder="Password">
             <button type="submit">Login</button>
         </form>
-        
+        </div>
     </body>
 </html>

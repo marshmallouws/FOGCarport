@@ -23,6 +23,8 @@ public class Product {
     private int category_id;
     private int thickness;
     private String name;
+    private int lengthMin;
+    private int lengthMax;
     
     //For creating new product
     public Product (Category category, int height, int length, int width, double price, int stock) {
@@ -62,6 +64,15 @@ public class Product {
         this.id = id;
         this.name = name;
     }
+    
+    // For building the Blueprint
+    public Product (int category_id, int product_id, int lengthMin, int lengthMax, int width) {
+        this.category_id = category_id;
+        this.id = product_id;
+        this.lengthMin = lengthMin;
+        this.lengthMax = lengthMax;
+        this.width = width;
+    } 
 
     public double getPrice() {
         return price;
@@ -106,5 +117,19 @@ public class Product {
     public int getCategory_id() {
         return category_id;
     }
+
+    public int getThickness() {
+        return thickness;
+    }
+
+    public int getLengthMin() {
+        return lengthMin;
+    }
+
+    public int getLengthMax() {
+        return lengthMax;
+    }
+    
+    
     
 }

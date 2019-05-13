@@ -8,15 +8,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <%@ include file="/WEB-INF/parts/headmeta.jspf" %>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/redmond/jquery-ui.css">
         <title>Materialer & Produkter</title>
 
         <style>
             #materials_topWrapper {
+                position: relative;
                 max-width:1180px;
                 width:100%;
                 margin:20px auto;
@@ -63,6 +62,7 @@
         </style>
     </head>
     <body>
+        <%@ include file="/WEB-INF/parts/navigation.jspf" %>
         <script>
             $(function () {
                 $('#materials_editBtn').click(function () {
@@ -184,6 +184,7 @@
                 }
             });
         </script>
+        <div class="page-wrapper">
         <div id="materials_topWrapper">
             <button id="materials_editBtn" class="btn btn-primary active">Redigér materialer</button>
             <button id="materials_createBtn" class="btn btn-primary">Opret materialer</button>
@@ -250,6 +251,7 @@
                 <span id="materials_saveMsg_icon" class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
                 <span id="materials_saveMsg_msg">Success! Ændringerne er nu gemt.</span>
             </p>
+        </div>
         </div>
     </body>
 </html>
