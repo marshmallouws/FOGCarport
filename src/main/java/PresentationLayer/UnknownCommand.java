@@ -18,6 +18,7 @@ public class UnknownCommand extends Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.sendRedirect("");
     }
     
 }
