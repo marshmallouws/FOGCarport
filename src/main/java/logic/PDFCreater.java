@@ -8,10 +8,17 @@ package logic;
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.events.Event;
+import com.itextpdf.kernel.events.IEventHandler;
+import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
@@ -47,24 +54,33 @@ public class PDFCreater {
         try {
             pdf = new PdfDocument(new PdfWriter("Ordre" + order.getId() + ".pdf"));
             doc = new Document(pdf);
+            doc.setMargins(170, 50, 40, 50);
+            
+            Image logo = new Image(ImageDataFactory.create("logo.png"));
+            
+            ImageEventHandler handler = new ImageEventHandler(logo);
+            pdf.addEventHandler(PdfDocumentEvent.END_PAGE, handler);
 
             createFrontPage(order, doc, pdf);
-            createFooter(doc);
-            
+            //createFooter(doc);
+
             pdf.addNewPage(PageSize.A4);
             doc.add(new AreaBreak());
 
             createMaterialList(order, doc);
-
+            /*
             //TODO: Observe if header is correct when adding new pages
             try {
-                createHeader("VÆREBRO\nCARPORTE", 25, pdf, doc);
+                //createHeader("VÆREBRO\nCARPORTE", 25, pdf, doc);
+                manipulatePdf(doc, pdf);
             } catch (Exception ex) {
                 // IGNORE THIS
-            }
+            } */
 
         } catch (FileNotFoundException ex) {
 
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(PDFCreater.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             // lets guard it from null pointer exception
             if (doc != null) {
@@ -73,7 +89,7 @@ public class PDFCreater {
         }
 
     }
-    
+
     public void createFrontPage(Order order, Document doc, PdfDocument pdf) {
 
         Text info = new Text("Ordre nummer:" + order.getId());
@@ -81,12 +97,10 @@ public class PDFCreater {
 
         Paragraph pi = new Paragraph(info);
         pi.setTextAlignment(TextAlignment.CENTER);
-        pi.setPadding(100);
         pi.setFontSize(20);
 
         Paragraph pd = new Paragraph(date);
         pd.setTextAlignment(TextAlignment.CENTER);
-        pd.setPaddingTop(10);
         pd.setFontSize(20);
 
         doc.add(pi);
@@ -129,7 +143,6 @@ public class PDFCreater {
     private void createMaterialList(Order order, Document doc) {
         Text inf = new Text("Husk at kontrollere styklisten inden du går i gang");
         Paragraph p = new Paragraph(inf);
-        p.setPaddingTop(100);
 
         doc.add(p);
 
@@ -162,34 +175,38 @@ public class PDFCreater {
         doc.add(table);
 
         List<Category> categories = l.getCategorieslist();
-        
+
+        /* TODO: Optimize to prevent looping through all 
+            Odetails for every instance of Category. Maybe this should be
+            done in the method buildCarport so that it returns a Map */
         for (Category cat : categories) {
+
             Table t = new Table(pointColumnWidths);
             String title = cat.getName();
 
             boolean printTitle = true;
 
             for (Odetail o : details) {
-
-                if (printTitle) {
-                    t.addCell(new Cell(1, 4).add(title).setBold());
-                    printTitle = false;
-                }
-
                 if (o.getProduct().getCategory().getName().equals(title)) {
+
+                    if (printTitle) {
+                        t.addCell(new Cell(1, 4).add(title).setBold());
+                        printTitle = false;
+                    }
 
                     t.addCell(new Cell().add(o.getProduct().getName()));
                     t.addCell(new Cell().add(String.valueOf(o.getProduct().getLength())));
                     t.addCell(new Cell().add(String.valueOf(o.getQty())));
                     t.addCell(new Cell().add(o.getComment()));
-                } else {
-                    break;
                 }
             }
-            
-            doc.add(t);
+
+            if (!t.isEmpty()) {
+                doc.add(new Paragraph(new Text("\n")));
+                doc.add(t);
+            }
+
         }
-        
 
     }
 
@@ -202,5 +219,28 @@ public class PDFCreater {
         //Order order = l.getOrder(1);
         p.createPDF(order);
 
+    }
+
+    public class ImageEventHandler implements IEventHandler {
+
+        protected Image img;
+
+
+        public ImageEventHandler(Image img) {
+            this.img = img;
+        }
+
+        @Override
+        public void handleEvent(Event event) {
+            PdfDocumentEvent docEvent = (PdfDocumentEvent) event;
+            PdfDocument pdfDoc = docEvent.getDocument();
+            PdfPage page = docEvent.getPage();
+            PdfCanvas aboveCanvas = new PdfCanvas(page.newContentStreamAfter(),
+                    page.getResources(), pdfDoc);
+            Rectangle area = page.getPageSize();
+            new Canvas(aboveCanvas, pdfDoc, area)
+                    .add(img);
+            
+        }
     }
 }
