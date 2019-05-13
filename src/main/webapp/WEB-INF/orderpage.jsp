@@ -16,11 +16,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width , initial-scale=1" />
+        <%@ include file="/WEB-INF/parts/headmeta.jspf" %>
         <title>Byg din carport! - Fog</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://preview.babylonjs.com/babylon.js"></script> 
         <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
         <script src="https://code.jquery.com/pep/0.4.1/pep.js"></script>
@@ -29,20 +26,7 @@
     </head>
     <body>
         <div class="orderpage_wrapper">
-            <div class="header">
-                <nav class="navbar navbar-dark" style="flex-flow: row nowrap;justify-content: flex-start;">
-                    <a class="navbar-brand" href="./"><img height="70" src="3dview/images/fog-logo.png" /></a>
-                    <div id="navbarHeader">
-                        <div class="navbar-nav" style="flex-direction: row;">
-                            <a class="nav-item nav-link" href="./">Forside</a>
-                            <a class="nav-item nav-link active" href="./byggecenter?view=orderpage">Bestil Carport</a>
-                            <a class="nav-item nav-link" href="#">Priser</a>
-                        </div>
-                    </div>
-                </nav>
-
-
-            </div>
+            <%@ include file="/WEB-INF/parts/navigation.jspf" %>
             <div id="canvasWrapper">
                 <div id="canvasArea">
                     <div id="cLoadScreenContainer">

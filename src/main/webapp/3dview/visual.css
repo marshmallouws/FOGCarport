@@ -12,21 +12,9 @@ body {
     overflow-y:hidden;
 }
 
-
-.header {
-    position:absolute;
-    top:0;
-    left:0;
-    height:70px;
-    z-index: 9999;
-    width:100%;
-    background-color:#014079;
-}
-
-#navbarHeader .navbar-nav .nav-link {
-    padding-right: 1rem;
-    padding-left: 1rem;
-    font-size:1.2rem;
+.navbar {
+        max-width:100% !important;
+    margin:0 !important;
 }
 
 .orderpage_wrapper {

@@ -1,0 +1,14 @@
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>
+<div class="header">
+    <nav class="navbar navbar-dark" style="flex-flow: row nowrap;justify-content: flex-start;">
+        <a class="navbar-brand" href="./"><img height="70" src="3dview/images/fog-logo.png" /></a>
+        <div id="navbarHeader">
+            <div class="navbar-nav" style="flex-direction: row;">
+                <a class="nav-item nav-link" href="./">Forside</a>
+                <a class="nav-item nav-link active" href="./byggecenter?view=orderpage">Bestil Carport</a>
+                <a class="nav-item nav-link" href="#">Priser</a>
+            </div>
+        </div>
+    </nav>
+</div>
