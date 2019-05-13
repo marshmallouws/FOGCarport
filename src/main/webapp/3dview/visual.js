@@ -79,7 +79,7 @@ function updateScene() {
     roof = roofAngle < 5 ? false : true;
     roofType = roofTin.value;
         
-    if(width<=0||length<=0||height<=0){
+    if(width<=0||length<=0||height<=0||(!roof && roofType <=0)){
         orderButtonDisabled(true);
         return;
     }
