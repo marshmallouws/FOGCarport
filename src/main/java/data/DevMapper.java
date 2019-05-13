@@ -1198,7 +1198,7 @@ public class DevMapper {
         File file = new File(path);
         //System.out.println(new File(".").getAbsolutePath());
 
-        //System.out.println(new DevMapper().loadZipcodesFromFile(file));
+        System.out.println(new DevMapper().loadZipcodesFromFile(file));
         Order order = new Order(270, 720, 720, 200, 200, 10, 12);
 
 //        new DevMapper().calcRoofAngledLength(order);
@@ -1212,7 +1212,7 @@ public class DevMapper {
 //        System.out.println("end");
         List<Orequest> blueprint = new DevMapper().carportBlueprint(order);
         for (Odetail o : new DevMapper().carportBuilder(blueprint, order)) {
-            System.out.println(o.getProduct().getName() + " " + o.getProduct().getLength() + " cm. " + o.getQty() + " stk. " + o.getAmount() + " kr. " + " " + o.getComment());
+            //System.out.println(o.getProduct().getName() + " " + o.getProduct().getLength() + " cm. " + o.getQty() + " stk. " + o.getAmount() + " kr. " + " " + o.getComment());
         }
 
         //System.out.println(new DevMapper().calcRemmeMap(order));
