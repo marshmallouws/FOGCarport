@@ -106,7 +106,7 @@ public class AddOrderCommand extends Command {
             if (orderID > 0) {
                 Order orderNew = lf.getOrder(orderID);
                 
-                lf.createOdetail(new DevMapper().buildCarport(orderNew));
+                lf.createOdetail(lf.buildCarport(orderNew));
                 request.setAttribute("success", true);
             } else {
                 request.setAttribute("success", false);

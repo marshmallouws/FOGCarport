@@ -1,0 +1,161 @@
+/* 
+    Created on : 09-May-2019, 16:37:39
+    Author     : vl48
+*/
+
+.header {
+    position:absolute;
+    top:0;
+    left:0;
+    height:70px;
+    z-index: 9999;
+    width:100%;
+    background-color:#014079;
+}
+
+.navbar {
+    max-width:1180px;
+    margin:auto;
+}
+
+#navbarHeader .navbar-nav .nav-link {
+    padding-right: 1rem;
+    padding-left: 1rem;
+    font-size:1.2rem;
+}
+
+.login-btn {
+    cursor:pointer;
+    color:#FFF !important;
+    position: absolute;
+    right: 0;
+    top: 25px;
+}
+
+.login-btn:hover {
+    font-weight:700;
+    text-decoration: none !important;
+}
+
+.login-btn span {
+    padding-left:5px;
+}
+
+#login_modal {
+    width:100%;
+    height:100%;
+    background-color:#00000070;
+    position: fixed;
+    left:0;
+    top:0;
+    z-index: 9999999;
+}
+
+#login_modal .login-form {
+    padding: 30px;
+    border-radius: 30px;
+    width: 350px;
+    background-color: #FFF;
+    margin: auto;
+    position:relative;
+    -webkit-box-shadow: 0px 0px 16px 3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 16px 3px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 16px 3px rgba(0,0,0,0.75);
+}
+
+#login_modal .login-form input, #login_modal .login-form button {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 40px;
+    padding:5px;
+}
+
+#login_modal .login-close-btn {
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    width: 30px;
+}
+
+.banner {
+    background-image: url('../images/headerbg.jpg');
+    background-size:cover;
+    background-position:center;
+    height:500px;
+    width:100%;
+    -webkit-box-shadow: 0px 6px 14px 6px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 6px 14px 6px rgba(0,0,0,0.75);
+    box-shadow: 0px 6px 14px 6px rgba(0,0,0,0.75);
+}
+
+.banner_content {
+    margin-top:70px !important;
+    padding-top:30px;
+    color:#FFF;
+}
+
+a.light-link {
+    color:#FFF;
+}
+
+.banner_content h4 {
+    padding:10px;
+    background-color:#00000050;
+    -webkit-box-shadow: 0px 0px 18px 5px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 18px 5px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 18px 5px rgba(0,0,0,0.5);
+}
+
+.separator {
+    background-color:#014079;
+    width:100%;
+    height:10px;
+    margin-bottom:35px;
+}
+
+.trusted-icons {
+    height:50px;
+    margin-bottom:10px;
+}
+
+.alt-wrapper {
+    margin-top:35px;
+    width:100%;
+    background-color:#014079;
+    padding-top:30px;
+    padding-bottom:30px;
+    color:#FFF;
+}
+
+.alt-wrapper .page-wrapper {
+    text-align: center;
+}
+.alt-wrapper .page-wrapper p {
+    text-align: justify;
+}
+
+.page-wrapper {
+    max-width:1180px;
+    margin: auto;
+}
+
+.menu-spacer {
+    margin-top:100px;
+}
+
+.col-icon {
+    margin-bottom:15px;
+}
+
+.col-title:after {
+    background: #FFF;
+    height: 2px;
+    width: 50%;
+    margin: auto;
+    content: ' ';
+    display: block;
+    margin-bottom: 15px;
+    margin-top: 20px;
+}

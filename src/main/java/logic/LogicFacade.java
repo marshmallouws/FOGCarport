@@ -49,7 +49,7 @@ public class LogicFacade {
     public void assignOrder(int orderID, int employeeID) {
         new data.OrderMapper().assignOrder(orderID, employeeID);
     }
-    
+
     public Order updateOrder(Order order) throws UpdateException {
         return new data.OrderMapper().updateOrder(order);
     }
@@ -65,7 +65,7 @@ public class LogicFacade {
     public int createCustomer(Customer customer) {
         return new data.UserMapper().createCustomer(customer);
     }
-    
+
     public Customer getCustomer(int customerID) {
         return new data.UserMapper().getCustomer(customerID);
     }
@@ -74,50 +74,117 @@ public class LogicFacade {
         return new Gson().toJson(new data.ProductMapper().getCategories());
     }
 
-    public String getProductList(String category_id) {
+    public String getProductVariantsList(String categoryID, String productID) {
         try {
-            int cat_id = Integer.parseInt(category_id);
-            return new Gson().toJson(new data.ProductMapper().getProductList(cat_id));
-        } catch (NumberFormatException e) {
+            int catID = Integer.parseInt(categoryID);
+            int prodID = Integer.parseInt(productID);
+            return new Gson().toJson(new data.ProductMapper().getProductVariantsList(catID, prodID));
+        } catch (NumberFormatException ex) {
             return "error";
         }
     }
 
-    public String getProduct(String product_id) {
+    public String getProductsInCategories(String categoryID) {
+        try {
+            int catID = Integer.parseInt(categoryID);
+            return new Gson().toJson(new data.ProductMapper().getProductsInCategories(catID));
+        } catch (NumberFormatException ex) {
+            return "error";
+        }
+
+    }
+
+    public String getProductVariant(String product_id) {
         try {
             int prod_id = Integer.parseInt(product_id);
-            return new Gson().toJson(new data.ProductMapper().getProduct(prod_id));
+            return new Gson().toJson(new data.ProductMapper().getProductVariant(prod_id));
         } catch (NumberFormatException e) {
             return "error";
         }
     }
 
-    public String saveProduct(String product) {
+    public String getProductVariant(int product_id) {
         try {
-            Product prod = new Gson().fromJson(product, Product.class);
-            boolean success = new data.ProductMapper().saveProduct(prod);
-            if (!success) {
+            if (product_id == 0) {
                 throw new Exception();
             }
-            return "success";
+
+            return new Gson().toJson(new data.ProductMapper().getProductVariant(product_id));
         } catch (Exception e) {
             return "error";
         }
+
     }
-    //Testing something
     
+    public String getProductMain(String product_id) {
+        try {
+            int prod_id = Integer.parseInt(product_id);
+            return new Gson().toJson(new data.ProductMapper().getProductMain(prod_id));
+        } catch(NumberFormatException ex) {
+            return "error";
+        }
+    }
+
+    public String updateProductVariant(String product) {
+        try {
+            Product prod = new Gson().fromJson(product, Product.class);
+            boolean success = new data.ProductMapper().updateProductVariant(prod);
+
+            if (!success) {
+                throw new Exception();
+            }
+            return "succes";
+
+        } catch (Exception ex) {
+            return "error";
+        }
+
+    }
+
+    public String createProduct(String product) {
+        try {
+            Product prod = new Gson().fromJson(product, Product.class);
+            int id = new data.ProductMapper().createProduct(prod);
+
+            if (id == 0) {
+                throw new Exception();
+            }
+            return "succes";
+
+        } catch (Exception ex) {
+            return "error";
+        }
+    }
+
+    public String createProductVariant(String product) {
+        try {
+            Product prod = new Gson().fromJson(product, Product.class);
+            int id = new data.ProductMapper().createProductVariant(prod);
+            
+            if (id == 0) {
+                throw new Exception();
+            }
+
+            return "succes";
+        } catch (Exception ex) {
+            return "error";
+        }
+
+    }
+
+    //Testing something
     public Employee getEmployee(int id) {
         return new data.UserMapper().getEmployee(id);
     }
-    
+
     public List<Odetail> buildCarport(Order order) throws FOGException {
-        return new data.DevMapper().buildCarport(order);
+        return new data.Builder().carportBuilder(new data.Builder().carportBlueprint(order), order);
     }
-    
+
     public List<Product> getRoofTypes() {
         return new data.ProductMapper().getRoofTypes();
     }
-    
+
     public List<Order> getOwnOrders(int emplId) {
         return new data.OrderMapper().getOwnOrders(emplId);
     }
@@ -125,10 +192,11 @@ public class LogicFacade {
     public List<Odetail> getOdetails(int orderID) {
         return new data.OrderMapper().getOdetails(orderID);
     }
+
     public void createOdetail(List<Odetail> odetails) {
         new data.OrderMapper().createOdetail(odetails);
     }
-    
+
     public void editOdetails(List<Odetail> odetails) {
         new data.OrderMapper().editOdetails(odetails);
     }
