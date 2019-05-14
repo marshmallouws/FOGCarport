@@ -13,9 +13,15 @@
 
     String currLogged = ((Employee)session.getAttribute("user")).getInitials();
 %>
-<jsp:include page="header.jsp"></jsp:include>
-
-    <div class="container">
+<!DOCTYPE html>
+<html>
+    <head>
+        <%@ include file="/WEB-INF/parts/headmeta.jspf" %>
+        <title>Bestillings Liste - Fog</title>
+    </head>
+    <body>
+        <%@ include file="/WEB-INF/parts/navigation.jspf" %>
+        <div class="page-wrapper menu-spacer">
         <body>
             <h1>Backend Page</h1>
             

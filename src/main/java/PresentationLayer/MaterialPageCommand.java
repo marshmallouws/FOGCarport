@@ -33,7 +33,12 @@ public class MaterialPageCommand extends Command {
                 break;
                 
             case "products":
-                json=logic.getProductList(request.getParameter("id"));
+                //json=logic.getProductList(request.getParameter("id"));
+                json=logic.getProductVariantsList(request.getParameter("categoryID"), request.getParameter("productID"));
+                break;
+                
+            case "productsInCat":
+                json = logic.getProductsInCategories(request.getParameter("categoryID"));
                 break;
                 
             case "product":
@@ -41,7 +46,12 @@ public class MaterialPageCommand extends Command {
                 break;
                 
             case "save":
-                json=logic.saveProduct(request.getParameter("product"));
+                //json=logic.saveProduct(request.getParameter("product"));
+                json = logic.updateProductVariant(request.getParameter("product"));
+                break;
+                
+            case "create":
+                json = logic.createProduct(request.getParameter("product"));
                 break;
                 
             default:
