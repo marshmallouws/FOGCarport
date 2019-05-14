@@ -106,7 +106,7 @@ public class UserMapper implements UserInterface {
             }
 
         } catch (ClassNotFoundException | SQLException ex) {
-
+            ex.printStackTrace();
         }
         return id;
     }
