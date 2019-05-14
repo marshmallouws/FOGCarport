@@ -71,6 +71,7 @@ public class PDFCreater {
             doc.add(new AreaBreak());
 
             createMaterialList(order, doc);
+            
             /*
             //TODO: Observe if header is correct when adding new pages
             try {
@@ -81,10 +82,13 @@ public class PDFCreater {
             } */
 
             doc.add(new AreaBreak());
+            createInstructions(order, doc);
 
         } catch (FileNotFoundException ex) {
 
         } catch (MalformedURLException ex) {
+            Logger.getLogger(PDFCreater.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FOGException ex) {
             Logger.getLogger(PDFCreater.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             // lets guard it from null pointer exception
@@ -108,6 +112,8 @@ public class PDFCreater {
         if(order.getShedLength() != 0) {
             list.add(new ListItem("Placér de syv skurstolper"));
         }
+        
+        doc.add(list);
         
         
 
