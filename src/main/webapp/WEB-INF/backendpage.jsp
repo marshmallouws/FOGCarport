@@ -57,7 +57,7 @@
                         <td><%= o.getRoofAngle()%></td>
                         <td><%= o.getEmpl().getInitials()%></td>
                         <td><%= o.getDate()%></td>
-                        <td><a class="btn btn-primary" href="byggecenter?view=orderinfo&orderID=<%= o.getId()%>">Vis</a></td>
+                        <td><a class="btn btn-primary" href="byggecenter?view=orderinfoadmin&orderID=<%= o.getId()%>">Vis</a></td>
                         <td><a class="btn btn-secondary" href="./byggecenter?view=carport&orderID=<%= o.getId()%>">Stykliste</a></td>
                     </tr>
                     <%}%>
@@ -95,7 +95,7 @@
                         <td><%= o.getRoofAngle()%></td>
                         <td><%= "Ikke tildelt"%></td>
                         <td><%= o.getDate()%></td>
-                        <td><a class="btn btn-primary" href="byggecenter?view=orderinfo&orderID=<%= o.getId()%>">Vis</a></td>
+                        <td><a class="btn btn-primary" href="byggecenter?view=orderinfoadmin&orderID=<%= o.getId()%>">Vis</a></td>
                         <td><a class="btn btn-info" href="byggecenter?view=assignorder&orderID=<%= o.getId()%>">Tildel</a></td>
                     </tr>
                     <% }%>

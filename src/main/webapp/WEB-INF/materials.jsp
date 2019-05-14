@@ -404,7 +404,7 @@
                     <div id="materials_prodSelect_input_wrapper" class="materials_select_wrapper" style="display:none;">
                         Produkter:
                         <select id="materials_prodSelect_input" class="form-control">
-                            <option value="0" selected>Nyt Produkt</option>
+                            <option value="0" selected>Opret Nyt Produkt</option>
                         </select>
                     </div>
 
@@ -413,7 +413,8 @@
                         Tykkelse<input id="product_thick_input" class="form-control" type="number" name="prodthick">
                         Bredde<input id="product_width_input" class="form-control" type="number" name="prodwidth">
 
-                        <div id="materials_matCreateVariant_wrapper" style="display:none;"> 
+                        <div id="materials_matCreateVariant_wrapper" style="display:none;">
+                            <p>Opret Ny Variant<p>
                             Længde<input id="product_length_input" disabled class="form-control" type="number" name="prodlength">
                             Pris<input id="product_price_input" disabled class="form-control" type="number" name="prodprice">
                             Antal<input id="product_stock_input" disabled class="form-control" type="number" name="prodstock">
