@@ -19,13 +19,16 @@ import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Canvas;
+import com.itextpdf.layout.ColumnDocumentRenderer;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.ListItem;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.property.ListNumberingType;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 import data.FOGException;
@@ -55,9 +58,9 @@ public class PDFCreater {
             pdf = new PdfDocument(new PdfWriter("Ordre" + order.getId() + ".pdf"));
             doc = new Document(pdf);
             doc.setMargins(170, 50, 40, 50);
-            
+
             Image logo = new Image(ImageDataFactory.create("logo.png"));
-            
+
             ImageEventHandler handler = new ImageEventHandler(logo);
             pdf.addEventHandler(PdfDocumentEvent.END_PAGE, handler);
 
@@ -77,6 +80,8 @@ public class PDFCreater {
                 // IGNORE THIS
             } */
 
+            doc.add(new AreaBreak());
+
         } catch (FileNotFoundException ex) {
 
         } catch (MalformedURLException ex) {
@@ -90,7 +95,25 @@ public class PDFCreater {
 
     }
 
-    public void createFrontPage(Order order, Document doc, PdfDocument pdf) {
+    private void createInstructions(Order order, Document doc) throws FOGException {
+        doc.add(new Paragraph(new Text("Husk at kontrollere styklisten inden du går i gang").setBold()));
+
+        List<Odetail> odetails = l.buildCarport(order);
+
+        com.itextpdf.layout.element.List list = new com.itextpdf.layout.element.List(ListNumberingType.DECIMAL);
+        list.add(new ListItem("Grundplan afsættes ved at hamre en stump\n"
+                + "lægte (A) i jorden til ca. markering af\n"
+                + "carportens hjørnestolper, en pæl i hvert hjørne."));
+        
+        if(order.getShedLength() != 0) {
+            list.add(new ListItem("Placér de syv skurstolper"));
+        }
+        
+        
+
+    }
+
+    private void createFrontPage(Order order, Document doc, PdfDocument pdf) {
 
         Text info = new Text("Ordre nummer:" + order.getId());
         Text date = new Text(order.getDate().substring(0, 10));
@@ -105,39 +128,6 @@ public class PDFCreater {
 
         doc.add(pi);
         doc.add(pd);
-    }
-
-    private void createHeader(String title, int fontsize, PdfDocument pdfDoc, Document doc) throws Exception {
-        Paragraph header = new Paragraph(title)
-                .setFont(PdfFontFactory.createFont(FontConstants.HELVETICA))
-                .setFontSize(fontsize);
-        float x, y;
-        for (int i = 1; i <= pdfDoc.getNumberOfPages(); i++) {
-            pdfDoc.getPage(i).setIgnorePageRotationForContent(true);
-            //System.out.println(pdfDoc.getPage(i).getRotation());
-            if (pdfDoc.getPage(i).getRotation() % 180 == 0) {
-                x = pdfDoc.getPage(i).getPageSize().getWidth() / 2;
-                y = pdfDoc.getPage(i).getPageSize().getTop() - 120;
-            } else {
-                System.out.println("rotated");
-                x = pdfDoc.getPage(i).getPageSize().getHeight() / 2;
-                y = pdfDoc.getPage(i).getPageSize().getRight() - 20;
-            }
-
-            doc.showTextAligned(header, x, y, i, TextAlignment.CENTER, VerticalAlignment.BOTTOM, 0);
-        }
-    }
-
-    private void createFooter(Document doc) {
-        try {
-            String imageFile = "logo.png";
-            ImageData data = ImageDataFactory.create(imageFile);
-            Image img = new Image(data);
-            img.setFixedPosition(400, 100);
-            doc.add(img);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(PDFCreater.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     private void createMaterialList(Order order, Document doc) {
@@ -215,7 +205,7 @@ public class PDFCreater {
         PDFCreater p = new PDFCreater();
         LogicFacade l = new LogicFacade();
         Employee empl = new Employee(1, "aaa", "bbb");
-        Order order = l.getOrder(3);
+        Order order = l.getOrder(1);
         //Order order = l.getOrder(1);
         p.createPDF(order);
 
@@ -224,7 +214,6 @@ public class PDFCreater {
     public class ImageEventHandler implements IEventHandler {
 
         protected Image img;
-
 
         public ImageEventHandler(Image img) {
             this.img = img;
@@ -240,7 +229,8 @@ public class PDFCreater {
             Rectangle area = page.getPageSize();
             new Canvas(aboveCanvas, pdfDoc, area)
                     .add(img);
-            
+            //area.applyMargins(0, 0, 0, 50, true);
+
         }
     }
 }
