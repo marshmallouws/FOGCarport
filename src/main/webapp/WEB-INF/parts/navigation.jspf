@@ -2,27 +2,46 @@
 <%@page import="entity.Employee"%>
 <%@ page pageEncoding="UTF-8" %>
 <div class="header">
-    <nav class="navbar navbar-dark" style="flex-flow: row nowrap;justify-content: flex-start;">
-        <a class="navbar-brand" href="./"><img height="70" src="3dview/images/fog-logo.png" /></a>
-        <div id="navbarHeader">
-            <div class="navbar-nav" style="flex-direction: row;">
-                <a class="nav-item nav-link <%= "/index.jsp".equals(request.getServletPath()) ? "active" : ""%>" 
-                   href="./">Forside</a>
-                <a class="nav-item nav-link <%= "/WEB-INF/orderpage.jsp".equals(request.getServletPath()) ? "active" : ""%>" 
-                   href="./byggecenter?view=orderpage">Bestil Carport</a>
+    <div class="page-wrapper" style="position:relative;">
+        <nav class="navbar navbar-dark" style="flex-flow: row nowrap;justify-content: flex-start;">
+            <a class="navbar-brand" href="./"><img height="70" src="3dview/images/fog-logo.png" /></a>
+            <div id="navbarHeader">
+                <div class="navbar-nav" style="flex-direction: row;">
+                    <a class="nav-item nav-link <%= "/index.jsp".equals(request.getServletPath()) ? "active" : ""%>" 
+                       href="./">Forside</a>
+                    <a class="nav-item nav-link <%= "/WEB-INF/orderpage.jsp".equals(request.getServletPath()) ? "active" : ""%>" 
+                       href="./byggecenter?view=orderpage">Bestil Carport</a>
 
-                <%
-                       Employee currentEmployee_nav = (Employee) session.getAttribute("user");
-                       if (currentEmployee_nav != null) {%>
-                <a class="nav-item nav-link <%= "/WEB-INF/backendpage.jsp".equals(request.getServletPath()) ? "active" : ""%>" 
-                   href="./byggecenter?view=backendpage">Se Bestillinger</a>
-                <a class="nav-item nav-link <%= "/WEB-INF/materials.jsp".equals(request.getServletPath()) ? "active" : ""%>" 
-                   href="./byggecenter?view=mats">Opret/Redigér Materialer</a>
-                <a class="nav-item nav-link btn-secondary" style="font-size:1rem;"
-                   href="./byggecenter?view=login&c=logout">Log ud</a>               
-                <% }
-                %>
+                    <%
+                        Employee currentEmployee_nav = (Employee) session.getAttribute("user");
+                        if (currentEmployee_nav != null) {%>
+                    <a class="nav-item nav-link <%= "/WEB-INF/backendpage.jsp".equals(request.getServletPath()) ? "active" : ""%>" 
+                       href="./byggecenter?view=backendpage">Se Bestillinger</a>
+                    <a class="nav-item nav-link <%= "/WEB-INF/materials.jsp".equals(request.getServletPath()) ? "active" : ""%>" 
+                       href="./byggecenter?view=mats">Opret/Redigér Materialer</a>        
+                    <% }
+                    %>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+        <% if (currentEmployee_nav != null) { %>
+        <a class="login-btn" href="./byggecenter?view=login&c=logout"><img src="images/w_logout.png"><span>Log ud</span></a>
+            <% } else { %>
+        <a class="login-btn" onclick="$('#login_modal').fadeIn();"><img src="images/w_login.png"><span>Log ind</span></a>
+            <% }%>
+    </div>
+
+
+</div>
+<div id="login_modal" style="display:none;">
+    <div class="page-wrapper" style="text-align:center;margin-top:20%;">
+        <form class="login-form" method="POST" action="byggecenter?view=login">
+            <img class="login-close-btn" onclick="$('#login_modal').fadeOut();" src="images/b_close.png">
+            <h4>Log Ind</h4>
+            <small>Kun for Fogs Ansatte</small>
+            <input type="text" name="username" id="username" placeholder="Brugernavn" required>
+            <input type="password" name="password" id="password" placeholder="Password" required>
+            <button class="btn btn-primary" type="submit">Log ind</button>
+        </form>
+    </div>
 </div>

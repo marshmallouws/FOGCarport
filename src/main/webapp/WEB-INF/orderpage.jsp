@@ -23,6 +23,14 @@
         <script src="https://code.jquery.com/pep/0.4.1/pep.js"></script>
         <link rel="stylesheet" href="3dview/visual.css">    
         <script src="3dview/visual.js"></script>
+        <style>
+            .page-wrapper {
+                max-width: 100% !important;
+            }
+            .login-btn {
+                right: 30px !important;
+            }
+        </style>
     </head>
     <body>
         <div class="orderpage_wrapper">
