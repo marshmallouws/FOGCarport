@@ -74,15 +74,6 @@ public class LogicFacade {
         return new Gson().toJson(new data.ProductMapper().getCategories());
     }
 
-    public String getProductList(String category_id) {
-        try {
-            int cat_id = Integer.parseInt(category_id);
-            return new Gson().toJson(new data.ProductMapper().getProductList(cat_id));
-        } catch (NumberFormatException e) {
-            return "error";
-        }
-    }
-
     public String getProductVariantsList(String categoryID, String productID) {
         try {
             int catID = Integer.parseInt(categoryID);
@@ -103,33 +94,42 @@ public class LogicFacade {
 
     }
 
-    public String getProduct(String product_id) {
+    public String getProductVariant(String product_id) {
         try {
             int prod_id = Integer.parseInt(product_id);
-            return new Gson().toJson(new data.ProductMapper().getProduct(prod_id));
+            return new Gson().toJson(new data.ProductMapper().getProductVariant(prod_id));
         } catch (NumberFormatException e) {
             return "error";
         }
     }
 
-    public String getProduct(int product_id) {
+    public String getProductVariant(int product_id) {
         try {
             if (product_id == 0) {
                 throw new Exception();
             }
 
-            return new Gson().toJson(new data.ProductMapper().getProduct(product_id));
+            return new Gson().toJson(new data.ProductMapper().getProductVariant(product_id));
         } catch (Exception e) {
             return "error";
         }
 
+    }
+    
+    public String getProductMain(String product_id) {
+        try {
+            int prod_id = Integer.parseInt(product_id);
+            return new Gson().toJson(new data.ProductMapper().getProductMain(prod_id));
+        } catch(NumberFormatException ex) {
+            return "error";
+        }
     }
 
     public String updateProductVariant(String product) {
         try {
             Product prod = new Gson().fromJson(product, Product.class);
             boolean success = new data.ProductMapper().updateProductVariant(prod);
-            
+
             if (!success) {
                 throw new Exception();
             }
@@ -140,36 +140,39 @@ public class LogicFacade {
         }
 
     }
-    
+
     public String createProduct(String product) {
         try {
             Product prod = new Gson().fromJson(product, Product.class);
             int id = new data.ProductMapper().createProduct(prod);
-            
+
             if (id == 0) {
                 throw new Exception();
-            }          
+            }
             return "succes";
-            
+
         } catch (Exception ex) {
             return "error";
         }
     }
 
-    public String saveProduct(String product) {
+    public String createProductVariant(String product) {
         try {
             Product prod = new Gson().fromJson(product, Product.class);
-            boolean success = new data.ProductMapper().saveProduct(prod);
-            if (!success) {
+            int id = new data.ProductMapper().createProductVariant(prod);
+            
+            if (id == 0) {
                 throw new Exception();
             }
-            return "success";
-        } catch (Exception e) {
+
+            return "succes";
+        } catch (Exception ex) {
             return "error";
         }
-    }
-    //Testing something
 
+    }
+
+    //Testing something
     public Employee getEmployee(int id) {
         return new data.UserMapper().getEmployee(id);
     }
