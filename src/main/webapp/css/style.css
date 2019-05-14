@@ -73,6 +73,7 @@ and open the template in the editor.
     margin-top: 10px;
     margin-bottom: 10px;
     height: 40px;
+    padding:5px;
 }
 
 #login_modal .login-close-btn {
