@@ -307,7 +307,7 @@ public class Builder {
             Product product = new Product(catID, prodID, lengthMin, lengthMax, width);
 
             int qty = entry.getValue();
-            double amount = qty * product.getPrice() * (product.getLength() / 100);
+            double amount = qty * (product.getPrice() * (product.getLength() / 100));
             reqs.add(new Orequest(product, order.getId(), qty, amount, comment));
         }
 
