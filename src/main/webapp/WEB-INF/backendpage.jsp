@@ -28,20 +28,19 @@
         </div>
         <div class="separator" style="margin-top:30px;"></div>
         <div class="page-wrapper">
-            <h3>Mine ordrer</h3>
+            <h3>Tildelte Bestillinger</h3>
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>id</th>
-                        <th>Carport længde</th>
-                        <th>Carport bredde</th>
-                        <th>Carport højde</th>
+                        <th>ID</th>
+                        <th>Længde</th>
+                        <th>Bredde</th>
+                        <th>Højde</th>
                         <th>Skur længde</th>
                         <th>Skur bredde</th>
                         <th>Tag vinkel</th>
                         <th>Ansvarlig</th>
                         <th>Dato</th>
-                        <th></th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -58,9 +57,8 @@
                         <td><%= o.getRoofAngle()%></td>
                         <td><%= o.getEmpl().getInitials()%></td>
                         <td><%= o.getDate()%></td>
-                        <td><form method="POST" action="byggecenter?view=orderinfo&orderID=<%= o.getId()%>"><button type="submit">Vis</button></form></td>
-                        <td><form method="POST" action="byggecenter?view=assignorder"><input type="hidden" name="orderID" value="<%= o.getId()%>"><button type="submit">Assign</button></form></td>
-                        <td><a href="./byggecenter?view=carport&orderID=<%= o.getId()%>">Stykliste</a></td>
+                        <td><a class="btn btn-primary" href="byggecenter?view=orderinfo&orderID=<%= o.getId()%>">Vis</a></td>
+                        <td><a class="btn btn-secondary" href="./byggecenter?view=carport&orderID=<%= o.getId()%>">Stykliste</a></td>
                     </tr>
                     <%}%>
                 </tbody>
@@ -68,14 +66,14 @@
 
             <div class="separator" style="margin-top:50px;"></div>
 
-            <h3>Afventende ordrer</h3>
+            <h3>Afventende Bestillinger</h3>
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>id</th>
-                        <th>Carport længde</th>
-                        <th>Carport bredde</th>
-                        <th>Carport højde</th>
+                        <th>ID</th>
+                        <th>Længde</th>
+                        <th>Bredde</th>
+                        <th>Højde</th>
                         <th>Skur længde</th>
                         <th>Skur bredde</th>
                         <th>Tag vinkel</th>
@@ -97,8 +95,8 @@
                         <td><%= o.getRoofAngle()%></td>
                         <td><%= "Ikke tildelt"%></td>
                         <td><%= o.getDate()%></td>
-                        <td><form method="POST" action="byggecenter?view=orderinfo&orderID=<%= o.getId()%>"><button type="submit">Vis</button></form></td>
-                        <td><form method="POST" action="byggecenter?view=assignorder"><input type="hidden" name="orderID" value="<%= o.getId()%>"><button type="submit">Assign</button></form></td>
+                        <td><a class="btn btn-primary" href="byggecenter?view=orderinfo&orderID=<%= o.getId()%>">Vis</a></td>
+                        <td><a class="btn btn-info" href="byggecenter?view=assignorder&orderID=<%= o.getId()%>">Tildel</a></td>
                     </tr>
                     <% }%>
                 </tbody>
