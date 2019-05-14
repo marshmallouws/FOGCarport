@@ -27,6 +27,8 @@ public class Builder {
         for (Odetail o : new Builder().carportBuilder(blueprint, order)) {
             System.out.println(o.getProduct().getName() + " " + o.getProduct().getLength() + " cm. " + o.getQty() + " stk. " + o.getAmount() + " kr. " + " " + o.getComment() + " " + o.getProduct().isActive());
         }
+
+        System.out.println(new Builder().calcStolperMap(1, 7, order));
     }
 
     // width afgør hvor mange rækker
@@ -275,7 +277,7 @@ public class Builder {
             }
         } catch (ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
-            
+
         }
         return products;
     }
@@ -333,7 +335,8 @@ public class Builder {
         // Stolper
         comment = "Stolper";
         catID = 1;
-        //ddProductToBuild(reqs, order, calcStolperMap(order), catID, comment);
+        prodID = 7;
+        addProductToBuild(reqs, order, calcStolperMap(catID, prodID, order), catID, prodID, comment);
 
         // Spær almindelig
         comment = "Spær";
@@ -372,7 +375,7 @@ public class Builder {
             addProductToBuild(reqs, order, calcSpaerMap(catID, prodID, order.getLenght(), (int) calcRoofAngledLength(order), true), catID, prodID, comment);
 
         }
-        
+
         // Bundskruer
         comment = "Skruer til tagplader";
         length = 60;
@@ -391,14 +394,14 @@ public class Builder {
             catID = 5;
             prodID = 8;
             addProductToBuild(reqs, order, calcSurfaceMap(order.getWidth(), order.getHeight(), catID, prodID, order, 2), catID, prodID, comment);
-            
+
             // Skruer til ydrebeklædning
             comment = "Til montering af yderste beklædning";
             length = 70;
             catID = 11;
             prodID = 15;
-            addProductToBuild(reqs, order, calcScrews(5, length, 6 , reqs), catID, prodID, comment);
-            
+            addProductToBuild(reqs, order, calcScrews(5, length, 6, reqs), catID, prodID, comment);
+
             // skruer til inderbeklædning
             comment = "Til montering af inderste beklædning";
             length = 50;
@@ -444,7 +447,7 @@ public class Builder {
                     } else {
                         amount = qty * product.getPrice() * (product.getLength() / 100);
                     }
-                    
+
                     String comment = r.getComment();
                     odetails.add(new Odetail(product, order.getId(), qty, amount, comment));
 
@@ -506,19 +509,78 @@ public class Builder {
         return status;
     }
 
-    private Map<Integer, Integer> calcStolperMap(Order order) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private int calcStolper(Order order) {
+        int maxLengthCarport = 1000;
+
+        // minimum
+        int count = 4;
+
+        // stor carport
+        if (order.getLenght() >= maxLengthCarport) {
+            count += 2;
+        }
+
+        // med skur
+        if (order.getShedLength() > 0 && order.getShedWidth() > 0) {
+            count += 7;
+        }
+        return count;
     }
-    
+
+    private Map<Integer, Integer> calcStolperMap(int categoryID, int productID, Order order) {
+        List<Product> woods = getProductsAllForBuild(categoryID, productID);
+        int bigLen = 1000;
+        int height = order.getHeight();
+
+        int max = calcMaxLength(woods);
+        int min = calcMinLength(woods);
+
+        int count = 4; // minimum
+
+        if (order.getLenght() >= bigLen) {
+            count += 2;
+        }
+
+        if (order.getShedLength() > 0 && order.getShedWidth() > 0) {
+            count += 7;
+        }
+
+        Map<Integer, Integer> map = new HashMap();
+        int length = order.getHeight() + 100; // skal placeres i jorden
+        
+        while (height > 0) {
+            if (height > max) {
+                map.put(max, map.getOrDefault(max, 0) + 1);
+                height -= max;
+            } else if (height < min) {
+                map.put(min, map.getOrDefault(min, 0) + 1);
+                height -= min;
+            } else {
+                for (Product p : woods) {
+                    if (p.getLength() > height) {
+                        map.put(p.getLength(), map.getOrDefault(p.getLength(), 0) + (1 * count));
+                        height -= p.getLength();
+                        break;
+                    }
+                }
+            }
+        }
+
+        //map.put(length, map.getOrDefault(order.getHeight(), 0) + count);
+
+        return map;
+
+    }
+
     private Map<Integer, Integer> calcScrews(int productCatID, int screwLength, int ratio, List<Orequest> blueprint) {
         Map<Integer, Integer> map = new HashMap();
-        
+
         for (Orequest o : blueprint) {
             if (o.getProduct().getCategory_id() == productCatID) {
                 map.put(screwLength, map.getOrDefault(screwLength, 0) + o.getQty() * ratio);
             }
         }
-        
+
         return map;
     }
 

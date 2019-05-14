@@ -156,6 +156,7 @@ var createScene = function () {
     camera.radius = length + height;
     // Attach the camera to the canvas.
     camera.attachControl(canvas, false);
+    scene.activeCamera.panningSensibility = 0;
 
     // Create a basic light, aiming 0,1,0 - meaning, to the sky.
     var _light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);

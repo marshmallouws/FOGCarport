@@ -1,7 +1,7 @@
 <%-- 
     Document   : orderpage
     Created on : Apr 23, 2019, 10:52:48 AM
-    Author     : caspe
+    Author     : vl48
 --%>
 <%@page import="entity.Product"%>
 <%@page import="java.util.List"%>
@@ -23,6 +23,14 @@
         <script src="https://code.jquery.com/pep/0.4.1/pep.js"></script>
         <link rel="stylesheet" href="3dview/visual.css">    
         <script src="3dview/visual.js"></script>
+        <style>
+            .page-wrapper {
+                max-width: 100% !important;
+            }
+            .login-btn {
+                right: 30px !important;
+            }
+        </style>
     </head>
     <body>
         <div class="orderpage_wrapper">

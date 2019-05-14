@@ -145,7 +145,7 @@ public class DevMapper {
     }
 
     public static void main(String[] args) {
-        String path = "C:\\Users\\caspe\\Desktop\\zipcodes.txt";
+        String path = System.getProperty("user.dir")+"\\src\\main\\java\\data\\zipcodes.txt";
         //String _path = ".\\zipcodes.txt";
         File file = new File(path);
         //System.out.println(new File(".").getAbsolutePath());
