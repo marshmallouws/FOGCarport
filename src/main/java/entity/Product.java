@@ -46,7 +46,7 @@ public class Product {
 
     }
     
-    // new simple
+    // Product "Variant"
     public Product (int id, int variant_id, Category category, int thickness, int width, int length, double price, int stock, String name, boolean active)  {
         this.id = id;
         this.variant_id = variant_id;
@@ -76,10 +76,20 @@ public class Product {
     }
     
     // For displaying all products in a category (not all variants)
-    public Product (int id, Category category, String name) {
+    public Product (int id, Category category, String name, boolean active) {
         this.id = id;
         this.category = category;
         this.name = name;
+        this.active = active;
+    }
+    
+    // Product "Main"
+    public Product (int id, String name, int thickness, int width, boolean active) {
+        this.id = id;
+        this.name = name;
+        this.thickness = thickness;
+        this.width = width;
+        this.active = active;
     }
     public double getPrice() {
         return price;
