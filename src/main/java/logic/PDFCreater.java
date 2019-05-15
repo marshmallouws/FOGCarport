@@ -5,13 +5,10 @@
  */
 package logic;
 
-import com.itextpdf.io.font.FontConstants;
-import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.events.Event;
 import com.itextpdf.kernel.events.IEventHandler;
 import com.itextpdf.kernel.events.PdfDocumentEvent;
-import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -19,7 +16,6 @@ import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Canvas;
-import com.itextpdf.layout.ColumnDocumentRenderer;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
@@ -30,7 +26,6 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.ListNumberingType;
 import com.itextpdf.layout.property.TextAlignment;
-import com.itextpdf.layout.property.VerticalAlignment;
 import data.FOGException;
 import entity.Category;
 import entity.Employee;
@@ -105,8 +100,8 @@ public class PDFCreater {
         List<Odetail> odetails = l.buildCarport(order);
 
         com.itextpdf.layout.element.List list = new com.itextpdf.layout.element.List(ListNumberingType.DECIMAL);
-        list.add(new ListItem("Grundplan afsættes ved at hamre en stump\n"
-                + "lægte (A) i jorden til ca. markering af\n"
+        list.add(new ListItem("Grundplan afsættes ved at hamre en stump"
+                + "lægte (A) i jorden til ca. markering af"
                 + "carportens hjørnestolper, en pæl i hvert hjørne."));
         
         if(order.getShedLength() != 0) {
