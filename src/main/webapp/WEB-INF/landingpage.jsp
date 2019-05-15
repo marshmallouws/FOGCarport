@@ -8,13 +8,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <%@ include file="/WEB-INF/parts/headmeta.jspf" %>
+        <title>Bestilling - Fog</title>
     </head>
     <body>
-        <h1>Ordren er oprettet og modtaget!</h1>
+        <%@ include file="/WEB-INF/parts/navigation.jspf" %>
+        <div class="page-wrapper menu-spacer">
+        <h1>Din bestilling er oprettet og modtaget!</h1>
         <p>Vi kontakter dig hurtigst muligt med en pris på din nye carport</p>
         
         <%= request.getAttribute("success") %>
+        </div>
     </body>
 </html>
