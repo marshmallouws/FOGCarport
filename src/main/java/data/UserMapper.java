@@ -20,6 +20,15 @@ import java.util.List;
  * @author Annika
  */
 public class UserMapper implements UserInterface {
+    private Connection conn;
+    
+    public UserMapper(ConnectorInterface conn) {
+        try {
+            this.conn = conn.connect();
+        } catch (ClassNotFoundException | SQLException e) {
+            
+        }
+    }
 
     /*public Employee logIn(String username, String password) throws LogInException {
         Employee user = null;
@@ -47,7 +56,7 @@ public class UserMapper implements UserInterface {
         Employee user = null;
         try {
             String query = "SELECT initials, passw, id FROM employee WHERE initials = ? AND passw = ?";
-            PreparedStatement ps = Connector.connection().prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setString(1, username);
             ps.setString(2, password);
@@ -71,13 +80,13 @@ public class UserMapper implements UserInterface {
 
         try {
             String query = "SELECT * FROM employee";
-            PreparedStatement ps = Connector.connection().prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 employees.add(new Employee(rs.getInt("id"), rs.getString("initials"), rs.getString("passw")));
             }
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return employees;
@@ -87,10 +96,9 @@ public class UserMapper implements UserInterface {
         int id = 0;
 
         try {
-            Connection con = Connector.connection();
             String query = "INSERT INTO customer (cname, email, address, zip, phone) "
                     + "VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, customer.getName());
             ps.setString(2, customer.getEmail());
             ps.setString(3, customer.getAddress());
@@ -105,7 +113,7 @@ public class UserMapper implements UserInterface {
                 id = rs.getInt(1);
             }
 
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return id;
@@ -116,17 +124,17 @@ public class UserMapper implements UserInterface {
         Customer customer = null;
 
         try {
-            Connection con = Connector.connection();
+
             String query = "SELECT * FROM customer WHERE id = " + customerID + ";";
 
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 customer = new Customer(rs.getInt("id"), rs.getString("cname"), rs.getString("email"), rs.getString("address"), rs.getInt("zip"), rs.getInt("phone"));
             }
 
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
@@ -136,11 +144,10 @@ public class UserMapper implements UserInterface {
     public Employee getEmployee(int emplId) {
         Employee empl = null;
         try {
-            Connection con = Connector.connection();
             String query = "SELECT * FROM employee WHERE id = ?";
             
 
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, emplId);
             ResultSet rs = ps.executeQuery();
 
@@ -148,7 +155,7 @@ public class UserMapper implements UserInterface {
                 empl = new Employee(rs.getInt("id"), rs.getString("initials"));
             }
 
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 

@@ -20,7 +20,16 @@ import java.util.Map;
  * @author Casper
  */
 public class Builder {
-
+    private Connection conn;
+    
+    public Builder(ConnectorInterface conn) {
+        try {
+            this.conn = conn.connect();
+        } catch (ClassNotFoundException | SQLException e) {
+            
+        }
+    }
+    /*
     public static void main(String[] args) {
         Order order = new Order(270, 1900, 1900, 200, 200, 20, 12);
         
@@ -30,7 +39,7 @@ public class Builder {
         }
 
         System.out.println(new Builder().calcStolperMap(1, 7, order));
-    }
+    } */
 
     // width afgør hvor mange rækker
     private Map<Integer, Integer> calcSpaerMap(int categoryID, int productID, int x, int y, boolean angled) {
@@ -251,13 +260,12 @@ public class Builder {
     public List<Product> getProductsAllForBuild(int categoryID, int productID) {
         List<Product> products = new ArrayList();
         try {
-            Connection con = Connector.connection();
             String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories.category_name, products.thickness, products.width, length, price, stock, product_variants.active, products.product_name FROM carports.product_variants\n"
                     + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
                     + "JOIN products ON product_variants.product_id = products.id\n"
                     + "JOIN categories ON products_in_categories.category_id = categories.id\n"
                     + "WHERE category_id = ? AND product_variants.product_id = ?;";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, categoryID);
             ps.setInt(2, productID);
             ResultSet rs = ps.executeQuery();
@@ -276,7 +284,7 @@ public class Builder {
 
                 products.add(new Product(id, variant_id, category, thickness, width, length, price, stock, name, active));
             }
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
 
         }
@@ -414,7 +422,6 @@ public class Builder {
 
     // En færdig stykliste for en carport ud fra et blueprint
     public List<Odetail> carportBuilder(List<Orequest> request, Order order) {
-        Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -422,7 +429,6 @@ public class Builder {
         String query;
 
         try {
-            con = Connector.connection();
             for (Orequest r : request) {
                 query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories.category_name, products.thickness, products.width, length, price, stock, product_variants.active, products.product_name FROM carports.product_variants\n"
                         + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
@@ -430,7 +436,7 @@ public class Builder {
                         + "JOIN categories ON products_in_categories.category_id = categories.id\n"
                         + "WHERE category_id = ? AND (length BETWEEN ? AND ?) AND product_variants.product_id = ?;";
 
-                ps = con.prepareStatement(query);
+                ps = conn.prepareStatement(query);
                 ps.setInt(1, r.getProduct().getCategory_id());
                 ps.setInt(2, r.getProduct().getLengthMin());
                 ps.setInt(3, r.getProduct().getLengthMax());
@@ -455,7 +461,7 @@ public class Builder {
                 }
             }
 
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
             if (rs != null) {
@@ -474,15 +480,6 @@ public class Builder {
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
-            }
-
-            try {
-                if (con != null && !con.isClosed()) {
-                    con.close();
-                    con = null;
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
             }
         }
 
