@@ -10,9 +10,15 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Fejlside</title>
+        <%@ include file="/WEB-INF/parts/headmeta.jspf" %>
     </head>
     <body>
-        <h1>Hov! Noget gik galt..</h1>
-        <p><%= request.getAttribute("error") %></p>
+        <%@ include file="/WEB-INF/parts/navigation.jspf" %>
+        <br>
+        <br>
+        <br>
+        <br>
+            <h1>Hov! Noget gik galt..</h1>
+            <p><%= request.getAttribute("error") %></p>
     </body>
 </html>

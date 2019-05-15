@@ -88,14 +88,31 @@ public class OrderInfoAdminCommand extends Command {
         
         request.setAttribute("employees", employees);
         
-        int orderID = Integer.parseInt(request.getParameter("orderID"));
-        Order orderToShow = lf.getOrder(orderID);
-        Customer customer = lf.getCustomer(orderToShow.getCustomerId());
+        int orderID = 0;
+        Order orderToShow = null;
+        Customer customer = null;
         
-        request.setAttribute("customer", customer);
-        request.setAttribute("order", orderToShow);
+        try {
+            orderID = Integer.parseInt(request.getParameter("orderID"));
+            
+            orderToShow = lf.getOrder(orderID);
+            customer = lf.getCustomer(orderToShow.getCustomerId());
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+            request.setAttribute("error", "Ugyldigt input. Kontakt support.");
+            request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+            return;
+        }
         
-        request.getRequestDispatcher("/WEB-INF/orderdetails-admin.jsp").forward(request, response);
+        if (orderToShow == null || customer == null) {
+            request.setAttribute("error", "Kunne ikke få detajler om ordren. Kontakt support.");
+            request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+            return;
+        } else {
+            request.setAttribute("customer", customer);
+            request.setAttribute("order", orderToShow);
+
+            request.getRequestDispatcher("/WEB-INF/orderdetails-admin.jsp").forward(request, response);
+        }
         
     }
     

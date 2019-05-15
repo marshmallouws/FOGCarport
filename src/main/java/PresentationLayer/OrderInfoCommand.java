@@ -19,14 +19,31 @@ public class OrderInfoCommand extends Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        int orderID = Integer.parseInt(request.getParameter("orderID"));
+        int orderID = 0;
+        
+        try {
+            orderID = Integer.parseInt(request.getParameter("orderID"));
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "Ugyldigt input. Kontakt support.");
+            request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+            return;
+        }
+        
+        
         Order orderToShow = lf.getOrder(orderID);
         Customer c = lf.getCustomer(orderToShow.getCustomerId());
         
-        request.setAttribute("order", orderToShow);
-        request.setAttribute("customer", c);
+        if (orderToShow == null || c == null) {
+            request.setAttribute("error", "Kunne ikke få detajler om ordren. Kontakt support.");
+            request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+            return;
+        } else {
+            request.setAttribute("order", orderToShow);
+            request.setAttribute("customer", c);
+            
+            request.getRequestDispatcher("/WEB-INF/orderdetails.jsp").forward(request, response);
+        }
         
-        request.getRequestDispatcher("/WEB-INF/orderdetails.jsp").forward(request, response);
     }
     
 }

@@ -38,11 +38,16 @@ public class AddOrderCommand extends Command {
         String message = request.getParameter("message");
         
         // validate info
-//        if (StringUtils.isStrictlyNumeric(phone) != true || StringUtils.isStrictlyNumeric(zip) != true || zip.length() > 4) {
-//            System.out.println("NONONONO");
-//            request.getRequestDispatcher("/WEB-INF/orderpage.jsp").forward(request, response);
-//            return;
-//        }
+        if (StringUtils.isStrictlyNumeric(phone) != true || 
+                StringUtils.isStrictlyNumeric(zip) != true || 
+                zip.length() > 4 || 
+                zip.length() < 4 || fullname.length() > 45 ||
+                !email.contains("@") || !email.contains(".")) 
+        {
+            request.setAttribute("error", "Det ser ud til, at kunde informationen ikke var udfyldt korrekt!");
+            request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+            return;
+        }
 
         LogicFacade lf = new LogicFacade();
         Customer c = null;
@@ -65,9 +70,10 @@ public class AddOrderCommand extends Command {
             if (StringUtils.isStrictlyNumeric(_carportWidth) == false || 
                 StringUtils.isStrictlyNumeric(_carportLength) == false || 
                 StringUtils.isStrictlyNumeric(_shedWidth) == false || 
-                StringUtils.isStrictlyNumeric(_shedLength) == false|| 
-                StringUtils.isStrictlyNumeric(_roofAngle) == false
-                ) {
+                StringUtils.isStrictlyNumeric(_shedLength) == false || 
+                StringUtils.isStrictlyNumeric(_roofAngle) == false || 
+                StringUtils.isStrictlyNumeric(_carportHeight) == false) 
+            {
                 request.setAttribute("error", "Kun tal kan bruges til at oprette en ordre.");
                 request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
                 return;
@@ -86,6 +92,12 @@ public class AddOrderCommand extends Command {
                 
                 if (Integer.parseInt(_roofAngle) < 0 || Integer.parseInt(_roofAngle) > 45) {
                     request.setAttribute("error", "Det ser ud til, at vinklen på carportens tag er for stor! Kontakt support.");
+                    request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+                    return;
+                }
+                
+                if (Integer.parseInt(_carportHeight) < 225 || Integer.parseInt(_carportHeight) > 500) {
+                    request.setAttribute("error", "Det ser ud til, at højden på carporten er for stor! Kontakt support.");
                     request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
                     return;
                 }
