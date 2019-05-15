@@ -1,0 +1,6 @@
+- Fjern password fra Employee så det ikke bliver lagt i et objekt
+- Ændr Connector samt Mappers så de bruger getInstance-format for Singleton (så det stemmer overens med Singleton Pattern). Fordel: vi kan bruge en anden DB til tests.
+- Hash password
+- Brug regex til email så det bliver det rigtige format.
+- Del Builder op så der er en Mapper-klasse og en logik-klasse til selve udregningerne.
+- Benyt status på ordren til at sortere, så en medarbejder som udgangspunkt kun ser de ufærdige ordrer.

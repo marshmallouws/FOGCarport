@@ -8,13 +8,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <%@ include file="/WEB-INF/parts/headmeta.jspf" %>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/redmond/jquery-ui.css">
         <title>Materialer & Produkter</title>
-
         <style>
             #materials_topWrapper {
                 max-width:1180px;
@@ -324,119 +321,122 @@
                 }
             });
         </script>
-        <div id="materials_topWrapper">
-            <button id="materials_editBtn" class="btn btn-primary active">Redigér materialer</button>
-            <button id="materials_createBtn" class="btn btn-primary">Opret materialer</button>
-            <div id="materials_ui_wrapper">
-                <!-- Edit materials -->
-                <div id="materials_editUI">
+        <%@ include file="/WEB-INF/parts/navigation.jspf" %>
+        <div class="page-wrapper menu-spacer">
+            <div id="materials_topWrapper">
+                <button id="materials_editBtn" class="btn btn-primary active">Redigér materialer</button>
+                <button id="materials_createBtn" class="btn btn-primary">Opret materialer</button>
+                <div id="materials_ui_wrapper">
+                    <!-- Edit materials -->
+                    <div id="materials_editUI">
 
-                    <div class="materials_select_wrapper">
-                        Kategori:
-                        <select id="materials_catSelect" class="form-control">
-                            <option value="" disabled selected>Vælg kategori</option>
-                        </select>
-                    </div>
+                        <div class="materials_select_wrapper">
+                            Kategori:
+                            <select id="materials_catSelect" class="form-control">
+                                <option value="" disabled selected>Vælg kategori</option>
+                            </select>
+                        </div>
 
-                    <!-- 
-                    <button id="materials_createCategoryBtn" class="btn btn-success">Opret kategori</button>
-                    -->
+                        <!-- 
+                        <button id="materials_createCategoryBtn" class="btn btn-success">Opret kategori</button>
+                        -->
 
-                    <div id="materials_prodSelect_wrapper" class="materials_select_wrapper" style="display:none;">
-                        Produkter:
-                        <select id="materials_prodSelect" class="form-control">
-                            <option value="" disabled selected>Vælg produkt</option>
-                        </select>
-                    </div>
+                        <div id="materials_prodSelect_wrapper" class="materials_select_wrapper" style="display:none;">
+                            Produkter:
+                            <select id="materials_prodSelect" class="form-control">
+                                <option value="" disabled selected>Vælg produkt</option>
+                            </select>
+                        </div>
 
-                    <div id="materials_matSelect_wrapper" class="materials_select_wrapper" style="display:none;">
-                        Materiale:
-                        <select id="materials_matSelect" class="form-control">
-                            <option value="" disabled selected>Vælg materiale</option>
-                        </select>
-                    </div>
+                        <div id="materials_matSelect_wrapper" class="materials_select_wrapper" style="display:none;">
+                            Materiale:
+                            <select id="materials_matSelect" class="form-control">
+                                <option value="" disabled selected>Vælg materiale</option>
+                            </select>
+                        </div>
 
 
-                    <div id="materials_matEdit_wrapper" style="display:none;">
-                        <h2 id="materials_matEdit_name"></h2>
-                        <div id="materials_matEdit_form">
-                            <div class="materials_formBox">
-                                <h5>Status</h5>
-                                <input id="materials_productActive" type="checkbox" name="active" value=""> Aktiv<br>
-                                På lager: <span id="materials_productStock">0</span> stk.<br>
-                                Pris: <input id="materials_productPrice" type="number" name="price" min="0">
+                        <div id="materials_matEdit_wrapper" style="display:none;">
+                            <h2 id="materials_matEdit_name"></h2>
+                            <div id="materials_matEdit_form">
+                                <div class="materials_formBox">
+                                    <h5>Status</h5>
+                                    <input id="materials_productActive" type="checkbox" name="active" value=""> Aktiv<br>
+                                    På lager: <span id="materials_productStock">0</span> stk.<br>
+                                    Pris: <input id="materials_productPrice" type="number" name="price" min="0">
+                                </div>
+                                <div class="materials_formBox">
+                                    <h5>Mål</h5>
+                                    <div class="materials_inputWrapper">
+                                        Højde:<br>
+                                        <input id="materials_productHeight" type="number" name="height" min="0">
+                                    </div>
+                                    <div class="materials_inputWrapper">
+                                        Længde:<br>
+                                        <input id="materials_productLength" type="number" name="length" min="0">
+                                    </div>
+                                    <div class="materials_inputWrapper">
+                                        Bredde:<br>
+                                        <input id="materials_productWidth" type="number" name="width" min="0">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="materials_formBox">
-                                <h5>Mål</h5>
-                                <div class="materials_inputWrapper">
-                                    Højde:<br>
-                                    <input id="materials_productHeight" type="number" name="height" min="0">
-                                </div>
-                                <div class="materials_inputWrapper">
-                                    Længde:<br>
-                                    <input id="materials_productLength" type="number" name="length" min="0">
-                                </div>
-                                <div class="materials_inputWrapper">
-                                    Bredde:<br>
-                                    <input id="materials_productWidth" type="number" name="width" min="0">
+                            <button id="materials_saveBtn" class="btn btn-info">Gem ændringer</button>
+                            <div id="materials_saveSpinner" style="display:none;">
+                                <div class="spinner-border" role="status">
+                                    <span class="sr-only">Gemmer...</span>
                                 </div>
                             </div>
                         </div>
-                        <button id="materials_saveBtn" class="btn btn-info">Gem ændringer</button>
-                        <div id="materials_saveSpinner" style="display:none;">
-                            <div class="spinner-border" role="status">
-                                <span class="sr-only">Gemmer...</span>
-                            </div>
-                        </div>
                     </div>
+                    <!-- edit end -->
+
+                    <!-- create materials -->
+                    <div id="materials_createUI" style="display:none;">
+                        <div class="materials_select_wrapper">
+                            Kategori:
+                            <select id="materials_catSelect_input" class="form-control">
+                                <option value="" disabled selected>Vælg kategori</option>
+                            </select>
+                        </div>
+
+                        <div id="materials_prodSelect_input_wrapper" class="materials_select_wrapper" style="display:none;">
+                            Produkter:
+                            <select id="materials_prodSelect_input" class="form-control">
+                                <option value="0" selected>Opret Nyt Produkt</option>
+                            </select>
+                        </div>
+
+                        <div id="materials_matCreate_wrapper" style="display:none;">
+                            Navn<input id="product_name_input" class="form-control" type="text" name="prodname">
+                            Tykkelse<input id="product_thick_input" class="form-control" type="number" name="prodthick">
+                            Bredde<input id="product_width_input" class="form-control" type="number" name="prodwidth">
+
+                            <div id="materials_matCreateVariant_wrapper" style="display:none;">
+                                <p>Opret Ny Variant<p>
+                                    Længde<input id="product_length_input" disabled class="form-control" type="number" name="prodlength">
+                                    Pris<input id="product_price_input" disabled class="form-control" type="number" name="prodprice">
+                                    Antal<input id="product_stock_input" disabled class="form-control" type="number" name="prodstock">
+                                    Aktiv<input id="product_active_input" disabled class="form-control" type="checkbox" name="prodactive" value="">
+                            </div>
+                            <button id="materials_createNewBtn" class="btn btn-info">Opret Produkt</button>
+                        </div>
+
+
+
+
+
+                    </div>
+                    <!-- create end -->
                 </div>
-                <!-- edit end -->
-
-                <!-- create materials -->
-                <div id="materials_createUI" style="display:none;">
-                    <div class="materials_select_wrapper">
-                        Kategori:
-                        <select id="materials_catSelect_input" class="form-control">
-                            <option value="" disabled selected>Vælg kategori</option>
-                        </select>
-                    </div>
-
-                    <div id="materials_prodSelect_input_wrapper" class="materials_select_wrapper" style="display:none;">
-                        Produkter:
-                        <select id="materials_prodSelect_input" class="form-control">
-                            <option value="0" selected>Opret Nyt Produkt</option>
-                        </select>
-                    </div>
-
-                    <div id="materials_matCreate_wrapper" style="display:none;">
-                        Navn<input id="product_name_input" class="form-control" type="text" name="prodname">
-                        Tykkelse<input id="product_thick_input" class="form-control" type="number" name="prodthick">
-                        Bredde<input id="product_width_input" class="form-control" type="number" name="prodwidth">
-
-                        <div id="materials_matCreateVariant_wrapper" style="display:none;">
-                            <p>Opret Ny Variant<p>
-                            Længde<input id="product_length_input" disabled class="form-control" type="number" name="prodlength">
-                            Pris<input id="product_price_input" disabled class="form-control" type="number" name="prodprice">
-                            Antal<input id="product_stock_input" disabled class="form-control" type="number" name="prodstock">
-                            Aktiv<input id="product_active_input" disabled class="form-control" type="checkbox" name="prodactive" value="">
-                        </div>
-                        <button id="materials_createNewBtn" class="btn btn-info">Opret Produkt</button>
-                    </div>
-
-
-
-
-
-                </div>
-                <!-- create end -->
             </div>
-        </div>
 
-        <div id="materials_saveMsg" title="Ændringer" style="display:none;">
-            <p>
-                <span id="materials_saveMsg_icon" class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
-                <span id="materials_saveMsg_msg">Success! Ændringerne er nu gemt.</span>
-            </p>
+            <div id="materials_saveMsg" title="Ændringer" style="display:none;">
+                <p>
+                    <span id="materials_saveMsg_icon" class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+                    <span id="materials_saveMsg_msg">Success! Ændringerne er nu gemt.</span>
+                </p>
+            </div>
         </div>
     </body>
 </html>

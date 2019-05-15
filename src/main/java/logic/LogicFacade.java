@@ -11,9 +11,11 @@ import entity.Order;
 import entity.Employee;
 import data.LogInException;
 import data.UpdateException;
+import entity.Category;
 import entity.Customer;
 import entity.Odetail;
 import entity.Product;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -187,6 +189,10 @@ public class LogicFacade {
 
     public List<Order> getOwnOrders(int emplId) {
         return new data.OrderMapper().getOwnOrders(emplId);
+    }
+    
+    public ArrayList<Category> getCategorieslist() {
+        return new data.ProductMapper().getCategories();
     }
 
     public List<Odetail> getOdetails(int orderID) {
