@@ -40,13 +40,13 @@ public class OrdeMapperTest {
 
     @Test
     public void testGetOrders() {
-        List<Order> orders = o.getOldOrders();
+        List<Order> orders = o.getOrders();
         
         assertNotNull(orders);
         int id = 1;
         int height = 300;
         int length = 660;
-        int width = 420;
+        int width = 540;
         int shedLength = 420;
         int shedWidth = 510;
         int roofAngle = 25;
