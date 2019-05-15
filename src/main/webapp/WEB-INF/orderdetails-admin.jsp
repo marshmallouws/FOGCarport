@@ -7,7 +7,7 @@
     Created on : Apr 29, 2019, 12:34:28 PM
     Author     : caspe
 --%>
-<jsp:include page="header.jsp"></jsp:include>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <% Order order = (Order) request.getAttribute("order");
     List<Integer> carportSelectWidth = (List<Integer>) request.getAttribute("carportSelectWidth");
@@ -19,13 +19,20 @@
     List<Employee> employees = (List<Employee>) request.getAttribute("employees");
     Customer customer = (Customer) request.getAttribute("customer");
 %>
-<body>
-    <div class="container">
-        <h1>Orderdetails-admin</h1>
+<!DOCTYPE html>
+<html>
+    <head>
+        <%@ include file="/WEB-INF/parts/headmeta.jspf" %>
+        <title>Bestilling #<%=order.getId()%> - Fog</title>
+    </head>
+    <body>
+        <%@ include file="/WEB-INF/parts/navigation.jspf" %>
+    <div class="page-wrapper menu-spacer">
+        <h1>Bestilling #<%=order.getId()%></h1> 
 
         <div id="search-container">
             <input type="text" name="searchInput" id="searchInput">
-            <button type="button" id="searchBtn">Søg</button>    
+            <button type="button" id="searchBtn">SÃ¸g</button>    
         </div>
 
 
@@ -53,7 +60,7 @@
                     <div class="form-group">
                         <label for="employee">Ansvarlig</label>
                         <select class="form-control input-disabled" name="employee" id="employee">
-                            <option value=0>Vælg medarbejder</option>
+                            <option value=0>VÃ¦lg medarbejder</option>
                             <%
                                 for (Employee employee : employees) {
                                     if (employee.getId() == order.employeeId()) {
@@ -94,7 +101,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="message">Evt. bemærkninger</label>
+                        <label for="message">Evt. bemÃ¦rkninger</label>
                         <textarea class="form-control" name="message" id="message"></textarea>
                     </div>
 
@@ -102,9 +109,9 @@
 
                 <div class="col">
                     <div class="form-group">
-                        <label for="carportLength">Carport længde</label>
+                        <label for="carportLength">Carport lÃ¦ngde</label>
                         <select class="form-control input-disabled" name="carportLength" id="carportLength">
-                            <option value=0>Vælg længde</option>
+                            <option value=0>VÃ¦lg lÃ¦ngde</option>
                             <%
                                 for (int length : carportSelectLength) {
                                     if (length == order.getLenght()) {
@@ -120,7 +127,7 @@
                     <div class="form-group">
                         <label for="carportWidth">Carport bredde</label>
                         <select class="form-control input-disabled" name="carportWidth" id="carportWidth">
-                            <option value="0">Vælg bredde</option>
+                            <option value="0">VÃ¦lg bredde</option>
                             <%
                                 for (int width : carportSelectWidth) {
                                     if (width == order.getWidth()) {
@@ -134,9 +141,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="carportHeight">Carport højde</label>
+                        <label for="carportHeight">Carport hÃ¸jde</label>
                         <select class="form-control input-disabled" name="carportHeight" id="carportHeight">
-                            <option value=0>Vælg højde</option>
+                            <option value=0>VÃ¦lg hÃ¸jde</option>
                             <%
                                 for (int height : carportSelectHeight) {
                                     if (height == order.getHeight()) {
@@ -152,7 +159,7 @@
                     <div class="form-group">
                         <label for="roofMaterial">Tag</label>
                         <select class="form-control input-disabled" name="roofMaterial" id="roofMaterial">
-                            <option value=0>Vælg tag</option>
+                            <option value=0>VÃ¦lg tag</option>
                             <option value="Plasttrapezplader">Plasttrapezplader</option>
                         </select>
                     </div>
@@ -165,9 +172,9 @@
                                 for (int angle : roofSelectAngle) {
                                     if (angle == order.getRoofAngle()) {
                             %>
-                            <option value="<%= angle%>" selected><%= angle%>°</option>
+                            <option value="<%= angle%>" selected><%= angle%>Â°</option>
                             <% } else {%>
-                            <option value="<%= angle%>"><%= angle%>°</option>
+                            <option value="<%= angle%>"><%= angle%>Â°</option>
                             <% }
                                 } %>
                         </select>
@@ -185,7 +192,7 @@
                     <div class="form-group">
                         <label for="shedWidth">Redskabsrum bredde</label>
                         <select class="form-control input-disabled" name="shedWidth" id="shedWidth">
-                            <option value=0>Ønsker ikke redskabsrum</option>
+                            <option value=0>Ã˜nsker ikke redskabsrum</option>
                             <%
                                 for (int width : shedSelectWidth) {
                                     if (width == order.getShedWidth()) {
@@ -199,9 +206,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="shedLength">Redskabsrum længde</label>
+                        <label for="shedLength">Redskabsrum lÃ¦ngde</label>
                         <select class="form-control input-disabled" name="shedLength" id="shedLength">
-                            <option value=0>Ønsker ikke redskabsrum</option>
+                            <option value=0>Ã˜nsker ikke redskabsrum</option>
                             <%
                                 for (int length : shedSelectLength) {
                                     if (length == order.getShedLength()) {
