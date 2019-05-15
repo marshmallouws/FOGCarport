@@ -1,6 +1,7 @@
 package PresentationLayer;
 
 import data.BuildException;
+import com.mysql.cj.util.StringUtils;
 import data.DevMapper;
 import data.FOGException;
 import entity.Customer;
@@ -36,10 +37,23 @@ public class AddOrderCommand extends Command {
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String message = request.getParameter("message");
+        
+        // validate info
+        if (StringUtils.isStrictlyNumeric(phone) != true || 
+                StringUtils.isStrictlyNumeric(zip) != true || 
+                zip.length() > 4 || 
+                zip.length() < 4 || fullname.length() > 45 ||
+                !email.contains("@") || !email.contains(".")) 
+        {
+            request.setAttribute("error", "Det ser ud til, at kunde informationen ikke var udfyldt korrekt!");
+            request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+            return;
+        }
 
         LogicFacade lf = new LogicFacade();
         Customer c = null;
         try {
+            
             int formatZip = Integer.parseInt(zip);
             int formatPhone = Integer.parseInt(phone);
 
@@ -53,7 +67,44 @@ public class AddOrderCommand extends Command {
         }
 
         try {
-            int height = Integer.parseInt(_carportHeight);
+            
+            if (StringUtils.isStrictlyNumeric(_carportWidth) == false || 
+                StringUtils.isStrictlyNumeric(_carportLength) == false || 
+                StringUtils.isStrictlyNumeric(_shedWidth) == false || 
+                StringUtils.isStrictlyNumeric(_shedLength) == false || 
+                StringUtils.isStrictlyNumeric(_roofAngle) == false || 
+                StringUtils.isStrictlyNumeric(_carportHeight) == false) 
+            {
+                request.setAttribute("error", "Kun tal kan bruges til at oprette en ordre.");
+                request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+                return;
+            } else {
+                if (Integer.parseInt(_carportWidth) < 240 || Integer.parseInt(_carportWidth) > 750) {
+                    request.setAttribute("error", "Det ser ud til, at størrelse på carporten er for stor! Kontakt support.");
+                    request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+                    return;
+                }
+                
+                if (Integer.parseInt(_carportLength) < 240 || Integer.parseInt(_carportLength) > 780) {
+                    request.setAttribute("error", "Det ser ud til, at størrelse på carporten er for stor! Kontakt support.");
+                    request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+                    return;
+                }
+                
+                if (Integer.parseInt(_roofAngle) < 0 || Integer.parseInt(_roofAngle) > 45) {
+                    request.setAttribute("error", "Det ser ud til, at vinklen på carportens tag er for stor! Kontakt support.");
+                    request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+                    return;
+                }
+                
+                if (Integer.parseInt(_carportHeight) < 225 || Integer.parseInt(_carportHeight) > 500) {
+                    request.setAttribute("error", "Det ser ud til, at højden på carporten er for stor! Kontakt support.");
+                    request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+                    return;
+                }
+            }
+            
+            int height = Integer.parseInt(_carportHeight); // skal implementeres som på order admin page
             int carportWidth = Integer.parseInt(_carportWidth);
             int carportLength = Integer.parseInt(_carportLength);
             int shedWidth = Integer.parseInt(_shedWidth);
