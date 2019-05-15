@@ -23,6 +23,7 @@ public class Builder {
 
     public static void main(String[] args) {
         Order order = new Order(270, 1900, 1900, 200, 200, 20, 12);
+        
         List<Orequest> blueprint = new Builder().carportBlueprint(order);
         for (Odetail o : new Builder().carportBuilder(blueprint, order)) {
             System.out.println(o.getProduct().getName() + " " + o.getProduct().getLength() + " cm. " + o.getQty() + " stk. " + o.getAmount() + " kr. " + " " + o.getComment() + " " + o.getProduct().isActive());
@@ -507,24 +508,6 @@ public class Builder {
         }
 
         return status;
-    }
-
-    private int calcStolper(Order order) {
-        int maxLengthCarport = 1000;
-
-        // minimum
-        int count = 4;
-
-        // stor carport
-        if (order.getLenght() >= maxLengthCarport) {
-            count += 2;
-        }
-
-        // med skur
-        if (order.getShedLength() > 0 && order.getShedWidth() > 0) {
-            count += 7;
-        }
-        return count;
     }
 
     private Map<Integer, Integer> calcStolperMap(int categoryID, int productID, Order order) {

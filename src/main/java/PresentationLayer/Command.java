@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author caspe
  */
+
+//windows1252
 public abstract class Command {
 
 //    private static Map<String, Command> commands;

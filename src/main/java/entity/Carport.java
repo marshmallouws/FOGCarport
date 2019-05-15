@@ -13,27 +13,28 @@ import java.util.List;
  * @author caspe
  */
 public class Carport {
+
     int height;
     int length;
     int width;
-    
+
     double price;
-    
+
     List<Odetail> items;
 
     public Carport(List<Odetail> items) {
         this.items = items;
         this.price = calcPrice(items);
     }
-    
+
     public double getPrice() {
         return price;
     }
-    
+
     public List<Odetail> getItems() {
         return items;
     }
-    
+
     private double calcPrice(List<Odetail> items) {
         double total = 0;
         for (Odetail o : items) {
@@ -41,7 +42,7 @@ public class Carport {
         }
         return total;
     }
-    
+
     public List<Odetail> getWoodsList() {
         List<Odetail> woods = new ArrayList();
         for (Odetail o : items) {
@@ -52,7 +53,7 @@ public class Carport {
         }
         return woods;
     }
-    
+
     public List<Odetail> getScrewsList() {
         List<Odetail> screws = new ArrayList();
         for (Odetail o : items) {
@@ -64,5 +65,20 @@ public class Carport {
         return screws;
     }
     
-    
+    public int getCountCategory(int categoryID) {
+        try {
+            if (items == null) {
+                throw new Exception();
+            }
+            int count = 0;
+            for (Odetail o : items) {
+                if (o.getProduct().getCategory().getId() == categoryID) {
+                    count++;
+                }
+            }
+            return count;
+        } catch (Exception ex) {
+            return 0;
+        }
+    }
 }
