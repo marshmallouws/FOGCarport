@@ -32,7 +32,8 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Ordrenummer</th>
+                        <th>Kunde</th>
                         <th>Længde</th>
                         <th>Bredde</th>
                         <th>Højde</th>
@@ -49,6 +50,7 @@
                     <% for (Order o : myOrders) {%>
                     <tr>
                         <td><%= o.getId()%></td>
+                        <td><%= o.getCustomerId() %></td>
                         <td><%= o.getLenght()%></td>
                         <td><%= o.getWidth()%></td>
                         <td><%= o.getHeight()%></td>
@@ -70,7 +72,8 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Ordrenummer</th>
+                        <th>Kunde</th>
                         <th>Længde</th>
                         <th>Bredde</th>
                         <th>Højde</th>
@@ -87,6 +90,7 @@
                     <% for (Order o : unassignedOrders) {%>
                     <tr>
                         <td><%= o.getId()%></td>
+                        <td><%= o.getCustomerId() %></td>
                         <td><%= o.getLenght()%></td>
                         <td><%= o.getWidth()%></td>
                         <td><%= o.getHeight()%></td>

@@ -4,6 +4,7 @@
     Author     : caspe
 --%>
 
+<%@page import="entity.Carport"%>
 <%@page import="entity.Order"%>
 <%@page import="data.DevMapper"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -11,13 +12,15 @@
 <%
     //Order order = (Order) request.getAttribute("order");
     Order order = new Order(270, 600, 820, 300, 300, 10, 12);
+    //Carport carport = new Carport(new logic.LogicFacade().buildCarport(order));
     int carportWidth = order.getWidth();
     int carportLength = order.getLenght();
 
     int canvasWidth = 800;
     int canvasHeight = 1000;
 
-    int spaer = new DevMapper().calcSpaer(order);
+    //int spaer = carport.getCountCategory(8); // spær
+    int spaer = 15; // spær
 %>
 
 <!DOCTYPE html>
