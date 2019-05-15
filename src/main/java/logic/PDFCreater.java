@@ -26,6 +26,7 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.ListNumberingType;
 import com.itextpdf.layout.property.TextAlignment;
+import data.BuildException;
 import data.FOGException;
 import entity.Category;
 import entity.Employee;
@@ -97,7 +98,11 @@ public class PDFCreater {
     private void createInstructions(Order order, Document doc) throws FOGException {
         doc.add(new Paragraph(new Text("Husk at kontrollere styklisten inden du går i gang").setBold()));
 
-        List<Odetail> odetails = l.buildCarport(order);
+        try {
+            List<Odetail> odetails = l.buildCarport(order);
+        } catch (BuildException ex) {
+            ex.printStackTrace();
+        }
 
         com.itextpdf.layout.element.List list = new com.itextpdf.layout.element.List(ListNumberingType.DECIMAL);
         list.add(new ListItem("Grundplan afsættes ved at hamre en stump"
@@ -142,8 +147,8 @@ public class PDFCreater {
         Table table = new Table(pointColumnWidths);
         try {
             details = l.buildCarport(order);
-        } catch (FOGException ex) {
-            Logger.getLogger(PDFCreater.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BuildException ex) {
+            ex.printStackTrace();
         }
 
         Cell c1 = new Cell();

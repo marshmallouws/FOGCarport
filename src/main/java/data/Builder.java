@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,20 +26,38 @@ public class Builder {
     public static void main(String[] args) {
         Order order = new Order(270, 1900, 1900, 200, 200, 20, 12);
         
-        List<Orequest> blueprint = new Builder().carportBlueprint(order);
-        for (Odetail o : new Builder().carportBuilder(blueprint, order)) {
+        List<Orequest> blueprint = null;
+        try {
+            blueprint = new Builder().carportBlueprint(null);
+            
+            for (Odetail o : new Builder().carportBuilder(blueprint, order)) {
             System.out.println(o.getProduct().getName() + " " + o.getProduct().getLength() + " cm. " + o.getQty() + " stk. " + o.getAmount() + " kr. " + " " + o.getComment() + " " + o.getProduct().isActive());
         }
-
-        System.out.println(new Builder().calcStolperMap(1, 7, order));
+        } catch (BuildException ex) {
+            System.out.println("Fail..");
+        }
+        
     }
 
     // width afgør hvor mange rækker
-    private Map<Integer, Integer> calcSpaerMap(int categoryID, int productID, int x, int y, boolean angled) {
+    private Map<Integer, Integer> calcSpaerMap(int categoryID, int productID, int x, int y, boolean angled) throws BuildException {
         Map<Integer, Integer> map = new HashMap();
+        
+        if(categoryID == 0 || productID == 0) {
+            throw new BuildException("Intet produkt valgt til at udregne spær");
+        }
+        
+        if (x == 0 || y == 0) {
+            throw new BuildException("Mangler mål til udregning af spær");
+        }
+        
         List<Product> woods = getProductsAllForBuild(categoryID, productID);
+        
+        if (woods == null || woods.isEmpty()) {
+            throw new BuildException(("Ingen produkter med categoryID; " + categoryID + " og productID: " + productID +  " blev fundet til at udregne spær"));
+        }
 
-        int qty = 10;
+        int qty = 10; // minimum
         int gap = x / qty;
 
         while (gap >= 60) {
@@ -81,7 +101,7 @@ public class Builder {
         return map;
     }
 
-    private Map<Integer, Integer> calcWoodsMap(int categoryID, int productID, int length) {
+    private Map<Integer, Integer> calcWoodsMap(int categoryID, int productID, int length) throws BuildException {
         Map<Integer, Integer> map = new HashMap();
         List<Product> woods = getProductsAllForBuild(categoryID, productID);
 
@@ -318,12 +338,20 @@ public class Builder {
     }
 
     // Standard blueprint for en carport
-    public List<Orequest> carportBlueprint(Order order) {
+    public List<Orequest> carportBlueprint(Order order) throws BuildException {
         String comment;
         int catID;
         int prodID;
         int length;
         List<Orequest> reqs = new ArrayList();
+        
+        if (order == null) {
+            throw new BuildException("Ingen ordre tilknyttet blueprintet..");
+        }
+        
+        if (order.getHeight() <= 0 || order.getLenght() <= 0 || order.getWidth() <= 0 ) {
+            throw new BuildException("Mål mangler på ordre..");
+        }
 
         //Remme
         comment = "Remme i sider, sadles ned i stolper";
@@ -510,7 +538,7 @@ public class Builder {
         return status;
     }
 
-    private Map<Integer, Integer> calcStolperMap(int categoryID, int productID, Order order) {
+    private Map<Integer, Integer> calcStolperMap(int categoryID, int productID, Order order) throws BuildException {
         List<Product> woods = getProductsAllForBuild(categoryID, productID);
         int bigLen = 1000;
         int height = order.getHeight();
@@ -584,8 +612,12 @@ public class Builder {
     }
 
     // max længden af et bestemt produkt
-    private int calcMaxLength(List<Product> woods) {
-
+    private int calcMaxLength(List<Product> woods) throws BuildException {
+        
+        if (woods == null || woods.isEmpty()) {
+            throw new BuildException("Ingen produkter tilgængelig til at udregne maxLength ");
+        }
+        
         int max = 0;
 
         for (Product p : woods) {
@@ -599,20 +631,18 @@ public class Builder {
     }
 
     // min længden af et bestemt produkt
-    private int calcMinLength(List<Product> woods) {
-        int min = 0;
-        try {
-            min = woods.get(0).getLength();
-
+    private int calcMinLength(List<Product> woods) throws BuildException {
+        
+        if (woods == null || woods.isEmpty()) {
+            throw new BuildException("Ingen produkter tilgængelig til at udregne minLength ");
+        }
+        
+        int min = woods.get(0).getLength();
             for (Product p : woods) {
                 if (p.getLength() < min) {
                     min = p.getLength();
                 }
             }
-
-        } catch (IndexOutOfBoundsException ex) {
-            ex.printStackTrace();
-        }
 
         return min;
 

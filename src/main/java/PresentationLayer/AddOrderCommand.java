@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import data.BuildException;
 import data.DevMapper;
 import data.FOGException;
 import entity.Customer;
@@ -19,7 +20,7 @@ import logic.LogicFacade;
 public class AddOrderCommand extends Command {
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException {
 
         String _carportWidth = request.getParameter("carportWidth");
         String _carportLength = request.getParameter("carportLength");
@@ -52,7 +53,7 @@ public class AddOrderCommand extends Command {
         }
 
         try {
-            int height = Integer.parseInt(_carportHeight); // skal implementeres som på order admin page
+            int height = Integer.parseInt(_carportHeight);
             int carportWidth = Integer.parseInt(_carportWidth);
             int carportLength = Integer.parseInt(_carportLength);
             int shedWidth = Integer.parseInt(_shedWidth);
@@ -76,9 +77,8 @@ public class AddOrderCommand extends Command {
 
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
-        } catch (FOGException ex) {
-            ex.printStackTrace();
-        }
+        } catch (BuildException ex) {
+            throw new FOGException(ex.getMessage());        }
 
     }
 

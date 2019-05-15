@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import data.BuildException;
 import data.FOGException;
 import entity.Carport;
 import entity.Odetail;
@@ -40,8 +41,9 @@ public class CarportProductsCommand extends Command {
             Carport carport = new Carport(odetailsFromDB);
             
             request.setAttribute("carport", carport);
-        } catch (FOGException ex) {
-            throw new FOGException(ex.getMessage());
+        } catch (BuildException ex) {
+            request.setAttribute("error", "Der skete en fejl ved carporten: " + ex.getMessage());
+            request.getRequestDispatcher("/WEB-INF/carport.jsp").forward(request, response);
         }
         
         request.setAttribute("order", order);

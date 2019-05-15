@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import data.BuildException;
 import data.FOGException;
 import data.UpdateException;
 import java.io.IOException;
