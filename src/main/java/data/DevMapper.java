@@ -27,13 +27,23 @@ import java.util.logging.Logger;
  * @author caspe
  */
 public class DevMapper {
+    private Connection con;
+    
+    public DevMapper(ConnectorInterface con) {
+        try {
+            this.con = con.connect();
+            
+        } catch (ClassNotFoundException | SQLException e) {
+            
+        }
+    }
+    
 
     public boolean loadZipcodesFromFile(File file) {
         boolean status = false;
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(file));
-            Connection con = Connector.connection();
 
             String str;
             while ((str = br.readLine()) != null) {
@@ -56,7 +66,7 @@ public class DevMapper {
 
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
-        } catch (ClassNotFoundException | SQLException | IOException ex) {
+        } catch (SQLException | IOException ex) {
             ex.printStackTrace();
         } finally {
             try {
@@ -106,7 +116,6 @@ public class DevMapper {
 
     private void addUniversalSkruer(List<Odetail> odetails, Order order) {
         try {
-            Connection con = Connector.connection();
             String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories_test.category_name, products_test.thickness, products_test.width, length, price, stock, products_test.product_name FROM carports.product_variants\n"
                     + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
                     + "JOIN products_test ON product_variants.product_id = products_test.id\n"
@@ -125,7 +134,7 @@ public class DevMapper {
                 odetails.add(new Odetail(product, order.getId(), qty, amount, comment));
             }
 
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
@@ -150,7 +159,7 @@ public class DevMapper {
         File file = new File(path);
         //System.out.println(new File(".").getAbsolutePath());
 
-        System.out.println(new DevMapper().loadZipcodesFromFile(file));
+        //System.out.println(new DevMapper().loadZipcodesFromFile(file));
     }
 
 }

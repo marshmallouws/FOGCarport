@@ -23,7 +23,8 @@ public class OrdeMapperTest {
     
     @BeforeClass
     public static void setUpClass() {
-        o = new OrderMapper();
+        ConnectorMock m = ConnectorMock.getInstance();
+        o = new OrderMapper(m);
     }
     
     @AfterClass

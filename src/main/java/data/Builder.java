@@ -20,7 +20,16 @@ import java.util.Map;
  * @author Casper
  */
 public class Builder {
-
+    private Connection conn;
+    
+    public Builder(ConnectorInterface conn) {
+        try {
+            this.conn = conn.connect();
+        } catch (ClassNotFoundException | SQLException e) {
+            
+        }
+    }
+    /*
     public static void main(String[] args) {
         Order order = new Order(270, 1900, 1900, 200, 200, 20, 12);
         List<Orequest> blueprint = new Builder().carportBlueprint(order);
@@ -29,7 +38,7 @@ public class Builder {
         }
 
         System.out.println(new Builder().calcStolperMap(1, 7, order));
-    }
+    } */
 
     // width afgør hvor mange rækker
     private Map<Integer, Integer> calcSpaerMap(int categoryID, int productID, int x, int y, boolean angled) {
@@ -250,13 +259,12 @@ public class Builder {
     public List<Product> getProductsAllForBuild(int categoryID, int productID) {
         List<Product> products = new ArrayList();
         try {
-            Connection con = Connector.connection();
             String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories.category_name, products.thickness, products.width, length, price, stock, product_variants.active, products.product_name FROM carports.product_variants\n"
                     + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
                     + "JOIN products ON product_variants.product_id = products.id\n"
                     + "JOIN categories ON products_in_categories.category_id = categories.id\n"
                     + "WHERE category_id = ? AND product_variants.product_id = ?;";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, categoryID);
             ps.setInt(2, productID);
             ResultSet rs = ps.executeQuery();
@@ -275,7 +283,7 @@ public class Builder {
 
                 products.add(new Product(id, variant_id, category, thickness, width, length, price, stock, name, active));
             }
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
 
         }
@@ -421,7 +429,6 @@ public class Builder {
         String query;
 
         try {
-            con = Connector.connection();
             for (Orequest r : request) {
                 query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories.category_name, products.thickness, products.width, length, price, stock, product_variants.active, products.product_name FROM carports.product_variants\n"
                         + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
@@ -454,7 +461,7 @@ public class Builder {
                 }
             }
 
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
             if (rs != null) {

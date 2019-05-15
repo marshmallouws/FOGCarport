@@ -15,6 +15,16 @@ import java.util.List;
  * @author Annika
  */
 public class ProductMapper implements ProductDAOInterface {
+    
+    private Connection con;
+    
+    public ProductMapper(ConnectorInterface con) {
+        try {
+            this.con = con.connect();
+        } catch (ClassNotFoundException | SQLException e) {
+            
+        }
+    }
 
     public Product buildProductVariant(ResultSet rs) throws SQLException {
         int id = rs.getInt("product_id");
@@ -35,7 +45,7 @@ public class ProductMapper implements ProductDAOInterface {
     public Product getProductVariant(int id) {
         Product product = null;
         try {
-            Connection con = Connector.connection();
+
             String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories.category_name, products.thickness, products.width, length, price, stock, product_variants.active, products.product_name FROM carports.product_variants\n"
                     + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
                     + "JOIN products ON product_variants.product_id = products.id\n"
@@ -49,7 +59,7 @@ public class ProductMapper implements ProductDAOInterface {
                 product = buildProductVariant(rs);
             }
 
-        } catch (SQLException | ClassNotFoundException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return product;
@@ -59,7 +69,6 @@ public class ProductMapper implements ProductDAOInterface {
     public Product getProductMain(int id) {
         Product product = null;
         try {
-            Connection con = Connector.connection();
             String query = "SELECT id, product_name, thickness, width, active FROM products WHERE id = ?;";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, id);
@@ -69,7 +78,7 @@ public class ProductMapper implements ProductDAOInterface {
                 product = new Product(rs.getInt("id"), rs.getString("product_name"), rs.getInt("thickness"), rs.getInt("width"), rs.getBoolean("active"));
             }
 
-        } catch (SQLException | ClassNotFoundException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
@@ -82,7 +91,6 @@ public class ProductMapper implements ProductDAOInterface {
     public ArrayList<Category> getCategories() {
         ArrayList<Category> cat = new ArrayList();
         try {
-            Connection con = Connector.connection();
             String query = "SELECT id, category_name FROM categories;";
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
@@ -97,7 +105,7 @@ public class ProductMapper implements ProductDAOInterface {
                 cat.add(new Category(id, name, height, width, length)); // OLD
             }
 
-        } catch (SQLException | ClassNotFoundException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return cat;
@@ -107,7 +115,6 @@ public class ProductMapper implements ProductDAOInterface {
     public ArrayList<Product> getProductVariantsList(int categoryID, int productID) {
         ArrayList<Product> prod = new ArrayList();
         try {
-            Connection con = Connector.connection();
             String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories.category_name, products.thickness, products.width, length, price, stock, product_variants.active, products.product_name FROM carports.product_variants\n"
                     + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
                     + "JOIN products ON product_variants.product_id = products.id\n"
@@ -122,7 +129,7 @@ public class ProductMapper implements ProductDAOInterface {
                 prod.add(buildProductVariant(rs));
             }
 
-        } catch (SQLException | ClassNotFoundException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return prod;
@@ -132,7 +139,6 @@ public class ProductMapper implements ProductDAOInterface {
     public List<Product> getProductsInCategories(int categoryID) {
         List<Product> products = new ArrayList();
         try {
-            Connection con = Connector.connection();
             String query = "SELECT * FROM products_in_categories\n"
                     + "JOIN products ON products.id = products_in_categories.product_id\n"
                     + "JOIN categories ON categories.id = products_in_categories.category_id\n"
@@ -145,7 +151,7 @@ public class ProductMapper implements ProductDAOInterface {
                 products.add(new Product(rs.getInt("product_id"), new Category(rs.getInt("category_id"), rs.getString("category_name")), rs.getString("product_name"), rs.getBoolean("active")));
             }
             return products;
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
@@ -156,7 +162,6 @@ public class ProductMapper implements ProductDAOInterface {
     public int createProductVariant(Product product) {
         int variantID = 0;
         try {
-            Connection con = Connector.connection();
             String query = "INSERT INTO product_variants (product_id, length, price, stock) VALUES (?, ?, ?, ?);";
             PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, product.getId());
@@ -171,7 +176,7 @@ public class ProductMapper implements ProductDAOInterface {
             }
 
             return variantID;
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
             return variantID;
         }
@@ -182,7 +187,6 @@ public class ProductMapper implements ProductDAOInterface {
         Connection con = null;
         try {
             int id = 0;
-            con = Connector.connection();
             con.setAutoCommit(false); // implement transactions with categoryID
             String query = "INSERT INTO products (product_name, thickness, width) VALUES (?,?,?);";
             PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -206,7 +210,7 @@ public class ProductMapper implements ProductDAOInterface {
             con.setAutoCommit(true);
 
             return id;
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
             try {
                 con.rollback();
@@ -220,7 +224,6 @@ public class ProductMapper implements ProductDAOInterface {
     @Override
     public boolean updateProductVariant(Product product) {
         try {
-            Connection con = Connector.connection();
             String query = "UPDATE product_variants SET price = ?, stock = ?, active = ? WHERE id = ?";
             PreparedStatement ps = con.prepareStatement(query);
             ps.setDouble(1, product.getPrice());
@@ -230,7 +233,7 @@ public class ProductMapper implements ProductDAOInterface {
             ps.executeUpdate();
             return true;
 
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
         }
@@ -241,7 +244,6 @@ public class ProductMapper implements ProductDAOInterface {
         List<Product> roofs = new ArrayList();
 
         try {
-            Connection con = Connector.connection();
             String query = "SELECT * FROM products_in_categories\n"
                     + "JOIN products ON products_in_categories.product_id = products.id\n"
                     + "WHERE category_id = 7;";
@@ -253,7 +255,7 @@ public class ProductMapper implements ProductDAOInterface {
                 roofs.add(new Product(rs.getInt("product_id"), rs.getString("product_name")));
             }
 
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 

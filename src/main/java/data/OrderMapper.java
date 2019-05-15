@@ -26,14 +26,24 @@ import java.util.logging.Logger;
  * @author Bitten
  */
 public class OrderMapper implements OrderInterface {
+    private Connection conn;
+    private ConnectorInterface connI;
+    
+    public OrderMapper(ConnectorInterface conn) {
+        try {
+            this.conn = conn.connect();
+            this.connI = conn;
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(OrderMapper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @Override
     public int createOrder(Order order, Customer customer) {
         try {
-            Connection con = Connector.connection();
             String SQL = "INSERT INTO `c_order` (height, length, width, shed_length, shed_width, roof_angle, roof_type, cust_id) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement ps = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, order.getHeight());
             ps.setInt(2, order.getLenght());
             ps.setInt(3, order.getWidth());
@@ -60,8 +70,7 @@ public class OrderMapper implements OrderInterface {
     private ResultSet getResult(String query, int... id) throws SQLException, ClassNotFoundException {
         ResultSet rs = null;
 
-        Connection con = Connector.connection();
-        PreparedStatement ps = con.prepareStatement(query);
+        PreparedStatement ps = conn.prepareStatement(query);
 
         for (int i = 0; i < id.length; i++) {
             ps.setInt(i + 1, id[i]);
@@ -101,7 +110,7 @@ public class OrderMapper implements OrderInterface {
     }
 
     private Employee getEmployee(int id) {
-        UserMapper u = new UserMapper();
+        UserMapper u = new UserMapper(connI);
         return u.getEmployee(id);
     }
 
@@ -176,9 +185,8 @@ public class OrderMapper implements OrderInterface {
     @Override
     public void assignOrder(Employee user, Order order) {
         try {
-            Connection con = Connector.connection();
             String query = "UPDATE c_order SET userid = ? WHERE id = ?";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, user.getId());
             ps.setInt(2, order.getId());
@@ -194,9 +202,8 @@ public class OrderMapper implements OrderInterface {
     @Override
     public void assignOrder(int orderID, int employeeID) {
         try {
-            Connection con = Connector.connection();
             String query = "UPDATE c_order SET emp_id = ? WHERE id = ?";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, employeeID);
             ps.setInt(2, orderID);
@@ -213,10 +220,9 @@ public class OrderMapper implements OrderInterface {
         String query;
         PreparedStatement ps;
         try {
-            Connection con = Connector.connection();
             if (order.employeeId() == 0) {
                 query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ? WHERE id = ?;";
-                ps = con.prepareStatement(query);
+                ps = conn.prepareStatement(query);
 
                 ps.setInt(1, order.getHeight());
                 ps.setInt(2, order.getLenght());
@@ -227,7 +233,7 @@ public class OrderMapper implements OrderInterface {
                 ps.setInt(7, order.getId());
             } else {
                 query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ?, emp_id = ? WHERE id = ?;";
-                ps = con.prepareStatement(query);
+                ps = conn.prepareStatement(query);
 
                 ps.setInt(1, order.getHeight());
                 ps.setInt(2, order.getLenght());
@@ -245,7 +251,7 @@ public class OrderMapper implements OrderInterface {
             } else {
                 throw new UpdateException("Fejl ved opdatering af ordre " + order.getId());
             }
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
             throw new UpdateException("Fejl ved opdatering af ordre " + order.getId());
         }
@@ -269,11 +275,11 @@ public class OrderMapper implements OrderInterface {
     @Override
     public void createOdetail(List<Odetail> odetails) {
         try {
-            Connection con = Connector.connection();
-            con.setAutoCommit(false);
+
+            conn.setAutoCommit(false);
             String query = "INSERT INTO `odetail` (prod_id, order_id, qty, amount, cmt) "
                     + "VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             for (Odetail od : odetails) {
                 ps.setInt(1, od.getProduct().getVariant_id());
@@ -284,15 +290,15 @@ public class OrderMapper implements OrderInterface {
                 ps.executeUpdate();
             }
 
-            con.commit();
-            con.setAutoCommit(true);
+            conn.commit();
+            conn.setAutoCommit(true);
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             try {
-                Connection con = Connector.connection();
-                con.rollback();
-            } catch (SQLException | ClassNotFoundException e1) {
+
+                conn.rollback();
+            } catch (SQLException e1) {
                 System.out.println("Could not rollback updates");
                 e1.printStackTrace();
             }
@@ -304,11 +310,10 @@ public class OrderMapper implements OrderInterface {
     @Override
     public void editOdetails(List<Odetail> details) {
         try {
-            Connection con = Connector.connection();
-            con.setAutoCommit(false);
+            conn.setAutoCommit(false);
             //String query = "UPDATE `odetails` SET prod_id = ?, amount = ? WHERE order_id = ?";
             String query = "UPDATE odetail SET cmt = ? WHERE id = ?;";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             for (Odetail od : details) {
 //                ps.setInt(1, od.getProduct().getVariant_id());
@@ -318,15 +323,15 @@ public class OrderMapper implements OrderInterface {
                 ps.executeUpdate();
             }
 
-            con.commit();
-            con.setAutoCommit(true);
+            conn.commit();
+            conn.setAutoCommit(true);
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
 
             try {
-                Connection con = Connector.connection();
-                con.rollback();
-            } catch (SQLException | ClassNotFoundException e1) {
+
+                conn.rollback();
+            } catch (SQLException e1) {
                 System.out.println("Could not rollback updates");
             }
 
@@ -338,10 +343,8 @@ public class OrderMapper implements OrderInterface {
         Category cat = null;
 
         try {
-
-            Connection con = Connector.connection();
             String query = "SELECT categories.id, categories.category_name FROM categories JOIN products_in_categories ON products_in_categories.category_id = categories.id WHERE products_in_categories.product_id = ?";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, prod_id);
             ResultSet rs = ps.executeQuery();
@@ -350,7 +353,7 @@ public class OrderMapper implements OrderInterface {
                 cat = new Category(rs.getInt(1), rs.getString(2));
             }
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -364,13 +367,11 @@ public class OrderMapper implements OrderInterface {
         Category category = null;
 
         try {
-
-            Connection con = Connector.connection();
             String query = "SELECT product_variants.id, product_variants.product_id, product_variants.length, product_variants.price, product_variants.stock, products.product_name, products.thickness, products.width "
                     + "FROM product_variants "
                     + "JOIN products ON product_variants.product_id = products.id "
                     + "WHERE product_variants.id = ?";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
 
             ps.setInt(1, prod_id);
             ResultSet rs = ps.executeQuery();
@@ -383,7 +384,7 @@ public class OrderMapper implements OrderInterface {
                 prod = new Product(rs.getInt("product_id"), rs.getInt("id"), category, rs.getInt("thickness"), rs.getInt("length"), rs.getInt("width"), rs.getInt("price"), true, rs.getInt("stock"), rs.getString("product_name"));
             }
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -395,9 +396,8 @@ public class OrderMapper implements OrderInterface {
         List<Odetail> details = new ArrayList<>();
         Product prod = null;
         try {
-            Connection con = Connector.connection();
             String query = "SELECT * FROM odetail WHERE order_id = ?";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, orderID);
             ResultSet rs = ps.executeQuery();
 
@@ -408,7 +408,7 @@ public class OrderMapper implements OrderInterface {
                 details.add(new Odetail(rs.getInt("id"), prod, rs.getInt("order_id"), rs.getInt("qty"), rs.getDouble("amount"), rs.getString("cmt")));
             }
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return details;

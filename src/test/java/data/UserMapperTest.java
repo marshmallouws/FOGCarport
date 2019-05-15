@@ -25,7 +25,8 @@ public class UserMapperTest {
 
     @BeforeClass
     public static void setUpClass() {
-        u = new UserMapper();
+        ConnectorMock m = ConnectorMock.getInstance();
+        u = new UserMapper(m);
     }
 
     @Test
