@@ -422,7 +422,6 @@ public class Builder {
 
     // En færdig stykliste for en carport ud fra et blueprint
     public List<Odetail> carportBuilder(List<Orequest> request, Order order) {
-        Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
 
@@ -437,7 +436,7 @@ public class Builder {
                         + "JOIN categories ON products_in_categories.category_id = categories.id\n"
                         + "WHERE category_id = ? AND (length BETWEEN ? AND ?) AND product_variants.product_id = ?;";
 
-                ps = con.prepareStatement(query);
+                ps = conn.prepareStatement(query);
                 ps.setInt(1, r.getProduct().getCategory_id());
                 ps.setInt(2, r.getProduct().getLengthMin());
                 ps.setInt(3, r.getProduct().getLengthMax());
@@ -481,15 +480,6 @@ public class Builder {
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
-            }
-
-            try {
-                if (con != null && !con.isClosed()) {
-                    con.close();
-                    con = null;
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
             }
         }
 
