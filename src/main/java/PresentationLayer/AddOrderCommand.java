@@ -129,7 +129,8 @@ public class AddOrderCommand extends Command {
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
         } catch (BuildException ex) {
-            throw new FOGException(ex.getMessage());        }
+            throw new FOGException(ex.getMessage());
+        }
 
     }
 

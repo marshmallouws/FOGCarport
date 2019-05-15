@@ -84,7 +84,7 @@ public class PDFCreater {
 
         } catch (MalformedURLException ex) {
             Logger.getLogger(PDFCreater.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FOGException ex) {
+        } catch (BuildException ex) {
             Logger.getLogger(PDFCreater.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             // lets guard it from null pointer exception
@@ -95,14 +95,10 @@ public class PDFCreater {
 
     }
 
-    private void createInstructions(Order order, Document doc) throws FOGException {
+    private void createInstructions(Order order, Document doc) throws BuildException {
         doc.add(new Paragraph(new Text("Husk at kontrollere styklisten inden du går i gang").setBold()));
 
-        try {
-            List<Odetail> odetails = l.buildCarport(order);
-        } catch (BuildException ex) {
-            ex.printStackTrace();
-        }
+        List<Odetail> odetails = l.buildCarport(order);
 
         com.itextpdf.layout.element.List list = new com.itextpdf.layout.element.List(ListNumberingType.DECIMAL);
         list.add(new ListItem("Grundplan afsættes ved at hamre en stump"
@@ -136,7 +132,7 @@ public class PDFCreater {
         doc.add(pd);
     }
 
-    private void createMaterialList(Order order, Document doc) {
+    private void createMaterialList(Order order, Document doc) throws BuildException {
         Text inf = new Text("Husk at kontrollere styklisten inden du går i gang");
         Paragraph p = new Paragraph(inf);
 
@@ -145,11 +141,7 @@ public class PDFCreater {
         List<Odetail> details = null;
         float[] pointColumnWidths = {137F, 90F, 90F, 137F};
         Table table = new Table(pointColumnWidths);
-        try {
-            details = l.buildCarport(order);
-        } catch (BuildException ex) {
-            ex.printStackTrace();
-        }
+        details = l.buildCarport(order);
 
         Cell c1 = new Cell();
         c1.add("Beskrivelse").setBold();

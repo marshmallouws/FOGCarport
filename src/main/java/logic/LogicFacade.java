@@ -6,6 +6,7 @@
 package logic;
 
 import com.google.gson.Gson;
+import data.BuildException;
 import data.Builder;
 import data.Connector;
 import data.ConnectorInterface;
@@ -186,7 +187,7 @@ public class LogicFacade {
         return new data.UserMapper(conn).getEmployee(id);
     }
     
-    public List<Odetail> buildCarport(Order order) throws FOGException {
+    public List<Odetail> buildCarport(Order order) throws BuildException {
         Builder b = new data.Builder(conn);
         List<Orequest> car = b.carportBlueprint(order);
         return b.carportBuilder(car, order);

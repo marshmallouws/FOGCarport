@@ -47,6 +47,7 @@ public class Builder {
         }
         
     }
+*/
 
     // width afgør hvor mange rækker
     private Map<Integer, Integer> calcSpaerMap(int categoryID, int productID, int x, int y, boolean angled) throws BuildException {
