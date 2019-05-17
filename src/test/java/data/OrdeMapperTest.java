@@ -5,6 +5,7 @@
  */
 package data;
 
+import entity.Customer;
 import entity.Order;
 import java.util.List;
 import org.junit.After;
@@ -75,4 +76,26 @@ public class OrdeMapperTest {
         }
     }
     
+    @Test
+    public void testCreateOrder() {
+        int height = 200;
+        int length = 300;
+        int width = 330;
+        int shedL = 0;
+        int shedW = 0;
+        int roofangle = 0;
+        int rooftype = 1;
+        int custId = 4;
+        Customer cust = new UserMapper(ConnectorMock.getInstance()).getCustomer(4);
+        Order ord = new Order(height, width, length, shedL, shedW, roofangle, 
+                rooftype, custId);
+        
+        int id = o.createOrder(ord, cust);
+        Order order = o.getOrder(id);
+        
+        assertNotNull(order);
+        assertEquals(height, order.getHeight());
+        assertEquals(length, order.getLenght());
+        assertEquals(width, order.getWidth());
+    }
 }

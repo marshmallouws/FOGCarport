@@ -15,7 +15,7 @@ import java.sql.SQLException;
  */
 public class ConnectorMock implements ConnectorInterface {
 
-    private static final String URL = "jdbc:mysql://138.68.92.25:3306/carports";
+    private static final String URL = "jdbc:mysql://138.68.92.25:3306/test_carports";
     private static final String USERNAME = "testuser";
     private static final String PASSWORD = "password123";
     private static ConnectorMock single;
