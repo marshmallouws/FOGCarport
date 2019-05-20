@@ -5,7 +5,6 @@
  */
 package data;
 
-import entity.Category;
 import entity.Customer;
 import entity.Order;
 import entity.Employee;
@@ -68,7 +67,7 @@ public class OrderMapper implements OrderInterface {
                 return rs.getInt(1);
             }
 
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
@@ -345,7 +344,7 @@ public class OrderMapper implements OrderInterface {
 
         }
     }
-
+    /*
     @Override
     public Category getCategory(int prod_id) {
         Category cat = null;
@@ -366,7 +365,7 @@ public class OrderMapper implements OrderInterface {
         }
 
         return cat;
-    }
+    } 
 
     @Override
     public Product getProduct(int prod_id) {
@@ -397,10 +396,11 @@ public class OrderMapper implements OrderInterface {
         }
 
         return prod;
-    }
+    } */
 
     @Override
     public List<Odetail> getOdetails(int orderID) {
+        ProductMapper pm = new ProductMapper(connI);
         List<Odetail> details = new ArrayList<>();
         Product prod = null;
         try {
@@ -410,8 +410,7 @@ public class OrderMapper implements OrderInterface {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-
-                prod = getProduct(rs.getInt("prod_id"));
+                prod = pm.getProduct(rs.getInt("prod_id"));
 
                 details.add(new Odetail(rs.getInt("id"), prod, rs.getInt("order_id"), rs.getInt("qty"), rs.getDouble("amount"), rs.getString("cmt")));
             }
