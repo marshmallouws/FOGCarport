@@ -44,13 +44,21 @@ public class OrderMapper implements OrderInterface {
             String SQL = "INSERT INTO `c_order` (height, length, width, shed_length, shed_width, roof_angle, roof_type, cust_id) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, order.getHeight());
-            ps.setInt(2, order.getLenght());
-            ps.setInt(3, order.getWidth());
-            ps.setInt(4, order.getShedLength());
-            ps.setInt(5, order.getShedWidth());
-            ps.setInt(6, order.getRoofAngle());
-            ps.setInt(7, order.getRoofType());
+            int height = order.getHeight();
+            int length = order.getLenght();
+            int width = order.getWidth();
+            int shedLength = order.getShedLength();
+            int shedWidth = order.getShedWidth();
+            int angle = order.getRoofAngle();
+            int rooftype = order.getRoofType();
+            
+            ps.setInt(1, height);
+            ps.setInt(2, length);
+            ps.setInt(3, width);
+            ps.setInt(4, shedLength);
+            ps.setInt(5, shedWidth);
+            ps.setInt(6, angle);
+            ps.setInt(7, rooftype);
             ps.setInt(8, customer.getId());
             ps.executeUpdate();
 

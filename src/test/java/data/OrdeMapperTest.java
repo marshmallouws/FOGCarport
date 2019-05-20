@@ -45,14 +45,15 @@ public class OrdeMapperTest {
         List<Order> orders = o.getOrders();
         
         assertNotNull(orders);
-        int id = 1;
+        int id = 6;
         int height = 300;
-        int length = 660;
-        int width = 540;
-        int shedLength = 420;
-        int shedWidth = 510;
-        int roofAngle = 25;
-        String date = "2019-05-13 22:27:22";
+        int length = 300;
+        int width = 300;
+        int shedLength = 0;
+        int shedWidth = 0;
+        int roofAngle = 4;
+        String date = "2019-05-20 09:23:55";
+
         String status = "recieved";
         boolean found = false;
        
@@ -79,16 +80,14 @@ public class OrdeMapperTest {
     @Test
     public void testCreateOrder() {
         int height = 200;
-        int length = 300;
         int width = 330;
+        int length = 300;
         int shedL = 0;
         int shedW = 0;
         int roofangle = 0;
         int rooftype = 1;
-        int custId = 4;
         Customer cust = new UserMapper(ConnectorMock.getInstance()).getCustomer(4);
-        Order ord = new Order(height, width, length, shedL, shedW, roofangle, 
-                rooftype, custId);
+        Order ord = new Order(height, width, length, shedL, shedW, roofangle, rooftype);
         
         int id = o.createOrder(ord, cust);
         Order order = o.getOrder(id);
@@ -97,5 +96,33 @@ public class OrdeMapperTest {
         assertEquals(height, order.getHeight());
         assertEquals(length, order.getLenght());
         assertEquals(width, order.getWidth());
+        
+        //int height, int width, int length, int shedLength, int shedWidth, int roofAngle, int roofType
+    }
+    
+    @Test
+    public void testGetOrdersUnassigned() {
+        List<Order> orders = o.getOrdersUnassigned();
+        assertNotNull(orders);
+        
+        for(Order o: orders) {
+            if(o.getEmpl() != null) {
+                fail();
+            }
+        }
+    }
+    
+    @Test
+    public void testGetOwnOrders() {
+        List<Order> orders = o.getOwnOrders(1);
+        assertNotNull(orders);
+        
+        for(Order o: orders) {
+            if(o.getEmpl() == null) {
+                fail();
+            } else {
+                assertEquals(1, o.getEmpl().getId());
+            }
+        }
     }
 }

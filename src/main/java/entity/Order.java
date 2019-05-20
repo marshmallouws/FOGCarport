@@ -36,7 +36,7 @@ public class Order {
         this.shedWidth = shedWidth;
         this.roofAngle = roofAngle;
         this.roofType = roofType;
-        this.customerId = customerId;
+        //this.customerId = customerId;
     }
     
     //For fetching data from db
