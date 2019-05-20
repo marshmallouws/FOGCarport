@@ -2,13 +2,10 @@ package PresentationLayer;
 
 import data.BuildException;
 import com.mysql.cj.util.StringUtils;
-import data.DevMapper;
 import data.FOGException;
 import entity.Customer;
 import entity.Order;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,9 +40,9 @@ public class AddOrderCommand extends Command {
                 StringUtils.isStrictlyNumeric(zip) != true || 
                 zip.length() > 4 || 
                 zip.length() < 4 || fullname.length() > 45 ||
-                !email.contains("@") || !email.contains(".")) 
+                !email.contains("@") || !email.contains("."))
         {
-            request.setAttribute("error", "Det ser ud til, at kunde informationen ikke var udfyldt korrekt!");
+            request.setAttribute("error", "Det ser ud til, at kundeinformationen ikke var udfyldt korrekt!");
             request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
             return;
         }

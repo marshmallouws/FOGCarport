@@ -95,7 +95,20 @@ public class Order {
     }
     
     public String getDate() {
-        return date;
+        String year = "";
+        String month = "";
+        String day = "";
+        String time = "";
+        
+        String[] sp1 = date.split(" ");
+        time = sp1[1].substring(0,5);
+        
+        String[] dates = sp1[0].split("-");
+        year = dates[0];
+        month = dates[1];
+        day = dates[2];
+        
+        return day + "-" + month + "-" + year + "   kl. " + time;
     }
     
     public String getStatus() {

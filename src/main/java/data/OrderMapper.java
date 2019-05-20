@@ -344,59 +344,6 @@ public class OrderMapper implements OrderInterface {
 
         }
     }
-    /*
-    @Override
-    public Category getCategory(int prod_id) {
-        Category cat = null;
-
-        try {
-            String query = "SELECT categories.id, categories.category_name FROM categories JOIN products_in_categories ON products_in_categories.category_id = categories.id WHERE products_in_categories.product_id = ?";
-            PreparedStatement ps = conn.prepareStatement(query);
-
-            ps.setInt(1, prod_id);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                cat = new Category(rs.getInt(1), rs.getString(2));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return cat;
-    } 
-
-    @Override
-    public Product getProduct(int prod_id) {
-
-        Product prod = null;
-        Category category = null;
-
-        try {
-            String query = "SELECT product_variants.id, product_variants.product_id, product_variants.length, product_variants.price, product_variants.stock, products.product_name, products.thickness, products.width "
-                    + "FROM product_variants "
-                    + "JOIN products ON product_variants.product_id = products.id "
-                    + "WHERE product_variants.id = ?";
-            PreparedStatement ps = conn.prepareStatement(query);
-
-            ps.setInt(1, prod_id);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-                int prodID = rs.getInt("product_id");
-
-                category = getCategory(prodID);
-                prod = new Product(rs.getInt("product_id"), rs.getInt("id"), category, rs.getInt("thickness"), rs.getInt("length"), rs.getInt("width"), rs.getInt("price"), true, rs.getInt("stock"), rs.getString("product_name"));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return prod;
-    } */
 
     @Override
     public List<Odetail> getOdetails(int orderID) {
