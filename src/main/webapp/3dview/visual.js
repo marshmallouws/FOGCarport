@@ -2,7 +2,7 @@ window.addEventListener('DOMContentLoaded', function () {
     startVisual();
 });
 
-function cLoadScreen(url) {
+function cLoadScreen() {
     //init the loader
     this.containerEl = document.getElementById("cLoadScreenContainer");
 }
