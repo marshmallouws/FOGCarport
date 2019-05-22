@@ -80,6 +80,16 @@
                         });
                     }
                 });
+                $('#blueprint_editBtn').click(function () {
+                    if (!$(this).hasClass('active')) {
+                        $(this).addClass('active');
+                        $('#materials_editBtn').removeClass('active');
+                        $('#materials_createBtn').removeClass('active');
+                        $("#materials_editUI").slideToggle("fast", function () {
+                            $("#blueprint_editUI").slideToggle("fast");
+                        });
+                    }
+                });
                 // EDIT
                 $('#materials_catSelect').one('change', function () {
                     $('#materials_prodSelect_wrapper').slideDown("fast");
@@ -263,7 +273,9 @@
 
                     $.post(query, {product: JSON.stringify(prodNew)}, function (data) {
                         if (data == "error") {
-
+                            $('#materials_saveMsg_icon').removeClass("ui-icon-circle-check");
+                            $('#materials_saveMsg_icon').addClass("ui-icon-alert");
+                            $('#materials_saveMsg_msg').html("Der skete en fejl. Kunne ikke oprette produktet.");
                         } else {
                             $('#materials_saveMsg_icon').removeClass("ui-icon-alert");
                             $('#materials_saveMsg_icon').addClass("ui-icon-circle-check");
@@ -326,6 +338,7 @@
             <div id="materials_topWrapper">
                 <button id="materials_editBtn" class="btn btn-primary active">Redigér materialer</button>
                 <button id="materials_createBtn" class="btn btn-primary">Opret materialer</button>
+                <button id="blueprint_editBtn" class="btn btn-primary">Rediger Blueprint</button>
                 <div id="materials_ui_wrapper">
                     <!-- Edit materials -->
                     <div id="materials_editUI">
@@ -421,13 +434,20 @@
                             </div>
                             <button id="materials_createNewBtn" class="btn btn-info">Opret Produkt</button>
                         </div>
-
-
-
-
-
                     </div>
                     <!-- create end -->
+                    
+                    <!-- edit blueprint -->
+                    <div id="blueprint_editUI" style="display:none;">
+                        <div id="blueprint_wrapper">
+                            <div id="blueprint_select_wrapper">
+                                <select>
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- edit blueprint end -->
                 </div>
             </div>
 

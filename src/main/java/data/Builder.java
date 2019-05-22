@@ -51,8 +51,7 @@ public class Builder {
         
     }
      */
-
-    // width afgør hvor mange rækker
+    // y afgør hvor mange rækker
     private Map<Integer, Integer> calcSpaerMap(int categoryID, int productID, int x, int y, boolean angled) throws BuildException {
         Map<Integer, Integer> map = new HashMap();
 
@@ -350,6 +349,45 @@ public class Builder {
         return reqs;
     }
 
+    public List<Orequest> carportBlueprint(Order order, List<Blueprint> blueprints) throws BuildException {
+        List<Orequest> reqs = new ArrayList();
+        int x; // x to calc
+        int y; // y to calc
+        for (Blueprint b : blueprints) {
+            switch (b.getUsage()) {
+                // Stolper
+                case 1:
+                    addProductToBuild(reqs, order, calcStolperMap(b.getCategory_id(), b.getProduct_id(), order), b.getCategory_id(), b.getProduct_id(), b.getMessage());
+                    break;
+                // Remme
+                case 2:
+                    x = order.getLenght();
+                    addProductToBuild(reqs, order, calcWoodsMap(b.getCategory_id(), b.getProduct_id(), x), b.getCategory_id(), b.getProduct_id(), b.getMessage());
+                    break;
+                // Spær
+                case 3:
+                    x = order.getLenght();
+                    y = order.getWidth();
+                    addProductToBuild(reqs, order, calcSpaerMap(b.getCategory_id(), b.getProduct_id(), x, y, false), b.getCategory_id(), b.getProduct_id(), b.getMessage());
+                    break;
+                // Understernbrædder sider
+                case 4:
+                    x = order.getLenght();
+                    addProductToBuild(reqs, order, calcStolperMap(b.getCategory_id(), b.getProduct_id(), order), b.getCategory_id(), b.getProduct_id(), b.getMessage());
+                    break;
+                // Understernbrædder for- og bagende
+                case 5:
+                    x = order.getWidth();
+                    addProductToBuild(reqs, order, calcStolperMap(b.getCategory_id(), b.getProduct_id(), order), b.getCategory_id(), b.getProduct_id(), b.getMessage());
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        return reqs;
+    }
+
     // Standard blueprint for en carport
     public List<Orequest> carportBlueprint(Order order) throws BuildException {
         String comment;
@@ -579,7 +617,7 @@ public class Builder {
             }
         }
 
-        //map.put(length, map.getOrDefault(order.getHeight(), 0) + count);
+        //map.put(x, map.getOrDefault(order.getHeight(), 0) + count);
         return map;
 
     }
@@ -619,7 +657,7 @@ public class Builder {
         for (Product p : woods) {
             len.add(p.getLength());
         }
-        
+
         System.out.println("len before: " + len);
         Collections.sort(len);
         System.out.println("len after: " + len);
@@ -630,9 +668,9 @@ public class Builder {
 
         int max = 0;
 
-        for (Product p : woods) {
-            if (p.getLength() > max) {
-                max = p.getLength();
+        for (Integer i : len) {
+            if (i > max) {
+                max = i;
             }
         }
 
@@ -642,7 +680,11 @@ public class Builder {
 
     // min længden af et bestemt produkt
     private int calcMinLength(List<Product> woods) throws BuildException {
+        List<Integer> len = new ArrayList();
 
+        for (Product p : woods) {
+            len.add(p.getLength());
+        }
         if (woods == null || woods.isEmpty()) {
             throw new BuildException("Ingen produkter tilgængelig til at udregne minLength ");
         }

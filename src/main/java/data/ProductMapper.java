@@ -184,7 +184,6 @@ public class ProductMapper implements ProductDAOInterface {
 
     @Override
     public int createProduct(Product product) {
-        Connection con = null;
         try {
             int id = 0;
             con.setAutoCommit(false); // implement transactions with categoryID
