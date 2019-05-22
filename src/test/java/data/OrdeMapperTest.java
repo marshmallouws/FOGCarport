@@ -40,7 +40,6 @@ public class OrdeMapperTest {
     public void tearDown() {
     }
 
-    @Test
     public void testGetOrders() {
         List<Order> orders = o.getOrders();
         
@@ -77,7 +76,7 @@ public class OrdeMapperTest {
         }
     }
     
-    @Test
+ 
     public void testCreateOrder() {
         int height = 200;
         int width = 330;
@@ -100,7 +99,7 @@ public class OrdeMapperTest {
         //int height, int width, int length, int shedLength, int shedWidth, int roofAngle, int roofType
     }
     
-    @Test
+   
     public void testGetOrdersUnassigned() {
         List<Order> orders = o.getOrdersUnassigned();
         assertNotNull(orders);
@@ -112,7 +111,7 @@ public class OrdeMapperTest {
         }
     }
     
-    @Test
+
     public void testGetOwnOrders() {
         List<Order> orders = o.getOwnOrders(1);
         assertNotNull(orders);

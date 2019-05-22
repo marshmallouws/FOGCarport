@@ -2,6 +2,7 @@
 <%@page import="entity.Employee"%>
 <%@page import="java.util.List"%>
 <%@page import="entity.Order"%>
+<%@page import="entity.Carport"%>
 <%-- 
     Document   : orderpage-admin
     Created on : Apr 29, 2019, 12:34:28 PM
@@ -18,6 +19,7 @@
     List<Integer> roofSelectAngle = (List<Integer>) request.getAttribute("roofSelectAngle");
     List<Employee> employees = (List<Employee>) request.getAttribute("employees");
     Customer customer = (Customer) request.getAttribute("customer");
+    Carport carport = (Carport) request.getAttribute("carport");
 %>
 <!DOCTYPE html>
 <html>
@@ -218,6 +220,27 @@
                             <option value="<%= length%>"><%= length%> cm</option>
                             <% }
                                 }%>
+                        </select>
+                    </div>
+                        
+                    <div class="form-group">
+                        <label for="calcPrice">Pris for materialer</label>
+                        <input type="text" class="form-control" name="calcPrice" id="price" value="<%= carport.getPrice() %>">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Salgspris</label>
+                        <% 
+                            if (order.getSalesPrice() == 0) {
+                        %>
+                        <input type="number" class="form-control input-disabled" name="price" id="price" placeholder="Ikke angivet">
+                        <%
+                            } else {
+                        %> 
+                        <input type="number" class="form-control input-disabled" name="price" id="price" value="<%= order.getSalesPrice() %>">
+                        <%
+                            }
+                        %>
                         </select>
                     </div>
                 </div>

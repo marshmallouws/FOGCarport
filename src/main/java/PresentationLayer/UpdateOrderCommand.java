@@ -3,9 +3,6 @@ package PresentationLayer;
 import data.UpdateException;
 import entity.Order;
 import java.io.IOException;
-import java.sql.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +28,7 @@ public class UpdateOrderCommand extends Command {
         String _shedLength = request.getParameter("shedLength");
         String _roofAngle = request.getParameter("roofAngle");
         String _employeeID = request.getParameter("employee");
+        String _salesPrice = request.getParameter("price");
         // Should also contain status and sales price.
         String fullname = request.getParameter("fullname");
         
@@ -43,8 +41,12 @@ public class UpdateOrderCommand extends Command {
             int shedLength = Integer.parseInt(_shedLength);
             int roofAngle = Integer.parseInt(_roofAngle);
             int employeeID = Integer.parseInt(_employeeID);
+            double salesPrice = 0;
+            if(_salesPrice != null && !(_salesPrice.isEmpty())) {
+                salesPrice = Double.parseDouble(_salesPrice);
+            }
             
-            order = new Order(orderID, employeeID, carportHeight, carportWidth, carportLength, shedLength, shedWidth, roofAngle);
+            order = new Order(orderID, employeeID, carportHeight, carportWidth, carportLength, shedLength, shedWidth, roofAngle, salesPrice);
             Order updatedOrder = logic.updateOrder(order);
             
             response.sendRedirect("byggecenter?view=orderinfoadmin&orderID=" + updatedOrder.getId());
