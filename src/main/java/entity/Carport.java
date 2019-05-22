@@ -7,6 +7,7 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -17,9 +18,7 @@ public class Carport {
     int height;
     int length;
     int width;
-
     double price;
-
     List<Odetail> items;
 
     public Carport(List<Odetail> items) {
@@ -40,7 +39,8 @@ public class Carport {
         for (Odetail o : items) {
             total += o.getAmount();
         }
-        return total;
+        DecimalFormat d = new DecimalFormat("##.00");
+        return Double.parseDouble(d.format(total)); 
     }
 
     public List<Odetail> getWoodsList() {

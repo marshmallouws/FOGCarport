@@ -5,7 +5,6 @@
  */
 package data;
 
-import entity.Category;
 import entity.Customer;
 import entity.Order;
 import entity.Employee;
@@ -44,13 +43,21 @@ public class OrderMapper implements OrderInterface {
             String SQL = "INSERT INTO `c_order` (height, length, width, shed_length, shed_width, roof_angle, roof_type, cust_id) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, order.getHeight());
-            ps.setInt(2, order.getLenght());
-            ps.setInt(3, order.getWidth());
-            ps.setInt(4, order.getShedLength());
-            ps.setInt(5, order.getShedWidth());
-            ps.setInt(6, order.getRoofAngle());
-            ps.setInt(7, order.getRoofType());
+            int height = order.getHeight();
+            int length = order.getLenght();
+            int width = order.getWidth();
+            int shedLength = order.getShedLength();
+            int shedWidth = order.getShedWidth();
+            int angle = order.getRoofAngle();
+            int rooftype = order.getRoofType();
+            
+            ps.setInt(1, height);
+            ps.setInt(2, length);
+            ps.setInt(3, width);
+            ps.setInt(4, shedLength);
+            ps.setInt(5, shedWidth);
+            ps.setInt(6, angle);
+            ps.setInt(7, rooftype);
             ps.setInt(8, customer.getId());
             ps.executeUpdate();
 
@@ -60,7 +67,7 @@ public class OrderMapper implements OrderInterface {
                 return rs.getInt(1);
             }
 
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
@@ -339,60 +346,8 @@ public class OrderMapper implements OrderInterface {
     }
 
     @Override
-    public Category getCategory(int prod_id) {
-        Category cat = null;
-
-        try {
-            String query = "SELECT categories.id, categories.category_name FROM categories JOIN products_in_categories ON products_in_categories.category_id = categories.id WHERE products_in_categories.product_id = ?";
-            PreparedStatement ps = conn.prepareStatement(query);
-
-            ps.setInt(1, prod_id);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                cat = new Category(rs.getInt(1), rs.getString(2));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return cat;
-    }
-
-    @Override
-    public Product getProduct(int prod_id) {
-
-        Product prod = null;
-        Category category = null;
-
-        try {
-            String query = "SELECT product_variants.id, product_variants.product_id, product_variants.length, product_variants.price, product_variants.stock, products.product_name, products.thickness, products.width "
-                    + "FROM product_variants "
-                    + "JOIN products ON product_variants.product_id = products.id "
-                    + "WHERE product_variants.id = ?";
-            PreparedStatement ps = conn.prepareStatement(query);
-
-            ps.setInt(1, prod_id);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-
-                int prodID = rs.getInt("product_id");
-
-                category = getCategory(prodID);
-                prod = new Product(rs.getInt("product_id"), rs.getInt("id"), category, rs.getInt("thickness"), rs.getInt("length"), rs.getInt("width"), rs.getInt("price"), true, rs.getInt("stock"), rs.getString("product_name"));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return prod;
-    }
-
-    @Override
     public List<Odetail> getOdetails(int orderID) {
+        ProductMapper pm = new ProductMapper(connI);
         List<Odetail> details = new ArrayList<>();
         Product prod = null;
         try {
@@ -402,8 +357,7 @@ public class OrderMapper implements OrderInterface {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-
-                prod = getProduct(rs.getInt("prod_id"));
+                prod = pm.getProduct(rs.getInt("prod_id"));
 
                 details.add(new Odetail(rs.getInt("id"), prod, rs.getInt("order_id"), rs.getInt("qty"), rs.getDouble("amount"), rs.getString("cmt")));
             }

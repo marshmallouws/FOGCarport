@@ -8,9 +8,6 @@ package data;
 import entity.Customer;
 import entity.Employee;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -46,40 +43,80 @@ public class UserMapperTest {
     }
 
     @Test
+    public void negativeTestLogin() {
+        String username = null;
+        String password = null;
+        boolean success = false;
+        try {
+            u.logIn(username, password);
+        } catch (Exception ex) { 
+            //Makes it possible to test for more exceptions
+            if (ex instanceof LogInException) {
+                //Expected
+                success = true;
+            }
+        }
+
+        assertTrue(success);
+    }
+
+    @Test
     public void testGetEmployee() {
         List<Employee> employees = u.getEmployees();
-        
+
         int id = 1;
         String initials = "aaa";
         boolean found = false;
         assertNotNull(employees);
-        
-        for(Employee e: employees) {
-            if(e.getId() == id) {
+
+        for (Employee e : employees) {
+            if (e.getId() == id) {
                 assertEquals(initials, e.getInitials());
                 found = true;
                 break;
             }
         }
-        
-        if(!found) {
+
+        if (!found) {
             fail(String.format("Expected id %d was not in database", id));
         }
     }
     
     @Test
     public void testGetCustomer() {
-        Customer c = u.getCustomer(8);
-        String name = "Annika Ehlers";
-        String email = "annika@mail.dk";
+        Customer c = u.getCustomer(4);
+        String name = "Annika";
+        String email = "2591.0@mail.dk";
         int zip = 2750;
-        int phone = 53443322;
-        
+        int phone = 12341234;
+
         assertNotNull(c);
         assertEquals(name, c.getName());
         assertEquals(email, c.getEmail());
         assertEquals(zip, c.getZip());
         assertEquals(phone, c.getPhone());
+
+    }
+    
+    //Might fail if random number for email is already in db.
+    @Test
+    public void testCreateCustomer() {
+        double rand = (int)(Math.random()*10000); //Mail is unique
+        String name = "Annika";
+        String email = rand + "@mail.dk";
+        String address = "annikavej 1";
+        int zip = 2750;
+        int phone = 12341234;
+        Customer c = new Customer(name, email, address, zip, phone);
+        
+        int id = u.createCustomer(c);
+        
+        Customer customer = u.getCustomer(id);
+        
+        assertNotNull(customer);
+        assertEquals(name, customer.getName());
+        assertEquals(address, customer.getAddress());
+        assertEquals(zip, customer.getZip());
         
     }
 }

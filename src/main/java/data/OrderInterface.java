@@ -32,8 +32,8 @@ public interface OrderInterface {
     public void createOdetail(List<Odetail> odetails);
     public void editOdetails(List<Odetail> detail);
     public List<Odetail> getOdetails(int orderID);
-    public Product getProduct(int prod_id);
-    public Category getCategory(int prod_id);
+    //public Product getProduct(int prod_id);
+    //public Category getCategory(int prod_id);
     
     
 }

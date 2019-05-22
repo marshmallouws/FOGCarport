@@ -16,7 +16,7 @@
 <html>
     <head>
         <%@ include file="/WEB-INF/parts/headmeta.jspf" %>
-        <title>Stykliste - <%-- Bestilling #<%=order.getId()%> --%> - Fog</title>
+        <title>Stykliste - <%-- Bestilling #<%=order.getId()%> --%> Fog</title>
     </head>
     <body>
         <%@ include file="/WEB-INF/parts/navigation.jspf" %>

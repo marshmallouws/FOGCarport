@@ -91,19 +91,6 @@
             </div>
         </div>
     </div>
-    <div class="separator"></div>
-    <div class="page-wrapper">
-        <h5>For Ansatte</h5>
-        <a href="byggecenter?view=orderpage">Frontend</a>
-        <a href="byggecenter?view=backendpage">Backend</a>
-        <a href="byggecenter?view=orderinfoadmin&orderID=1">Orderdetails-Admin Test</a>
-        <a href="byggecenter?view=carport&orderID=1">Stykliste Test</a>
-        <a href="byggecenter?view=mats">Materiale redigering</a>
-
-       
-
-
-    </div>
 
     <div class="alt-wrapper">
         <footer class="page-wrapper" style="margin-top:0;padding-top:20px;padding-bottom:50px;">

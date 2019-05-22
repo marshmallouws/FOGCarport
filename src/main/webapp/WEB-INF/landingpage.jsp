@@ -14,10 +14,8 @@
     <body>
         <%@ include file="/WEB-INF/parts/navigation.jspf" %>
         <div class="page-wrapper menu-spacer">
-        <h1>Din bestilling er oprettet og modtaget!</h1>
-        <p>Vi kontakter dig hurtigst muligt med en pris på din nye carport</p>
-        
-        <%= request.getAttribute("success") %>
+            <h1>Din bestilling er oprettet og modtaget!</h1>
+            <p>Vi kontakter dig hurtigst muligt med en pris på din nye carport</p>
         </div>
     </body>
 </html>
