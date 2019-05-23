@@ -21,7 +21,7 @@ import logic.PDFCreator;
  * @author Annika
  */
 public class DownloadPDFCommand extends Command {
-    private ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    //private ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException {
@@ -38,9 +38,6 @@ public class DownloadPDFCommand extends Command {
             ex.printStackTrace();
         }
         
-        
-        
-        String path = request.getContextPath();
         Document doc = p.createPDF(o, "C:\\Users\\Annika\\Desktop\\Netbeans Projects\\2. Semester\\Exam\\FOGCarport\\src\\main\\webapp\\");
         p.closeDoc(doc);
 
