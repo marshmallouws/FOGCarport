@@ -27,12 +27,10 @@ import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.ListNumberingType;
 import com.itextpdf.layout.property.TextAlignment;
 import data.BuildException;
-import data.FOGException;
 import entity.Category;
-import entity.Employee;
 import entity.Odetail;
 import entity.Order;
-import java.io.FileNotFoundException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,20 +40,24 @@ import java.util.logging.Logger;
  *
  * @author Annika
  */
-public class PDFCreater {
-
+public class PDFCreator {
+    OutputStream outputStream;
     LogicFacade l = new LogicFacade();
 
-    public void createPDF(Order order) {
+    public PDFCreator(OutputStream outputStream) {
+        this.outputStream = outputStream;
+    }
+
+    public Document createPDF(Order order, String path) {
         Document doc = null;
         PdfDocument pdf = null;
 
         try {
-            pdf = new PdfDocument(new PdfWriter("Ordre" + order.getId() + ".pdf"));
+            pdf = new PdfDocument(new PdfWriter(outputStream));
             doc = new Document(pdf);
             doc.setMargins(170, 50, 40, 50);
 
-            Image logo = new Image(ImageDataFactory.create("logo.png"));
+            Image logo = new Image(ImageDataFactory.create(path + "images/logo.png"));
 
             ImageEventHandler handler = new ImageEventHandler(logo);
             pdf.addEventHandler(PdfDocumentEvent.END_PAGE, handler);
@@ -67,7 +69,7 @@ public class PDFCreater {
             doc.add(new AreaBreak());
 
             createMaterialList(order, doc);
-            
+
             /*
             //TODO: Observe if header is correct when adding new pages
             try {
@@ -76,23 +78,24 @@ public class PDFCreater {
             } catch (Exception ex) {
                 // IGNORE THIS
             } */
-
-            doc.add(new AreaBreak());
+            doc.add(new AreaBreak()); 
             createInstructions(order, doc);
 
-        } catch (FileNotFoundException ex) {
-
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(PDFCreater.class.getName()).log(Level.SEVERE, null, ex);
+        //} catch (MalformedURLException ex) {
+            //Logger.getLogger(PDFCreator.class.getName()).log(Level.SEVERE, null, ex);
         } catch (BuildException ex) {
-            Logger.getLogger(PDFCreater.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            // lets guard it from null pointer exception
-            if (doc != null) {
-                doc.close();
-            }
+            Logger.getLogger(PDFCreator.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(PDFCreator.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return doc;
 
+    }
+    
+    public void closeDoc(Document doc) {
+        if(doc != null) {
+            doc.close();
+        }
     }
 
     private void createInstructions(Order order, Document doc) throws BuildException {
@@ -104,14 +107,12 @@ public class PDFCreater {
         list.add(new ListItem("Grundplan afsættes ved at hamre en stump"
                 + "lægte (A) i jorden til ca. markering af"
                 + "carportens hjørnestolper, en pæl i hvert hjørne."));
-        
-        if(order.getShedLength() != 0) {
+
+        if (order.getShedLength() != 0) {
             list.add(new ListItem("Placér de syv skurstolper"));
         }
-        
+
         doc.add(list);
-        
-        
 
     }
 
@@ -195,17 +196,6 @@ public class PDFCreater {
             }
 
         }
-
-    }
-
-    public static void main(String[] args) {
-
-        PDFCreater p = new PDFCreater();
-        LogicFacade l = new LogicFacade();
-        Employee empl = new Employee(1, "aaa", "bbb");
-        Order order = l.getOrder(1);
-        //Order order = l.getOrder(1);
-        p.createPDF(order);
 
     }
 
