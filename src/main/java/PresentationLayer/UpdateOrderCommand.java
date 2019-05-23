@@ -70,12 +70,20 @@ public class UpdateOrderCommand extends Command {
                 err = new Error("Bredden skal være mellem 240 og 780");
             }
             
-            if(shedWidth > carportWidth-30 || shedWidth < 210 || shedWidth > 720) {
+            if(shedWidth < 210 || shedWidth > 720) {
                 err = new Error("Skurets bredde skal være mellem 210 og 720");
             }
             
-            if(shedLength > carportLength-30 || shedLength < 150 || shedLength > 690) {
+            if(shedWidth > carportWidth-30) {
+                err = new Error("Skurets bredde må ikke være større end carportens bredde");
+            }
+            
+            if(shedLength < 150 || shedLength > 690) {
                 err = new Error("Skurets længde skal være mellem 150 og 690");
+            }
+            
+            if(shedLength > carportLength-30) {
+                err = new Error("Skurets længde må ikke være større end carportens bredde");
             }
             
             if(roofAngle%5 != 0 || roofAngle < 10 || roofAngle > 45) {
