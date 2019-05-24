@@ -31,8 +31,12 @@ public class LogicFacade {
     
     private ConnectorInterface conn = Connector.getInstance();
 
-    public int createOrder(Order order, Customer customer) {
-        return new data.OrderMapper(conn).createOrder(order, customer);
+//    public int createOrder(Order order, Customer customer) {
+//        return new data.OrderMapper(conn).createOrder(order, customer);
+//    }
+    
+    public int createOrder(Order order, String name, String email, String address, int zip, int phone) {
+        return new data.OrderMapper(conn).createOrder(order, name, email, address, zip, phone);
     }
 
     public Order getOrder(int id) {
@@ -215,4 +219,5 @@ public class LogicFacade {
     public void editOdetails(List<Odetail> odetails) {
         new data.OrderMapper(conn).editOdetails(odetails);
     }
+    
 }

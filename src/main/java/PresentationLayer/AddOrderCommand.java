@@ -50,20 +50,20 @@ public class AddOrderCommand extends Command {
         }
 
         LogicFacade lf = new LogicFacade();
-        Customer c = null;
-        try {
-            
-            int formatZip = Integer.parseInt(zip);
-            int formatPhone = Integer.parseInt(phone);
-
-            c = new Customer(fullname, email, address, formatZip, formatPhone);
-            int custID = lf.createCustomer(c);
-            
-            c.setID(custID);
-            
-        } catch (NumberFormatException ex) {
-            ex.printStackTrace();
-        }
+//        Customer c = null;
+//        try {
+//            
+//            int formatZip = Integer.parseInt(zip);
+//            //int formatPhone = Integer.parseInt(phone);
+//
+//            c = new Customer(fullname, email, address, formatZip, formatPhone);
+//            int custID = lf.createCustomer(c);
+//            
+//            c.setID(custID);
+//            
+//        } catch (NumberFormatException ex) {
+//            ex.printStackTrace();
+//        }
 
         try {
             
@@ -112,7 +112,7 @@ public class AddOrderCommand extends Command {
             int roofType = Integer.parseInt(_roofType);
 
             Order order = new Order(height, carportWidth, carportLength, shedWidth, shedLength, roofAngle, roofType);
-            int orderID = lf.createOrder(order, c);
+            int orderID = lf.createOrder(order, fullname, email, address, Integer.parseInt(zip), Integer.parseInt(phone) );
             
             
             if (orderID > 0) {
@@ -127,8 +127,8 @@ public class AddOrderCommand extends Command {
 
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
-        } catch (FOGException ex) {
-            ex.printStackTrace();
+        } catch (FOGException e) {
+            e.printStackTrace();
         }
 
     }
