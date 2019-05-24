@@ -38,8 +38,7 @@ public class AddOrderCommand extends Command {
         // validate info
         if (StringUtils.isStrictlyNumeric(phone) != true || 
                 StringUtils.isStrictlyNumeric(zip) != true || 
-                zip.length() > 4 || 
-                zip.length() < 4 || fullname.length() > 45 ||
+                zip.length() != 4 || fullname.length() > 45 ||
                 !email.contains("@") || !email.contains("."))
         {
             request.setAttribute("error", "Det ser ud til, at kundeinformationen ikke var udfyldt korrekt!");
@@ -48,20 +47,20 @@ public class AddOrderCommand extends Command {
         }
 
         LogicFacade lf = new LogicFacade();
-        Customer c = null;
-        try {
-            
-            int formatZip = Integer.parseInt(zip);
-            int formatPhone = Integer.parseInt(phone);
-
-            c = new Customer(fullname, email, address, formatZip, formatPhone);
-            int custID = lf.createCustomer(c);
-            
-            c.setID(custID);
-            
-        } catch (NumberFormatException ex) {
-            ex.printStackTrace();
-        }
+//        Customer c = null;
+//        try {
+//            
+//            int formatZip = Integer.parseInt(zip);
+//            //int formatPhone = Integer.parseInt(phone);
+//
+//            c = new Customer(fullname, email, address, formatZip, formatPhone);
+//            int custID = lf.createCustomer(c);
+//            
+//            c.setID(custID);
+//            
+//        } catch (NumberFormatException ex) {
+//            ex.printStackTrace();
+//        }
 
         try {
             
@@ -99,6 +98,18 @@ public class AddOrderCommand extends Command {
                     request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
                     return;
                 }
+      
+                if (Integer.parseInt(_shedWidth) < 210 || Integer.parseInt(_shedWidth) > 720) {
+                    request.setAttribute("error", "Det ser ud til, at højden på carporten er for stor! Kontakt support.");
+                    request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+                    return;
+                }
+              
+                if (Integer.parseInt(_shedLength) < 150 || Integer.parseInt(_shedLength) > 690) {
+                    request.setAttribute("error", "Det ser ud til, at højden på carporten er for stor! Kontakt support.");
+                    request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+                    return;
+                }
             }
             
             int height = Integer.parseInt(_carportHeight); // skal implementeres som på order admin page
@@ -110,7 +121,7 @@ public class AddOrderCommand extends Command {
             int roofType = Integer.parseInt(_roofType);
 
             Order order = new Order(height, carportWidth, carportLength, shedWidth, shedLength, roofAngle, roofType);
-            int orderID = lf.createOrder(order, c);
+            int orderID = lf.createOrder(order, fullname, email, address, Integer.parseInt(zip), Integer.parseInt(phone) );
             
             
             if (orderID > 0) {

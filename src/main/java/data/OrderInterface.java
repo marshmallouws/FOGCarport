@@ -19,7 +19,7 @@ import java.util.List;
  * @author Bitten
  */
 public interface OrderInterface {
-    public int createOrder(Order order, Customer customer);
+    public int createOrder(Order order, String name, String email, String address, int zip, int phone);
     public List<Order> getOrders();
     public List<Order> getOrdersUnassigned();
     public List<Order> getUnfinishedOrders();

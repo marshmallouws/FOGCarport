@@ -37,8 +37,12 @@ public class LogicFacade {
     private UserMapper usermapper = new UserMapper(conn);
     private ProductMapper productmapper = new ProductMapper(conn);
 
-    public int createOrder(Order order, Customer customer) {
-        return ordermapper.createOrder(order, customer);
+//    public int createOrder(Order order, Customer customer) {
+//        return new data.OrderMapper(conn).createOrder(order, customer);
+//    }
+    
+    public int createOrder(Order order, String name, String email, String address, int zip, int phone) {
+        return new data.OrderMapper(conn).createOrder(order, name, email, address, zip, phone);
     }
 
     public Order getOrder(int id) {
@@ -221,4 +225,5 @@ public class LogicFacade {
     public void editOdetails(List<Odetail> odetails) {
         ordermapper.editOdetails(odetails);
     }
+    
 }

@@ -65,6 +65,7 @@ public abstract class Command {
                 commands.put("mats", new MaterialPageCommand());
                 commands.put("carport", new CarportProductsCommand());
                 commands.put("carportEdit", new CarportProductsEditCommand());
+                commands.put("downloadpdf", new DownloadPDFCommand());
             }
         }
     }

@@ -47,11 +47,12 @@ public class Order {
         this.empl = empl;
         this.date = date;
         this.status = status;
+        this.salesPrice = salesPrice;
         this.customerId = customerId;
     }
     
-    // No date (is it used?)
-    public Order(int id, int employeeId, int height, int width, int lenght, int shedLength, int shedWidth, int roofAngle) {
+    // For updating order
+    public Order(int id, int employeeId, int height, int width, int lenght, int shedLength, int shedWidth, int roofAngle, double salesPrice) {
         this.id = id;
         this.employeeId = employeeId;
         this.height = height;
@@ -60,6 +61,7 @@ public class Order {
         this.shedLength = shedLength;
         this.shedWidth = shedWidth;
         this.roofAngle = roofAngle;
+        this.salesPrice = salesPrice;
     }
 
     public int getId() {

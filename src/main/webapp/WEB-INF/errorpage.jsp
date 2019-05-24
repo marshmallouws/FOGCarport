@@ -14,11 +14,9 @@
     </head>
     <body>
         <%@ include file="/WEB-INF/parts/navigation.jspf" %>
-        <br>
-        <br>
-        <br>
-        <br>
+        <div class="page-wrapper menu-spacer">
             <h1>Hov! Noget gik galt..</h1>
-            <p><%= request.getAttribute("error") %></p>
+            <p><%= request.getAttribute("error")%></p>
+        </div>
     </body>
 </html>

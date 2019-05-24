@@ -3,9 +3,6 @@ package PresentationLayer;
 import data.UpdateException;
 import entity.Order;
 import java.io.IOException;
-import java.sql.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +28,7 @@ public class UpdateOrderCommand extends Command {
         String _shedLength = request.getParameter("shedLength");
         String _roofAngle = request.getParameter("roofAngle");
         String _employeeID = request.getParameter("employee");
+        String _salesPrice = request.getParameter("price");
         // Should also contain status and sales price.
         String fullname = request.getParameter("fullname");
         
@@ -43,8 +41,63 @@ public class UpdateOrderCommand extends Command {
             int shedLength = Integer.parseInt(_shedLength);
             int roofAngle = Integer.parseInt(_roofAngle);
             int employeeID = Integer.parseInt(_employeeID);
+            double salesPrice = 0;
             
-            order = new Order(orderID, employeeID, carportHeight, carportWidth, carportLength, shedLength, shedWidth, roofAngle);
+            class Error {
+                String error = null;
+                
+                Error(String error){
+                    this.error = error;
+                }
+                
+            }
+            
+            Error err = null;
+            
+            if(_salesPrice != null && !(_salesPrice.isEmpty())) {
+                salesPrice = Double.parseDouble(_salesPrice);
+            }
+            
+            if(carportHeight < 180 || carportHeight > 300) {
+                err = new Error("Højden skal være mellem 180 og 300");
+            }
+            
+            if(carportLength%30 != 0 || carportLength < 240 || carportLength > 780) {
+                err = new Error("Længden skal være mellem 240 og 780");
+            }
+            
+            if(carportWidth%30 != 0 || carportWidth < 240 || carportWidth > 780) {
+                err = new Error("Bredden skal være mellem 240 og 780");
+            }
+            
+            if(shedWidth < 210 || shedWidth > 720) {
+                err = new Error("Skurets bredde skal være mellem 210 og 720");
+            }
+            
+            if(shedWidth > carportWidth-30) {
+                err = new Error("Skurets bredde må ikke være større end carportens bredde");
+            }
+            
+            if(shedLength < 150 || shedLength > 690) {
+                err = new Error("Skurets længde skal være mellem 150 og 690");
+            }
+            
+            if(shedLength > carportLength-30) {
+                err = new Error("Skurets længde må ikke være større end carportens bredde");
+            }
+            
+            if(roofAngle%5 != 0 || roofAngle < 10 || roofAngle > 45) {
+                err = new Error("Taget skal være mellem 15 og 45 grader");
+            }
+            
+            if(err != null) {
+                request.setAttribute("error", err.error);
+                request.getRequestDispatcher("byggecenter?view=orderinfoadmin&orderID=" + _orderID).forward(request, response);
+                
+                return;
+            }
+            
+            order = new Order(orderID, employeeID, carportHeight, carportWidth, carportLength, shedLength, shedWidth, roofAngle, salesPrice);
             Order updatedOrder = logic.updateOrder(order);
             
             response.sendRedirect("byggecenter?view=orderinfoadmin&orderID=" + updatedOrder.getId());
@@ -55,9 +108,5 @@ public class UpdateOrderCommand extends Command {
             request.getRequestDispatcher("byggecenter?view=orderinfoadmin&orderID=" + _orderID).forward(request, response);
             
         }
-        
-        
-        
     }
-    
 }

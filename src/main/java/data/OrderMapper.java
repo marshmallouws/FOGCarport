@@ -25,9 +25,10 @@ import java.util.logging.Logger;
  * @author Bitten
  */
 public class OrderMapper implements OrderInterface {
+
     private Connection conn;
     private ConnectorInterface connI;
-    
+
     public OrderMapper(ConnectorInterface conn) {
         try {
             this.conn = conn.connect();
@@ -38,37 +39,90 @@ public class OrderMapper implements OrderInterface {
     }
 
     @Override
-    public int createOrder(Order order, Customer customer) {
+//    public int createOrder(Order order, Customer customer) {
+//        try {
+//            String SQL = "INSERT INTO `c_order` (height, length, width, shed_length, shed_width, roof_angle, roof_type, cust_id) "
+//                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+//            PreparedStatement ps = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+//            ps.setInt(1, order.getHeight());
+//            ps.setInt(2, order.getLenght());
+//            ps.setInt(3, order.getWidth());
+//            ps.setInt(4, order.getShedLength());
+//            ps.setInt(5, order.getShedWidth());
+//            ps.setInt(6, order.getRoofAngle());
+//            ps.setInt(7, order.getRoofType());
+//            ps.setInt(8, customer.getId());
+//            ps.executeUpdate();
+//
+//            ResultSet rs = ps.getGeneratedKeys();
+//
+//            if (rs.next()) {
+//                return rs.getInt(1);
+//            }
+//
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//
+//        return 0;
+//    }
+
+    public int createOrder(Order order, String name, String email, String address, int zip, int phone) {
         try {
-            String SQL = "INSERT INTO `c_order` (height, length, width, shed_length, shed_width, roof_angle, roof_type, cust_id) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement ps = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            int height = order.getHeight();
-            int length = order.getLenght();
-            int width = order.getWidth();
-            int shedLength = order.getShedLength();
-            int shedWidth = order.getShedWidth();
-            int angle = order.getRoofAngle();
-            int rooftype = order.getRoofType();
-            
-            ps.setInt(1, height);
-            ps.setInt(2, length);
-            ps.setInt(3, width);
-            ps.setInt(4, shedLength);
-            ps.setInt(5, shedWidth);
-            ps.setInt(6, angle);
-            ps.setInt(7, rooftype);
-            ps.setInt(8, customer.getId());
+            conn.setAutoCommit(false);
+
+            // Create customer
+            int id = 0;
+            String query = "INSERT INTO customer (cname, email, address, zip, phone) "
+                    + "VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, name);
+            ps.setString(2, email);
+            ps.setString(3, address);
+            ps.setInt(4, zip);
+            ps.setInt(5, phone);
+
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
 
             if (rs.next()) {
-                return rs.getInt(1);
+                id = rs.getInt(1);
             }
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            //Create order
+            query = "INSERT INTO `c_order` (height, length, width, shed_length, shed_width, roof_angle, roof_type, cust_id) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, order.getHeight());
+            ps.setInt(2, order.getLenght());
+            ps.setInt(3, order.getWidth());
+            ps.setInt(4, order.getShedLength());
+            ps.setInt(5, order.getShedWidth());
+            ps.setInt(6, order.getRoofAngle());
+            ps.setInt(7, order.getRoofType());
+            ps.setInt(8, id);
+
+            ps.executeUpdate();
+
+            ResultSet rs2 = ps.getGeneratedKeys();
+            if (rs2.next()) {
+                id = rs2.getInt(1);
+            }
+            conn.commit();
+            conn.setAutoCommit(true);
+            return (id);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            try {
+                conn.rollback();
+            } catch (SQLException e1) {
+                System.out.println("Could not rollback updates");
+                e1.printStackTrace();
+            }
+
         }
 
         return 0;
@@ -228,7 +282,7 @@ public class OrderMapper implements OrderInterface {
         PreparedStatement ps;
         try {
             if (order.employeeId() == 0) {
-                query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ? WHERE id = ?;";
+                query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ?, sales_price = ? WHERE id = ?;";
                 ps = conn.prepareStatement(query);
 
                 ps.setInt(1, order.getHeight());
@@ -237,9 +291,11 @@ public class OrderMapper implements OrderInterface {
                 ps.setInt(4, order.getShedLength());
                 ps.setInt(5, order.getShedWidth());
                 ps.setInt(6, order.getRoofAngle());
-                ps.setInt(7, order.getId());
+                ps.setDouble(7, order.getSalesPrice());
+                ps.setInt(8, order.getId());
+                
             } else {
-                query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ?, emp_id = ? WHERE id = ?;";
+                query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ?, emp_id = ?, sales_price = ? WHERE id = ?;";
                 ps = conn.prepareStatement(query);
 
                 ps.setInt(1, order.getHeight());
@@ -249,8 +305,8 @@ public class OrderMapper implements OrderInterface {
                 ps.setInt(5, order.getShedWidth());
                 ps.setInt(6, order.getRoofAngle());
                 ps.setInt(7, order.employeeId());
-                ps.setInt(8, order.getId());
-
+                ps.setDouble(8, order.getSalesPrice());
+                ps.setInt(9, order.getId());
             }
 
             if (ps.executeUpdate() == 1) {
