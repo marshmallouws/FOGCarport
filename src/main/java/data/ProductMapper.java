@@ -186,9 +186,9 @@ public class ProductMapper implements ProductDAOInterface {
     public int createProduct(Product product) {
         try {
             int id = 0;
-            con.setAutoCommit(false); // implement transactions with categoryID
+            conn.setAutoCommit(false); // implement transactions with categoryID
             String query = "INSERT INTO products (product_name, thickness, width) VALUES (?,?,?);";
-            PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, product.getName());
             ps.setInt(2, product.getThickness());
             ps.setInt(3, product.getWidth());
@@ -200,19 +200,19 @@ public class ProductMapper implements ProductDAOInterface {
             }
 
             query = "INSERT INTO products_in_categories (category_id, product_id) VALUES (?, ?)";
-            ps = con.prepareStatement(query);
+            ps = conn.prepareStatement(query);
             ps.setInt(1, product.getCategory_id());
             ps.setInt(2, id);
             ps.executeUpdate();
 
-            con.commit();
-            con.setAutoCommit(true);
+            conn.commit();
+            conn.setAutoCommit(true);
 
             return id;
         } catch (SQLException ex) {
             ex.printStackTrace();
             try {
-                con.rollback();
+                conn.rollback();
                 return 0;
             } catch (SQLException ex1) {
                 return 0;
