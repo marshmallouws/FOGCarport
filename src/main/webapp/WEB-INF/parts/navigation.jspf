@@ -12,15 +12,15 @@ Author     : vl48
                     <a class="nav-item nav-link <%= "/index.jsp".equals(request.getServletPath()) ? "active" : ""%>" 
                        href="./">Forside</a>
                     <a class="nav-item nav-link <%= "/WEB-INF/orderpage.jsp".equals(request.getServletPath()) ? "active" : ""%>" 
-                       href="./byggecenter?view=orderpage">Bestil Carport</a>
+                       href="./byggecenter?view=orderpage">Bestil carport</a>
 
                     <%
                         Employee currentEmployee_nav = (Employee) session.getAttribute("user");
                         if (currentEmployee_nav != null) {%>
                     <a class="nav-item nav-link <%= "/WEB-INF/backendpage.jsp".equals(request.getServletPath()) ? "active" : ""%>" 
-                       href="./byggecenter?view=backendpage">Se Bestillinger</a>
+                       href="./byggecenter?view=backendpage">Se bestillinger</a>
                     <a class="nav-item nav-link <%= "/WEB-INF/materials.jsp".equals(request.getServletPath()) ? "active" : ""%>" 
-                       href="./byggecenter?view=mats">Opret/Redigér Materialer</a>        
+                       href="./byggecenter?view=mats">Opret/Redigér materialer</a>        
                     <% }
                     %>
                 </div>

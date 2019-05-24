@@ -65,10 +65,11 @@ public class UserMapper implements UserInterface {
 
             if (rs.next()) {
                 user = new Employee(rs.getInt("id"), username, password);
+            } else {
+                throw new LogInException();
             }
-
-        } catch (Exception ex) {
-            throw new LogInException();
+        } catch (SQLException ex) {
+            
         }
 
         return user;

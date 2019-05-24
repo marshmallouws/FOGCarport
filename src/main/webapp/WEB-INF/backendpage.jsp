@@ -17,18 +17,18 @@
 <html>
     <head>
         <%@ include file="/WEB-INF/parts/headmeta.jspf" %>
-        <title>Bestillings Liste - Fog</title>
+        <title>Bestillingsliste - Fog</title>
     </head>
     <body>
         <%@ include file="/WEB-INF/parts/navigation.jspf" %>
         <div class="page-wrapper menu-spacer">
-            <h1>Alle bestillinger</h1>
+            <h1>Bestillinger</h1>
 
             <h6><i>Logget på som:</i> <%=currLogged%></h6>
         </div>
         <div class="separator" style="margin-top:30px;"></div>
         <div class="page-wrapper">
-            <h3>Tildelte Bestillinger</h3>
+            <h3>Tildelte bestillinger</h3>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -37,9 +37,9 @@
                         <th>Længde</th>
                         <th>Bredde</th>
                         <th>Højde</th>
-                        <th>Skur længde</th>
-                        <th>Skur bredde</th>
-                        <th>Tag vinkel</th>
+                        <th>Skurlængde</th>
+                        <th>Skurbredde</th>
+                        <th>Tagvinkel</th>
                         <th>Ansvarlig</th>
                         <th>Dato</th>
                         <th></th>
@@ -68,7 +68,7 @@
 
             <div class="separator" style="margin-top:50px;"></div>
 
-            <h3>Afventende Bestillinger</h3>
+            <h3>Afventende bestillinger</h3>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -77,9 +77,9 @@
                         <th>Længde</th>
                         <th>Bredde</th>
                         <th>Højde</th>
-                        <th>Skur længde</th>
-                        <th>Skur bredde</th>
-                        <th>Tag vinkel</th>
+                        <th>Skurlængde</th>
+                        <th>Skurbredde</th>
+                        <th>Tagvinkel</th>
                         <th>Ansvarlig</th>
                         <th>Dato</th>
                         <th></th>

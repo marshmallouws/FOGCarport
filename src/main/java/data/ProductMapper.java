@@ -16,11 +16,11 @@ import java.util.List;
  */
 public class ProductMapper implements ProductDAOInterface {
     
-    private Connection con;
+    private Connection conn;
     
     public ProductMapper(ConnectorInterface con) {
         try {
-            this.con = con.connect();
+            this.conn = con.connect();
         } catch (ClassNotFoundException | SQLException e) {
             
         }
@@ -51,7 +51,7 @@ public class ProductMapper implements ProductDAOInterface {
                     + "JOIN products ON product_variants.product_id = products.id\n"
                     + "JOIN categories ON products_in_categories.category_id = categories.id\n"
                     + "WHERE product_variants.id = ?;";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, id);
 
             ResultSet rs = ps.executeQuery();
@@ -70,7 +70,7 @@ public class ProductMapper implements ProductDAOInterface {
         Product product = null;
         try {
             String query = "SELECT id, product_name, thickness, width, active FROM products WHERE id = ?;";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, id);
 
             ResultSet rs = ps.executeQuery();
@@ -92,7 +92,7 @@ public class ProductMapper implements ProductDAOInterface {
         ArrayList<Category> cat = new ArrayList();
         try {
             String query = "SELECT id, category_name FROM categories;";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -120,7 +120,7 @@ public class ProductMapper implements ProductDAOInterface {
                     + "JOIN products ON product_variants.product_id = products.id\n"
                     + "JOIN categories ON products_in_categories.category_id = categories.id\n"
                     + "WHERE category_id = ? AND products_in_categories.product_id = ?;";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, categoryID);
             ps.setInt(2, productID);
             ResultSet rs = ps.executeQuery();
@@ -143,7 +143,7 @@ public class ProductMapper implements ProductDAOInterface {
                     + "JOIN products ON products.id = products_in_categories.product_id\n"
                     + "JOIN categories ON categories.id = products_in_categories.category_id\n"
                     + "WHERE category_id = ?;";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, categoryID);
             ResultSet rs = ps.executeQuery();
 
@@ -163,7 +163,7 @@ public class ProductMapper implements ProductDAOInterface {
         int variantID = 0;
         try {
             String query = "INSERT INTO product_variants (product_id, length, price, stock) VALUES (?, ?, ?, ?);";
-            PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, product.getId());
             ps.setInt(2, product.getLength());
             ps.setDouble(3, product.getPrice());
@@ -184,12 +184,11 @@ public class ProductMapper implements ProductDAOInterface {
 
     @Override
     public int createProduct(Product product) {
-        Connection con = null;
         try {
             int id = 0;
-            con.setAutoCommit(false); // implement transactions with categoryID
+            conn.setAutoCommit(false); // implement transactions with categoryID
             String query = "INSERT INTO products (product_name, thickness, width) VALUES (?,?,?);";
-            PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, product.getName());
             ps.setInt(2, product.getThickness());
             ps.setInt(3, product.getWidth());
@@ -201,19 +200,19 @@ public class ProductMapper implements ProductDAOInterface {
             }
 
             query = "INSERT INTO products_in_categories (category_id, product_id) VALUES (?, ?)";
-            ps = con.prepareStatement(query);
+            ps = conn.prepareStatement(query);
             ps.setInt(1, product.getCategory_id());
             ps.setInt(2, id);
             ps.executeUpdate();
 
-            con.commit();
-            con.setAutoCommit(true);
+            conn.commit();
+            conn.setAutoCommit(true);
 
             return id;
         } catch (SQLException ex) {
             ex.printStackTrace();
             try {
-                con.rollback();
+                conn.rollback();
                 return 0;
             } catch (SQLException ex1) {
                 return 0;
@@ -225,7 +224,7 @@ public class ProductMapper implements ProductDAOInterface {
     public boolean updateProductVariant(Product product) {
         try {
             String query = "UPDATE product_variants SET price = ?, stock = ?, active = ? WHERE id = ?";
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
             ps.setDouble(1, product.getPrice());
             ps.setInt(2, product.getStock());
             ps.setBoolean(3, product.isActive());
@@ -248,7 +247,7 @@ public class ProductMapper implements ProductDAOInterface {
                     + "JOIN products ON products_in_categories.product_id = products.id\n"
                     + "WHERE category_id = 7;";
 
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -260,6 +259,56 @@ public class ProductMapper implements ProductDAOInterface {
         }
 
         return roofs;
+    }
+    
+    public Product getProduct(int id) {
+        Product prod = null;
+        Category category = null;
+
+        try {
+            String query = "SELECT product_variants.id, product_variants.product_id, product_variants.length, product_variants.price, product_variants.stock, products.product_name, products.thickness, products.width "
+                    + "FROM product_variants "
+                    + "JOIN products ON product_variants.product_id = products.id "
+                    + "WHERE product_variants.id = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                int prodID = rs.getInt("product_id");
+
+                category = getCategory(prodID);
+                prod = new Product(rs.getInt("product_id"), rs.getInt("id"), category, rs.getInt("thickness"), rs.getInt("length"), rs.getInt("width"), rs.getInt("price"), true, rs.getInt("stock"), rs.getString("product_name"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return prod;
+    }
+    
+    public Category getCategory(int prodId) {
+        Category cat = null;
+
+        try {
+            String query = "SELECT categories.id, categories.category_name FROM categories JOIN products_in_categories ON products_in_categories.category_id = categories.id WHERE products_in_categories.product_id = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ps.setInt(1, prodId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                cat = new Category(rs.getInt(1), rs.getString(2));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cat;
     }
 
 }

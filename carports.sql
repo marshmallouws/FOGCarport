@@ -71,7 +71,8 @@ INSERT INTO categories (id, category_name) VALUES
 (8, "Spær"),
 (9, "Bundskruer"),
 (10, "Universal"),
-(11, "Skruer");
+(11, "Skruer"),
+(12, "Tagsten");
 
 CREATE TABLE products (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -246,3 +247,5 @@ CREATE TABLE odetail(
 		FOREIGN KEY(order_id)
         REFERENCES c_order(id)
 );
+
+

@@ -1,13 +1,11 @@
 package PresentationLayer;
 
+import data.BuildException;
 import com.mysql.cj.util.StringUtils;
-import data.DevMapper;
 import data.FOGException;
 import entity.Customer;
 import entity.Order;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +18,7 @@ import logic.LogicFacade;
 public class AddOrderCommand extends Command {
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException {
 
         String _carportWidth = request.getParameter("carportWidth");
         String _carportLength = request.getParameter("carportLength");
@@ -40,11 +38,10 @@ public class AddOrderCommand extends Command {
         // validate info
         if (StringUtils.isStrictlyNumeric(phone) != true || 
                 StringUtils.isStrictlyNumeric(zip) != true || 
-                zip.length() > 4 || 
-                zip.length() < 4 || fullname.length() > 45 ||
-                !email.contains("@") || !email.contains(".")) 
+                zip.length() != 4 || fullname.length() > 45 ||
+                !email.contains("@") || !email.contains("."))
         {
-            request.setAttribute("error", "Det ser ud til, at kunde informationen ikke var udfyldt korrekt!");
+            request.setAttribute("error", "Det ser ud til, at kundeinformationen ikke var udfyldt korrekt!");
             request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
             return;
         }
@@ -101,6 +98,18 @@ public class AddOrderCommand extends Command {
                     request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
                     return;
                 }
+      
+                if (Integer.parseInt(_shedWidth) < 210 || Integer.parseInt(_shedWidth) > 720) {
+                    request.setAttribute("error", "Det ser ud til, at højden på carporten er for stor! Kontakt support.");
+                    request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+                    return;
+                }
+              
+                if (Integer.parseInt(_shedLength) < 150 || Integer.parseInt(_shedLength) > 690) {
+                    request.setAttribute("error", "Det ser ud til, at højden på carporten er for stor! Kontakt support.");
+                    request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+                    return;
+                }
             }
             
             int height = Integer.parseInt(_carportHeight); // skal implementeres som på order admin page
@@ -127,8 +136,8 @@ public class AddOrderCommand extends Command {
 
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
-        } catch (FOGException e) {
-            e.printStackTrace();
+        } catch (BuildException ex) {
+            throw new FOGException(ex.getMessage());
         }
 
     }

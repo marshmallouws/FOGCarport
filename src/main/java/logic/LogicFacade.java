@@ -6,14 +6,17 @@
 package logic;
 
 import com.google.gson.Gson;
+import data.BuildException;
 import data.Builder;
 import data.Connector;
 import data.ConnectorInterface;
-import data.FOGException;
 import entity.Order;
 import entity.Employee;
 import data.LogInException;
+import data.OrderMapper;
+import data.ProductMapper;
 import data.UpdateException;
+import data.UserMapper;
 import entity.Category;
 import entity.Customer;
 import entity.Odetail;
@@ -30,6 +33,9 @@ public class LogicFacade {
     //Should instanciate all Mappers in a constructor to avoid unnessecary object creation at each method call
     
     private ConnectorInterface conn = Connector.getInstance();
+    private OrderMapper ordermapper = new OrderMapper(conn);
+    private UserMapper usermapper = new UserMapper(conn);
+    private ProductMapper productmapper = new ProductMapper(conn);
 
 //    public int createOrder(Order order, Customer customer) {
 //        return new data.OrderMapper(conn).createOrder(order, customer);
@@ -40,58 +46,58 @@ public class LogicFacade {
     }
 
     public Order getOrder(int id) {
-        return new data.OrderMapper(conn).getOrder(id);
+        return ordermapper.getOrder(id);
     }
 
     public List<Order> getOrders() {
-        return new data.OrderMapper(conn).getOrders();
+        return ordermapper.getOrders();
     }
 
     public List<Order> getOrdersUnassigned() {
-        return new data.OrderMapper(conn).getOrdersUnassigned();
+        return ordermapper.getOrdersUnassigned();
     }
 
     public List<Order> getUnfinishedOrders() {
-        return new data.OrderMapper(conn).getUnfinishedOrders();
+        return ordermapper.getUnfinishedOrders();
     }
 
     public void assignOrder(Employee user, Order order) {
-        new data.OrderMapper(conn).assignOrder(user, order);
+        ordermapper.assignOrder(user, order);
     }
 
     public void assignOrder(int orderID, int employeeID) {
-        new data.OrderMapper(conn).assignOrder(orderID, employeeID);
+        ordermapper.assignOrder(orderID, employeeID);
     }
 
     public Order updateOrder(Order order) throws UpdateException {
-        return new data.OrderMapper(conn).updateOrder(order);
+        return ordermapper.updateOrder(order);
     }
 
     public Employee logIn(String username, String password) throws LogInException {
-        return new data.UserMapper(conn).logIn(username, password);
+        return usermapper.logIn(username, password);
     }
 
     public List<Employee> getEmployees() {
-        return new data.UserMapper(conn).getEmployees();
+        return usermapper.getEmployees();
     }
 
     public int createCustomer(Customer customer) {
-        return new data.UserMapper(conn).createCustomer(customer);
+        return usermapper.createCustomer(customer);
     }
 
     public Customer getCustomer(int customerID) {
-        return new data.UserMapper(conn).getCustomer(customerID);
+        return usermapper.getCustomer(customerID);
     }
 
     public String getCategories() {
-        return new Gson().toJson(new data.ProductMapper(conn).getCategories());
+        return new Gson().toJson(productmapper.getCategories());
     }
 
     public String getProductVariantsList(String categoryID, String productID) {
         try {
             int catID = Integer.parseInt(categoryID);
             int prodID = Integer.parseInt(productID);
-            return new Gson().toJson(new data.ProductMapper(conn).getProductVariantsList(catID, prodID));
+            return new Gson().toJson(productmapper.getProductVariantsList(catID, prodID));
         } catch (NumberFormatException ex) {
             return "error";
         }
@@ -100,7 +106,7 @@ public class LogicFacade {
     public String getProductsInCategories(String categoryID) {
         try {
             int catID = Integer.parseInt(categoryID);
-            return new Gson().toJson(new data.ProductMapper(conn).getProductsInCategories(catID));
+            return new Gson().toJson(productmapper.getProductsInCategories(catID));
         } catch (NumberFormatException ex) {
             return "error";
         }
@@ -110,7 +116,7 @@ public class LogicFacade {
     public String getProductVariant(String product_id) {
         try {
             int prod_id = Integer.parseInt(product_id);
-            return new Gson().toJson(new data.ProductMapper(conn).getProductVariant(prod_id));
+            return new Gson().toJson(productmapper.getProductVariant(prod_id));
         } catch (NumberFormatException e) {
             return "error";
         }
@@ -122,7 +128,7 @@ public class LogicFacade {
                 throw new Exception();
             }
 
-            return new Gson().toJson(new data.ProductMapper(conn).getProductVariant(product_id));
+            return new Gson().toJson(productmapper.getProductVariant(product_id));
         } catch (Exception e) {
             return "error";
         }
@@ -132,7 +138,7 @@ public class LogicFacade {
     public String getProductMain(String product_id) {
         try {
             int prod_id = Integer.parseInt(product_id);
-            return new Gson().toJson(new data.ProductMapper(conn).getProductMain(prod_id));
+            return new Gson().toJson(productmapper.getProductMain(prod_id));
         } catch(NumberFormatException ex) {
             return "error";
         }
@@ -141,7 +147,7 @@ public class LogicFacade {
     public String updateProductVariant(String product) {
         try {
             Product prod = new Gson().fromJson(product, Product.class);
-            boolean success = new data.ProductMapper(conn).updateProductVariant(prod);
+            boolean success = productmapper.updateProductVariant(prod);
 
             if (!success) {
                 throw new Exception();
@@ -157,7 +163,7 @@ public class LogicFacade {
     public String createProduct(String product) {
         try {
             Product prod = new Gson().fromJson(product, Product.class);
-            int id = new data.ProductMapper(conn).createProduct(prod);
+            int id = productmapper.createProduct(prod);
 
             if (id == 0) {
                 throw new Exception();
@@ -172,7 +178,7 @@ public class LogicFacade {
     public String createProductVariant(String product) {
         try {
             Product prod = new Gson().fromJson(product, Product.class);
-            int id = new data.ProductMapper(conn).createProductVariant(prod);
+            int id = productmapper.createProductVariant(prod);
             
             if (id == 0) {
                 throw new Exception();
@@ -187,37 +193,37 @@ public class LogicFacade {
 
     //Testing something
     public Employee getEmployee(int id) {
-        return new data.UserMapper(conn).getEmployee(id);
+        return usermapper.getEmployee(id);
     }
     
-    public List<Odetail> buildCarport(Order order) throws FOGException {
+    public List<Odetail> buildCarport(Order order) throws BuildException {
         Builder b = new data.Builder(conn);
         List<Orequest> car = b.carportBlueprint(order);
         return b.carportBuilder(car, order);
     }
 
     public List<Product> getRoofTypes() {
-        return new data.ProductMapper(conn).getRoofTypes();
+        return productmapper.getRoofTypes();
     }
 
     public List<Order> getOwnOrders(int emplId) {
-        return new data.OrderMapper(conn).getOwnOrders(emplId);
+        return ordermapper.getOwnOrders(emplId);
     }
     
     public ArrayList<Category> getCategorieslist() {
-        return new data.ProductMapper(conn).getCategories();
+        return productmapper.getCategories();
     }
 
     public List<Odetail> getOdetails(int orderID) {
-        return new data.OrderMapper(conn).getOdetails(orderID);
+        return ordermapper.getOdetails(orderID);
     }
 
     public void createOdetail(List<Odetail> odetails) {
-        new data.OrderMapper(conn).createOdetail(odetails);
+        ordermapper.createOdetail(odetails);
     }
 
     public void editOdetails(List<Odetail> odetails) {
-        new data.OrderMapper(conn).editOdetails(odetails);
+        ordermapper.editOdetails(odetails);
     }
     
 }

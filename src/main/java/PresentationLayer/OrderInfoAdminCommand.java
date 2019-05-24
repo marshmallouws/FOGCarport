@@ -1,8 +1,10 @@
 package PresentationLayer;
 
+import entity.Carport;
 import entity.Customer;
 import entity.Order;
 import entity.Employee;
+import entity.Odetail;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,12 +93,15 @@ public class OrderInfoAdminCommand extends Command {
         int orderID = 0;
         Order orderToShow = null;
         Customer customer = null;
+        Carport carport = null;
         
         try {
             orderID = Integer.parseInt(request.getParameter("orderID"));
             
             orderToShow = lf.getOrder(orderID);
             customer = lf.getCustomer(orderToShow.getCustomerId());
+            List<Odetail> odetails = lf.getOdetails(orderID);
+            carport = new Carport(odetails);
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
             request.setAttribute("error", "Ugyldigt input. Kontakt support.");
             request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
@@ -110,7 +115,7 @@ public class OrderInfoAdminCommand extends Command {
         } else {
             request.setAttribute("customer", customer);
             request.setAttribute("order", orderToShow);
-
+            request.setAttribute("carport", carport);
             request.getRequestDispatcher("/WEB-INF/orderdetails-admin.jsp").forward(request, response);
         }
         
