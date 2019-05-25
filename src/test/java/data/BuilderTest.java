@@ -47,55 +47,7 @@ public class BuilderTest {
         }
 
     }
-
-    /**
-     * Test of carportBlueprint method, of class Builder.
-     */
-//    @Test
-//    public void testCarportBlueprint_Order_List() throws Exception {
-//        System.out.println("carportBlueprint");
-//        Order order = null;
-//        List<Blueprint> blueprints = null;
-//        Builder instance = builder;
-//        List<Orequest> expResult = null;
-//        List<Orequest> result = instance.carportBlueprint(order, blueprints);
-//        assertEquals(expResult, result);
-//
-//        // TODO review the generated test code and remove the default call to fail.
-//        //fail("The test case is a prototype.");
-//    }
-
-    /**
-     * Test of carportBlueprint method, of class Builder.
-     */
-//    @Test
-//    public void testCarportBlueprint_Order() throws Exception {
-//        System.out.println("carportBlueprint");
-//        Order order = null;
-//        Builder instance = builder;
-//        List<Orequest> expResult = null;
-//        List<Orequest> result = instance.carportBlueprint(order);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        //fail("The test case is a prototype.");
-//    }
-
-    /**
-     * Test of carportBuilder method, of class Builder.
-     */
-//    @Test
-//    public void testCarportBuilder() {
-//        System.out.println("carportBuilder");
-//        List<Orequest> request = null;
-//        Order order = null;
-//        Builder instance = builder;
-//        List<Odetail> expResult = null;
-//        List<Odetail> result = instance.carportBuilder(request, order);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        //fail("The test case is a prototype.");
-//    }
-
+    
     /**
      * Test of validateCarport method, of class Builder.
      */
@@ -133,11 +85,34 @@ public class BuilderTest {
     
     @Test
     public void testCalcRoofMap() {
+        System.out.println("calcRoofMap");
         Order o = order;
         Builder instance = builder;
         int categoryID = 7;
         int productID = o.getRoofType();
+        Map<Integer, Integer> expResult = new HashMap();
+        expResult.put(210, 16);
+        expResult.put(150, 16);
         Map<Integer, Integer> result = instance.calcRoofMap(categoryID, productID, o);
+        
+        assertEquals(expResult, result);
+    }
+    
+    @Test
+    public void testCalcSurfaceMap() {
+        System.out.println("calcSurfaceMap");
+        Order o = order;
+        Builder instance = builder;
+        int x = o.getShedLength();
+        int y = o.getHeight();
+        int categoryID = 5;
+        int productID = 8;
+        int sides = 2;
+        Map<Integer, Integer> expResult = new HashMap();
+        expResult.put(270, 60);
+        Map<Integer, Integer> result = instance.calcSurfaceMap(x, y, categoryID, productID, o, sides);
+        
+        assertEquals(expResult, result);
     }
 
     /**
@@ -171,6 +146,11 @@ public class BuilderTest {
         int expResult = 11;
         Map<Integer, Integer> result = instance.calcStolperMap(categoryID, productID, o);
         assertEquals(true, result.containsValue(expResult));
+    }
+    
+    @Test
+    public void testCalcRoofAngledLength() {
+        System.out.println("calcRoofAngledLength");
     }
 
 }

@@ -32,23 +32,16 @@ public class Builder {
         }
     }
 
-    /*
+    
     public static void main(String[] args) {
-        Order order = new Order(270, 1900, 1900, 200, 200, 20, 12);
-        
-        List<Orequest> blueprint = null;
-        try {
-            blueprint = new Builder().carportBlueprint(null);
-            
-            for (Odetail o : new Builder().carportBuilder(blueprint, order)) {
-            System.out.println(o.getProduct().getName() + " " + o.getProduct().getLength() + " cm. " + o.getQty() + " stk. " + o.getAmount() + " kr. " + " " + o.getComment() + " " + o.getProduct().isActive());
-        }
-        } catch (BuildException ex) {
-            System.out.println("Fail..");
-        }
+        Connector con = Connector.getInstance();
+        Builder b = new Builder(con);
+        Order o = new Order(270, 640, 640, 300, 300, 20, 12);
+        //System.out.println(b.calcRoofMap(7, o.getRoofType(), o));
+        System.out.println(b.calcSurfaceMap(o.getShedLength(), o.getHeight(), 5, 8, o, 2));
         
     }
-     */
+     
     // y afgør hvor mange rækker
     public Map<Integer, Integer> calcSpaerMap(int categoryID, int productID, int x, int y, boolean angled) throws BuildException {
         Map<Integer, Integer> map = new HashMap();
@@ -216,7 +209,7 @@ public class Builder {
 
     }
 
-    private Map<Integer, Integer> calcSurfaceMap(int x, int y, int categoryID, int productID, Order order, int sides) {
+    public Map<Integer, Integer> calcSurfaceMap(int x, int y, int categoryID, int productID, Order order, int sides) {
         try {
             Map<Integer, Integer> map = new HashMap();
             List<Product> woods = getProductsAllForBuild(categoryID, productID);
@@ -466,12 +459,12 @@ public class Builder {
             comment = "Til beklædning af skur siderne";
             catID = 5;
             prodID = 8;
-            addProductToBuild(reqs, order, calcSurfaceMap(order.getLenght(), order.getHeight(), catID, prodID, order, 2), catID, prodID, comment);
+            addProductToBuild(reqs, order, calcSurfaceMap(order.getShedLength(), order.getHeight(), catID, prodID, order, 2), catID, prodID, comment);
 
             comment = "Til beklædning af skur gavle";
             catID = 5;
             prodID = 8;
-            addProductToBuild(reqs, order, calcSurfaceMap(order.getWidth(), order.getHeight(), catID, prodID, order, 2), catID, prodID, comment);
+            addProductToBuild(reqs, order, calcSurfaceMap(order.getShedWidth(), order.getHeight(), catID, prodID, order, 2), catID, prodID, comment);
 
             // Skruer til ydrebeklædning
             comment = "Til montering af yderste beklædning";
@@ -633,7 +626,7 @@ public class Builder {
     }
 
     // Længden på siden af taget
-    private double calcRoofAngledLength(Order order) {
+    public double calcRoofAngledLength(Order order) {
 
         double degree = order.getRoofAngle();
         double radian = Math.toRadians(degree);
