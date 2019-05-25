@@ -17,30 +17,30 @@ import javax.servlet.http.HttpServletResponse;
 //windows1252
 public abstract class Command {
 
-//    private static Map<String, Command> commands;
-//    static {
-//        commands = new HashMap<>();
-//        commands.put("login", new LoginCommand());
-//        commands.put("backendpage", new BackendPageCommand());
-//        commands.put("orderpage", new OrderPageCommand());
-//        commands.put("addorder", new AddOrderCommand());
-//        commands.put("assignorder", new AssignOrderCommand());
-//        commands.put("updateorder", new UpdateOrderCommand());
-//        commands.put("orderinfo", new OrderInfoCommand());
-//        commands.put("orderinfoadmin", new OrderInfoAdminCommand());
-//        commands.put("mats", new MaterialPageCommand());
-//        commands.put("carport", new CarportProductsCommand());
-//        commands.put("carportEdit", new CarportProductsEditCommand());
-//    }
+    private static Map<String, Command> commands;
+    static {
+        commands = new HashMap<>();
+        commands.put("login", new LoginCommand());
+        commands.put("backendpage", new BackendPageCommand());
+        commands.put("orderpage", new OrderPageCommand());
+        commands.put("addorder", new AddOrderCommand());
+        commands.put("assignorder", new AssignOrderCommand());
+        commands.put("updateorder", new UpdateOrderCommand());
+        commands.put("orderinfo", new OrderInfoCommand());
+        commands.put("orderinfoadmin", new OrderInfoAdminCommand());
+        commands.put("mats", new MaterialPageCommand());
+        commands.put("carport", new CarportProductsCommand());
+        commands.put("carportEdit", new CarportProductsEditCommand());
+    }
 
-    private static Map<String, Command> commands = null;
+    //private static Map<String, Command> commands = null;
 
     public abstract void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException;
 
     public static Command from(HttpServletRequest request) {
-        if (commands == null) {
-            initMap();
-        }
+//        if (commands == null) {
+//            initMap();
+//        }
         Command c;
         String origin = request.getParameter("view");
 
@@ -49,25 +49,25 @@ public abstract class Command {
         return c;
     }
 
-    private static void initMap() {
-        synchronized (Command.class) {
-            if (commands == null) {
-
-                commands = new HashMap<>();
-                commands.put("login", new LoginCommand());
-                commands.put("backendpage", new BackendPageCommand());
-                commands.put("orderpage", new OrderPageCommand());
-                commands.put("addorder", new AddOrderCommand());
-                commands.put("assignorder", new AssignOrderCommand());
-                commands.put("updateorder", new UpdateOrderCommand());
-                commands.put("orderinfo", new OrderInfoCommand());
-                commands.put("orderinfoadmin", new OrderInfoAdminCommand());
-                commands.put("mats", new MaterialPageCommand());
-                commands.put("carport", new CarportProductsCommand());
-                commands.put("carportEdit", new CarportProductsEditCommand());
-                commands.put("downloadpdf", new DownloadPDFCommand());
-            }
-        }
-    }
+//    private static void initMap() {
+//        synchronized (Command.class) {
+//            if (commands == null) {
+//
+//                commands = new HashMap<>();
+//                commands.put("login", new LoginCommand());
+//                commands.put("backendpage", new BackendPageCommand());
+//                commands.put("orderpage", new OrderPageCommand());
+//                commands.put("addorder", new AddOrderCommand());
+//                commands.put("assignorder", new AssignOrderCommand());
+//                commands.put("updateorder", new UpdateOrderCommand());
+//                commands.put("orderinfo", new OrderInfoCommand());
+//                commands.put("orderinfoadmin", new OrderInfoAdminCommand());
+//                commands.put("mats", new MaterialPageCommand());
+//                commands.put("carport", new CarportProductsCommand());
+//                commands.put("carportEdit", new CarportProductsEditCommand());
+//                commands.put("downloadpdf", new DownloadPDFCommand());
+//            }
+//        }
+//    }
 
 }
