@@ -17,20 +17,20 @@ import javax.servlet.http.HttpServletResponse;
 //windows1252
 public abstract class Command {
 
-    private static Map<String, Command> commands;
+    private final static Map<String, Command> COMMANDS;
     static {
-        commands = new HashMap<>();
-        commands.put("login", new LoginCommand());
-        commands.put("backendpage", new BackendPageCommand());
-        commands.put("orderpage", new OrderPageCommand());
-        commands.put("addorder", new AddOrderCommand());
-        commands.put("assignorder", new AssignOrderCommand());
-        commands.put("updateorder", new UpdateOrderCommand());
-        commands.put("orderinfo", new OrderInfoCommand());
-        commands.put("orderinfoadmin", new OrderInfoAdminCommand());
-        commands.put("mats", new MaterialPageCommand());
-        commands.put("carport", new CarportProductsCommand());
-        commands.put("carportEdit", new CarportProductsEditCommand());
+        COMMANDS = new HashMap<>();
+        COMMANDS.put("login", new LoginCommand());
+        COMMANDS.put("backendpage", new BackendPageCommand());
+        COMMANDS.put("orderpage", new OrderPageCommand());
+        COMMANDS.put("addorder", new AddOrderCommand());
+        COMMANDS.put("assignorder", new AssignOrderCommand());
+        COMMANDS.put("updateorder", new UpdateOrderCommand());
+        COMMANDS.put("orderinfo", new OrderInfoCommand());
+        COMMANDS.put("orderinfoadmin", new OrderInfoAdminCommand());
+        COMMANDS.put("mats", new MaterialPageCommand());
+        COMMANDS.put("carport", new CarportProductsCommand());
+        COMMANDS.put("carportEdit", new CarportProductsEditCommand());
     }
 
     //private static Map<String, Command> commands = null;
@@ -44,7 +44,7 @@ public abstract class Command {
         Command c;
         String origin = request.getParameter("view");
 
-        c = commands.getOrDefault(origin, new UnknownCommand());
+        c = COMMANDS.getOrDefault(origin, new UnknownCommand());
 
         return c;
     }
