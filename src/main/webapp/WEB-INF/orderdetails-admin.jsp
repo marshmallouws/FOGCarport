@@ -33,8 +33,8 @@
             <h1>Bestilling #<%=order.getId()%></h1> 
 
             <div id="search-container">
-                <input type="text" name="searchInput" id="searchInput">
-                <button type="button" id="searchBtn">Søg</button>    
+                <input style="width: 220px;display: inline-block;vertical-align: middle;" class="form-control" type="text" name="searchInput" id="searchInput" placeholder="Indtast bestillingsnummer..">
+                <button class="btn btn-primary" type="button" id="searchBtn">Gå til bestilling</button>    
             </div>
 
 
