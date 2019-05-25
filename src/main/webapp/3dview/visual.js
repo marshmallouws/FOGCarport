@@ -82,6 +82,7 @@ function updateScene() {
     roof = roofAngle < 5 ? false : true;
     roofType = roofTin.value;
         
+    ///check if values are negative
     if(width<=0||length<=0||height<=0||(!roof && roofType <=0)){
         orderButtonDisabled(true);
         return;
@@ -113,6 +114,7 @@ function updateScene() {
     } else {
         shedLin.style.backgroundColor = "";
     }
+    ///is roof type selected?
     if (!roof && roofType<=0) {
         roofTin.style.backgroundColor = "#e67e7e";
         $('#roofType > option').each(function () {
@@ -127,6 +129,7 @@ function updateScene() {
         roofTin.style.backgroundColor = "";
     }
     //////////////////////////
+    // Everything passed - create scene and enable order button.
     engine.displayLoadingUI();
     scene = createScene();
     orderButtonDisabled(false);
@@ -182,7 +185,7 @@ var createScene = function () {
     skyboxMaterial.disableLighting = true;
     skybox.material = skyboxMaterial;
 
-    /// MATS
+    /// Materials / Textures
     mat = new BABYLON.StandardMaterial("wood", scene);
     var woodTextureTask = assetsManager.addTextureTask("woodTask", "3dview/textures/wood.png");
     woodTextureTask.onSuccess = function (task) {
@@ -290,6 +293,7 @@ var createScene = function () {
     ground.checkCollisions = true;
     ground.receiveShadows = true;
 
+    //build trees and bushes only after loading their sprites.
     var treesTask = assetsManager.addTextureTask("treesTask", "3dview/images/tree.png");
     treesTask.onSuccess = function (task) {
         var spriteManagerTrees = new BABYLON.SpriteManager("treesManager", task.texture, 500, 950, scene);
@@ -319,13 +323,17 @@ var createScene = function () {
             bush.color = new BABYLON.Color4(.14, .33, .17, Math.random() * (1 - .5) + .5);
         }
     }
-
+    
+    //start loading assets.
     assetsManager.load();   
-        $(".sidebar-wrapper").css("z-index","9990");
+    
+    //make sure sidebar menu is visible.
+    $(".sidebar-wrapper").css("z-index","9990");
 
     // Return the created scene.
     return scene;
 
+    //calculate random position for sprites.
     function getRandomSpritePosition(close) {
         var distance = close ? width * 1.2 + length * 1.2 + height : width * 2 + length * 2 + height;
         var pos1 = Math.random() * 500 - 250;
@@ -340,40 +348,43 @@ var supportSize = 0.35;
 function createSupports(mat, shed) {
     var cLength = shed ? length - shedLength : length;
     for (var i = 0; i < cLength; i++) {
-        if (i % 8 != 0)
+        //Add a support beam at least every 8 units.
+        if (i % 8 !== 0)
             continue;
         var box = BABYLON.MeshBuilder.CreateBox('box' + i + '_', {height: height, width: supportSize, depth: supportSize}, scene);
         box.material = mat;
         box.position.z = -width;
         box.position.y = -2 + (height * 0.5);
-        box.position.x = i == 0 ? 0.5 : i;
+        box.position.x = i === 0 ? 0.5 : i;
         shadowGenerator.getShadowMap().renderList.push(box);
         box.receiveShadows = true;
     }
-
+    //if there's room, place a support beam at the back in the left side.
     if (shedWidth < width) {
         cLength = length;
         supportEnd(mat, true);
     }
 
     for (var i = 0; i < cLength; i++) {
-        if (i % 8 != 0)
+        //Add a support beam at least every 8 units.
+        if (i % 8 !== 0)
             continue;
         var box = BABYLON.MeshBuilder.CreateBox('box' + i, {height: height, width: supportSize, depth: supportSize}, scene);
         box.material = mat;
         box.position.z = width;
         box.position.y = -2 + (height * 0.5);
-        box.position.x = i == 0 ? 0.5 : i;
+        box.position.x = i === 0 ? 0.5 : i;
         shadowGenerator.getShadowMap().renderList.push(box);
         box.receiveShadows = true;
     }
 
+    //if there's no shed, add a support beam in the back on each side.
     if (!shed) {
         supportEnd(mat, true);
         supportEnd(mat, false);
     }
 
-    //RÆM 1
+    //Remme
     var box = BABYLON.MeshBuilder.CreateBox('box_raem1', {height: 0.5, width: length, depth: 0.2}, scene);
     box.material = mat;
     box.position.z = width + 0.2;
@@ -381,7 +392,7 @@ function createSupports(mat, shed) {
     box.position.x = length / 2;
     shadowGenerator.getShadowMap().renderList.push(box);
     box.receiveShadows = true;
-    //RÆM 2
+
     var box = BABYLON.MeshBuilder.CreateBox('box_raem2', {height: 0.5, width: length, depth: 0.2}, scene);
     box.material = mat;
     box.position.z = -width - 0.2;
@@ -466,6 +477,7 @@ function createShed(mat) {
 
 function createRoof(roofmat, roofmat2, roof) {
     if (!roof) {
+        //build flat roof
         var box = BABYLON.MeshBuilder.CreateBox('boxRoof', {height: 0.2, width: length + 1.08, depth: width * 2 + 1}, scene);
         box.position.x = length / 2;
         box.position.y = height - 2;
@@ -474,6 +486,7 @@ function createRoof(roofmat, roofmat2, roof) {
         shadowGenerator.getShadowMap().renderList.push(box);
         box.receiveShadows = true;
     } else {
+        //build angled roof
         //roof foundation
         var box = BABYLON.MeshBuilder.CreateBox('boxRoof', {height: 0.1, width: length + 1.01, depth: width * 2 + 1}, scene);
         box.position.x = length / 2;
@@ -482,7 +495,6 @@ function createRoof(roofmat, roofmat2, roof) {
         box.checkCollisions = true;
         shadowGenerator.getShadowMap().renderList.push(box);
         box.receiveShadows = true;
-
 
         //roof tiles
         /////////////////////////////////////////////////////
