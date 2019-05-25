@@ -53,6 +53,10 @@ public class LogicFacade {
     public Order updateOrder(Order order) throws UpdateException {
         return new data.OrderMapper().updateOrder(order);
     }
+    
+    public boolean updateOrderFull(Order order, List<Odetail> carport) throws UpdateException {
+        return new data.OrderMapper().updateOrderFull(order, carport);
+    }
 
     public Employee logIn(String username, String password) throws LogInException {
         return new data.UserMapper().logIn(username, password);

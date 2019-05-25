@@ -27,8 +27,6 @@ public class Builder {
         for (Odetail o : new Builder().carportBuilder(blueprint, order)) {
             System.out.println(o.getProduct().getName() + " " + o.getProduct().getLength() + " cm. " + o.getQty() + " stk. " + o.getAmount() + " kr. " + " " + o.getComment() + " " + o.getProduct().isActive());
         }
-
-        System.out.println(new Builder().calcStolperMap(1, 7, order));
     }
 
     // width afgør hvor mange rækker

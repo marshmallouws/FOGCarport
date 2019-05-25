@@ -1,11 +1,11 @@
 package PresentationLayer;
 
+import data.FOGException;
 import data.UpdateException;
+import entity.Odetail;
 import entity.Order;
 import java.io.IOException;
-import java.sql.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ import logic.LogicFacade;
 public class UpdateOrderCommand extends Command {
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException {
         
         LogicFacade logic = new LogicFacade();
         Order order;
@@ -45,19 +45,20 @@ public class UpdateOrderCommand extends Command {
             int employeeID = Integer.parseInt(_employeeID);
             
             order = new Order(orderID, employeeID, carportHeight, carportWidth, carportLength, shedLength, shedWidth, roofAngle);
-            Order updatedOrder = logic.updateOrder(order);
+            //Order updatedOrder = logic.updateOrder(order);
             
-            response.sendRedirect("byggecenter?view=orderinfoadmin&orderID=" + updatedOrder.getId());
+            List<Odetail> carport = logic.buildCarport(order);
+            logic.updateOrderFull(order, carport);
+            response.sendRedirect("byggecenter?view=orderinfoadmin&orderID=" + orderID);
+            
+            //response.sendRedirect("byggecenter?view=orderinfoadmin&orderID=" + updatedOrder.getId());
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
         } catch (UpdateException ex) {
             request.setAttribute("error", ex.getMessage());
             request.getRequestDispatcher("byggecenter?view=orderinfoadmin&orderID=" + _orderID).forward(request, response);
             
-        }
-        
-        
-        
+        }    
     }
     
 }

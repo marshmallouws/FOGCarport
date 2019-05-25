@@ -214,6 +214,7 @@ public class OrderMapper implements OrderInterface {
         PreparedStatement ps;
         try {
             Connection con = Connector.connection();
+
             if (order.employeeId() == 0) {
                 query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ? WHERE id = ?;";
                 ps = con.prepareStatement(query);
@@ -299,6 +300,78 @@ public class OrderMapper implements OrderInterface {
 
         }
 
+    }
+
+    public boolean updateOrderFull(Order order, List<Odetail> carport) throws UpdateException {
+        Connection con = null;
+        try {
+            con = Connector.connection();
+            con.setAutoCommit(false);
+            String query;
+            PreparedStatement ps;
+
+            // update order
+            if (order.employeeId() == 0) {
+                query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ? WHERE id = ?;";
+                ps = con.prepareStatement(query);
+
+                ps.setInt(1, order.getHeight());
+                ps.setInt(2, order.getLenght());
+                ps.setInt(3, order.getWidth());
+                ps.setInt(4, order.getShedLength());
+                ps.setInt(5, order.getShedWidth());
+                ps.setInt(6, order.getRoofAngle());
+                ps.setInt(7, order.getId());
+            } else {
+                query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ?, emp_id = ? WHERE id = ?;";
+                ps = con.prepareStatement(query);
+
+                ps.setInt(1, order.getHeight());
+                ps.setInt(2, order.getLenght());
+                ps.setInt(3, order.getWidth());
+                ps.setInt(4, order.getShedLength());
+                ps.setInt(5, order.getShedWidth());
+                ps.setInt(6, order.getRoofAngle());
+                ps.setInt(7, order.employeeId());
+                ps.setInt(8, order.getId());
+            }
+            ps.executeUpdate();
+
+            // delete old odetails
+            query = "DELETE * FROM odetail WHERE order_id = ?;";
+            ps = con.prepareStatement(query);
+            ps.executeUpdate();
+
+            // create new odetails
+            query = "INSERT INTO `odetail` (prod_id, order_id, qty, amount, cmt) "
+                    + "VALUES (?, ?, ?, ?, ?);";
+            ps = con.prepareStatement(query);
+
+            for (Odetail od : carport) {
+                ps.setInt(1, od.getProduct().getVariant_id());
+                ps.setInt(2, od.getOrder_id());
+                ps.setInt(3, od.getQty());
+                ps.setDouble(4, od.getAmount());
+                ps.setString(5, od.getComment());
+                ps.executeUpdate();
+            }
+
+            con.commit();
+            con.setAutoCommit(true);
+
+            return true;
+
+        } catch (ClassNotFoundException | SQLException ex) {
+            try {
+                if (con != null) {
+                    con.rollback();
+                    return false;
+                }
+                throw new UpdateException(ex.getMessage());
+            } catch (SQLException ex1) {
+                throw new UpdateException(ex1.getMessage());
+            }
+        }
     }
 
     @Override
