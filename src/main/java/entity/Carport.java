@@ -39,8 +39,8 @@ public class Carport {
         for (Odetail o : items) {
             total += o.getAmount();
         }
-        DecimalFormat d = new DecimalFormat("##.00");
-        return Double.parseDouble(d.format(total)); 
+        DecimalFormat d = new DecimalFormat("#.##");
+        return Double.valueOf(d.format(total)); 
     }
 
     public List<Odetail> getWoodsList() {
