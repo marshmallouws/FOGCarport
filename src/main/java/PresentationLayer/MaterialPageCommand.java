@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import data.FOGException;
 import data.OrderMapper;
 import entity.Order;
 import java.io.IOException;
@@ -16,7 +17,8 @@ import logic.LogicFacade;
 public class MaterialPageCommand extends Command {
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException {
+        if(request.getSession().getAttribute("user")==null)throw new FOGException("Du skal være logget ind for at tilgå denne side.");
         String cmd = request.getParameter("c");
         if (cmd == null || cmd.isEmpty()) {
             request.getRequestDispatcher("/WEB-INF/materials.jsp").forward(request, response);
@@ -66,7 +68,6 @@ public class MaterialPageCommand extends Command {
                 json = "error";
                 break;
         }
-
         response.getWriter().write(json);
     }
 

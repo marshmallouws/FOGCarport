@@ -8,6 +8,8 @@ package entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 /**
  *
@@ -40,7 +42,12 @@ public class Carport {
             total += o.getAmount();
         }
         DecimalFormat d = new DecimalFormat("#.##");
-        return Double.valueOf(d.format(total)); 
+        NumberFormat nf = NumberFormat.getInstance();
+        try {
+            return nf.parse(d.format(total)).doubleValue();
+        } catch(ParseException e){
+            return 0.0;
+        }
     }
 
     public List<Odetail> getWoodsList() {

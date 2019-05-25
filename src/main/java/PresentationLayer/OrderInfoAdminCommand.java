@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import data.FOGException;
 import entity.Carport;
 import entity.Customer;
 import entity.Order;
@@ -20,7 +21,8 @@ import logic.LogicFacade;
 public class OrderInfoAdminCommand extends Command {
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException {
+        if(request.getSession().getAttribute("user")==null)throw new FOGException("Du skal være logget ind for at tilgå denne side.");
         
         LogicFacade lf = new LogicFacade();
         
