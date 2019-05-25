@@ -50,7 +50,7 @@ public class Builder {
     }
      */
     // y afgør hvor mange rækker
-    private Map<Integer, Integer> calcSpaerMap(int categoryID, int productID, int x, int y, boolean angled) throws BuildException {
+    public Map<Integer, Integer> calcSpaerMap(int categoryID, int productID, int x, int y, boolean angled) throws BuildException {
         Map<Integer, Integer> map = new HashMap();
 
         if (categoryID == 0 || productID == 0) {
@@ -111,7 +111,7 @@ public class Builder {
         return map;
     }
 
-    private Map<Integer, Integer> calcWoodsMap(int categoryID, int productID, int length) throws BuildException {
+    public Map<Integer, Integer> calcWoodsMap(int categoryID, int productID, int length) throws BuildException {
         Map<Integer, Integer> map = new HashMap();
         List<Product> woods = getProductsAllForBuild(categoryID, productID);
 
@@ -141,7 +141,7 @@ public class Builder {
     }
 
     // Beregner antallet af produkter til et tag
-    private Map<Integer, Integer> calcRoofMap(int categoryID, int productID, Order order) {
+    public Map<Integer, Integer> calcRoofMap(int categoryID, int productID, Order order) {
         try {
             Map<Integer, Integer> map = new HashMap();
             List<Product> roofs = getProductsAllForBuild(categoryID, productID);
@@ -576,7 +576,7 @@ public class Builder {
         return status;
     }
 
-    private Map<Integer, Integer> calcStolperMap(int categoryID, int productID, Order order) throws BuildException {
+    public Map<Integer, Integer> calcStolperMap(int categoryID, int productID, Order order) throws BuildException {
         List<Product> woods = getProductsAllForBuild(categoryID, productID);
         int bigLen = 1000;
         int height = order.getHeight();
