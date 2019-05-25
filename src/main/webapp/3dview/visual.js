@@ -69,9 +69,12 @@ function updateScene() {
     var shedLin = document.getElementById("shedLengthIn");
     var shedWin = document.getElementById("shedWidthIn")
     var roofTin = document.getElementById("roofType");
+    var heightInput = document.getElementById("heightIn");
+    if(heightInput.value > heightInput.max-0)heightInput.value = heightInput.max;
+    else if (heightInput.value < heightInput.min-0) heightInput.value = heightInput.min;
     width = (wIn.value / 100) * 1.2;
     length = (lIn.value / 100) * 2;
-    height = (document.getElementById("heightIn").value / 100) * 2;
+    height = (heightInput.value / 100) * 2;
     shedLength = (shedLin.value / 100) * 2;
     shedWidth = (shedWin.value / 100) * 1.2;
     shed = shedLength < 0.5 || shedWidth < 0.5 ? false : true;
@@ -151,7 +154,7 @@ var createScene = function () {
     camera.allowUpsideDown = false;
     camera.checkCollisions = true;
     camera.collisionRadius = new BABYLON.Vector3(0.5, 0.5, 0.5);
-    // Target the camera to scene origin.
+    // Target the camera to middle of carport build.
     camera.setTarget(new BABYLON.Vector3(length / 2, height / 2.5, 0));
     camera.radius = length + height;
     // Attach the camera to the canvas.
