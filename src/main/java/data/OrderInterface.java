@@ -19,7 +19,7 @@ import java.util.List;
  * @author Bitten
  */
 public interface OrderInterface {
-    public int createOrder(Order order, Customer customer);
+    public int createOrder(Order order, String name, String email, String address, int zip, int phone);
     public List<Order> getOrders();
     public List<Order> getOrdersUnassigned();
     public List<Order> getUnfinishedOrders();
@@ -32,8 +32,8 @@ public interface OrderInterface {
     public void createOdetail(List<Odetail> odetails);
     public void editOdetails(List<Odetail> detail);
     public List<Odetail> getOdetails(int orderID);
-    public Product getProduct(int prod_id);
-    public Category getCategory(int prod_id);
+    //public Product getProduct(int prod_id);
+    //public Category getCategory(int prod_id);
     
     
 }

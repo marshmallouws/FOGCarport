@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import data.FOGException;
 import entity.Employee;
 import entity.Order;
 import java.io.IOException;
@@ -17,8 +18,8 @@ import logic.LogicFacade;
 public class BackendPageCommand extends Command {
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException {
+        if(request.getSession().getAttribute("user")==null)throw new FOGException("Du skal være logget ind for at tilgå denne side.");
         HttpSession session = request.getSession();
         
         

@@ -1,7 +1,7 @@
 <%-- 
     Document   : index
     Created on : Apr 25, 2019, 1:59:39 PM
-    Author     : caspe
+    Author     : vl48
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -21,9 +21,9 @@
         </div>
         <div class="separator"></div>
         <div class="page-wrapper" style="margin-top:10px;">
-            <div class="trusted-icons" style="margin-bottom:10px;">
-                <img src="images/fog_trust-1.png">
-                <img src="images/fog_trust-2.png">
+            <div class="trusted-icons">
+                <img align="left" src="images/fog_trust-1.png">
+                <img align="right" src="images/fog_trust-2.png">
             </div>
             <h2>SE VORES BREDE UDVALG AF CARPORTE</h2>
             <p>Når vores kunder handler hos os, får de altid den bedste service online som i vores butikker. 
@@ -90,23 +90,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="separator"></div>
-    <div class="page-wrapper">
-        <h5>For Ansatte</h5>
-        <a href="byggecenter?view=orderpage">Frontend</a>
-        <a href="byggecenter?view=backendpage">Backend</a>
-        <a href="byggecenter?view=orderinfoadmin&orderID=1">Orderdetails-Admin Test</a>
-        <a href="byggecenter?view=carport&orderID=1">Stykliste Test</a>
-        <a href="byggecenter?view=mats">Materiale redigering</a>
-
-        <form method="POST" action="byggecenter?view=login">
-            <input type="text" name="username" id="username" placeholder="Brugernavn">
-            <input type="password" name="password" id="password" placeholder="Password">
-            <button type="submit">Login</button>
-        </form>
-
-
     </div>
 
     <div class="alt-wrapper">

@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import data.FOGException;
 import entity.Employee;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,8 +17,8 @@ import logic.LogicFacade;
 public class AssignOrderCommand extends Command {
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException {
+        if(request.getSession().getAttribute("user")==null)throw new FOGException("Du skal være logget ind for at tilgå denne side.");
         HttpSession session = request.getSession();
         Employee user = (Employee) session.getAttribute("user");
         LogicFacade logic = new LogicFacade();

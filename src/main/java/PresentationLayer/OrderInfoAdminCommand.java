@@ -1,8 +1,11 @@
 package PresentationLayer;
 
+import data.FOGException;
+import entity.Carport;
 import entity.Customer;
 import entity.Order;
 import entity.Employee;
+import entity.Odetail;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +21,8 @@ import logic.LogicFacade;
 public class OrderInfoAdminCommand extends Command {
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException {
+        if(request.getSession().getAttribute("user")==null)throw new FOGException("Du skal være logget ind for at tilgå denne side.");
         
         LogicFacade lf = new LogicFacade();
         
@@ -88,14 +92,34 @@ public class OrderInfoAdminCommand extends Command {
         
         request.setAttribute("employees", employees);
         
-        int orderID = Integer.parseInt(request.getParameter("orderID"));
-        Order orderToShow = lf.getOrder(orderID);
-        Customer customer = lf.getCustomer(orderToShow.getCustomerId());
+        int orderID = 0;
+        Order orderToShow = null;
+        Customer customer = null;
+        Carport carport = null;
         
-        request.setAttribute("customer", customer);
-        request.setAttribute("order", orderToShow);
+        try {
+            orderID = Integer.parseInt(request.getParameter("orderID"));
+            
+            orderToShow = lf.getOrder(orderID);
+            customer = lf.getCustomer(orderToShow.getCustomerId());
+            List<Odetail> odetails = lf.getOdetails(orderID);
+            carport = new Carport(odetails);
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+            request.setAttribute("error", "Ugyldigt input. Kontakt support.");
+            request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+            return;
+        }
         
-        request.getRequestDispatcher("/WEB-INF/orderdetails-admin.jsp").forward(request, response);
+        if (orderToShow == null || customer == null) {
+            request.setAttribute("error", "Kunne ikke få detajler om ordren. Kontakt support.");
+            request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
+            return;
+        } else {
+            request.setAttribute("customer", customer);
+            request.setAttribute("order", orderToShow);
+            request.setAttribute("carport", carport);
+            request.getRequestDispatcher("/WEB-INF/orderdetails-admin.jsp").forward(request, response);
+        }
         
     }
     

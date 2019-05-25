@@ -1,5 +1,6 @@
 package PresentationLayer;
 
+import data.BuildException;
 import data.FOGException;
 import entity.Carport;
 import entity.Odetail;
@@ -21,7 +22,7 @@ public class CarportProductsCommand extends Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException {
-        
+        if(request.getSession().getAttribute("user")==null)throw new FOGException("Du skal være logget ind for at tilgå denne side.");
         LogicFacade lf = new LogicFacade();
         
         int orderID = Integer.parseInt(request.getParameter("orderID"));
@@ -35,14 +36,15 @@ public class CarportProductsCommand extends Command {
             request.getRequestDispatcher("/WEB-INF/carport.jsp").forward(request, response);
         }
         
+        // just for testing
         try {
             odetails = lf.buildCarport(order);
-            Carport carport = new Carport(odetailsFromDB);
-            
-            request.setAttribute("carport", carport);
-        } catch (FOGException ex) {
-            throw new FOGException(ex.getMessage());
+        } catch (BuildException ex) {
+            request.setAttribute("error", "Der kunne ikke bygges en carport fra ordren..");
+            request.getRequestDispatcher("/WEB-INF/carport.jsp").forward(request, response);
         }
+        Carport carport = new Carport(odetailsFromDB);
+        request.setAttribute("carport", carport);
         
         request.setAttribute("order", order);
         

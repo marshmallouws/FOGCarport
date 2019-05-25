@@ -36,7 +36,7 @@ public class Order {
         this.shedWidth = shedWidth;
         this.roofAngle = roofAngle;
         this.roofType = roofType;
-        this.customerId = customerId;
+        //this.customerId = customerId;
     }
     
     //For fetching data from db
@@ -47,11 +47,12 @@ public class Order {
         this.empl = empl;
         this.date = date;
         this.status = status;
+        this.salesPrice = salesPrice;
         this.customerId = customerId;
     }
     
-    // No date (is it used?)
-    public Order(int id, int employeeId, int height, int width, int lenght, int shedLength, int shedWidth, int roofAngle) {
+    // For updating order
+    public Order(int id, int employeeId, int height, int width, int lenght, int shedLength, int shedWidth, int roofAngle, int roofType, double salesPrice) {
         this.id = id;
         this.employeeId = employeeId;
         this.height = height;
@@ -60,6 +61,8 @@ public class Order {
         this.shedLength = shedLength;
         this.shedWidth = shedWidth;
         this.roofAngle = roofAngle;
+        this.roofType = roofType;
+        this.salesPrice = salesPrice;
     }
 
     public int getId() {
@@ -95,7 +98,20 @@ public class Order {
     }
     
     public String getDate() {
-        return date;
+        String year = "";
+        String month = "";
+        String day = "";
+        String time = "";
+        
+        String[] sp1 = date.split(" ");
+        time = sp1[1].substring(0,5);
+        
+        String[] dates = sp1[0].split("-");
+        year = dates[0];
+        month = dates[1];
+        day = dates[2];
+        
+        return day + "-" + month + "-" + year + "   kl. " + time;
     }
     
     public String getStatus() {

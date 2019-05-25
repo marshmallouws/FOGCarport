@@ -23,7 +23,7 @@ public class CarportProductsEditCommand extends Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException {
-        
+        if(request.getSession().getAttribute("user")==null)throw new FOGException("Du skal være logget ind for at tilgå denne side.");
         LogicFacade logic = new LogicFacade();
         
         List<Odetail> odetails = new ArrayList();
