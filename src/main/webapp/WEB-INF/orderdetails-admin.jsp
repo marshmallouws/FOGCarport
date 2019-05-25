@@ -1,3 +1,4 @@
+<%@page import="entity.Product"%>
 <%@page import="entity.Customer"%>
 <%@page import="entity.Employee"%>
 <%@page import="java.util.List"%>
@@ -17,6 +18,7 @@
     List<Integer> shedSelectWidth = (List<Integer>) request.getAttribute("shedSelectWidth");
     List<Integer> shedSelectLength = (List<Integer>) request.getAttribute("shedSelectLength");
     List<Integer> roofSelectAngle = (List<Integer>) request.getAttribute("roofSelectAngle");
+    List<Product> roofTypes = (List<Product>) request.getAttribute("roofTypes");
     List<Employee> employees = (List<Employee>) request.getAttribute("employees");
     Customer customer = (Customer) request.getAttribute("customer");
     Carport carport = (Carport) request.getAttribute("carport");
@@ -159,10 +161,18 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="roofMaterial">Tag</label>
-                            <select class="form-control input-disabled" name="roofMaterial" id="roofMaterial">
+                            <label for="roofType">Tag</label>
+                            <select class="form-control input-disabled" name="roofType" id="roofType">
                                 <option value=0>Vælg tag</option>
-                                <option value="Plasttrapezplader">Plasttrapezplader</option>
+                                <%
+                                    for (Product roof : roofTypes) {
+                                        if (roof.getId() == order.getRoofType()) {
+                                %>
+                                <option value="<%= roof.getId() %>" selected><%= roof.getName() %></option>
+                                <% } else {%>
+                                <option value="<%= roof.getId() %>"><%= roof.getName() %></option>
+                                <% }
+                                    } %>
                             </select>
                         </div>
 
@@ -251,7 +261,7 @@
                 <a style="float:right;" class="btn btn-primary" id="pdfBtn" href="./byggecenter?view=downloadpdf&orderID=<%= order.getId()%>">Hent PDF</a>
 
             </form>
-    
+
 
         </div> <!-- container end -->
 

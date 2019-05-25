@@ -378,7 +378,7 @@ public class OrderMapper implements OrderInterface {
 
             // update order
             if (order.employeeId() == 0) {
-                query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ? WHERE id = ?;";
+                query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ?, roof_type = ? WHERE id = ?;";
                 ps = conn.prepareStatement(query);
 
                 ps.setInt(1, order.getHeight());
@@ -387,19 +387,21 @@ public class OrderMapper implements OrderInterface {
                 ps.setInt(4, order.getShedLength());
                 ps.setInt(5, order.getShedWidth());
                 ps.setInt(6, order.getRoofAngle());
-                ps.setInt(7, order.getId());
-            } else {
-                query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ?, emp_id = ? WHERE id = ?;";
-                ps = conn.prepareStatement(query);
-
-                ps.setInt(1, order.getHeight());
-                ps.setInt(2, order.getLenght());
-                ps.setInt(3, order.getWidth());
-                ps.setInt(4, order.getShedLength());
-                ps.setInt(5, order.getShedWidth());
-                ps.setInt(6, order.getRoofAngle());
-                ps.setInt(7, order.employeeId());
+                ps.setInt(7, order.getRoofType());
                 ps.setInt(8, order.getId());
+            } else {
+                query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ?, roof_type = ?, emp_id = ? WHERE id = ?;";
+                ps = conn.prepareStatement(query);
+
+                ps.setInt(1, order.getHeight());
+                ps.setInt(2, order.getLenght());
+                ps.setInt(3, order.getWidth());
+                ps.setInt(4, order.getShedLength());
+                ps.setInt(5, order.getShedWidth());
+                ps.setInt(6, order.getRoofAngle());
+                ps.setInt(7, order.getRoofType());
+                ps.setInt(8, order.employeeId());
+                ps.setInt(9, order.getId());
             }
             ps.executeUpdate();
 
@@ -429,12 +431,12 @@ public class OrderMapper implements OrderInterface {
             return true;
 
         } catch (SQLException ex) {
+            ex.printStackTrace();
             try {
-                ex.printStackTrace();
                 if (conn != null) {
                     conn.rollback();
                     return false;
-                }   
+                }
                 throw new UpdateException(ex.getMessage());
 
             } catch (SQLException ex1) {

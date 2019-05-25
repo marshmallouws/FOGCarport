@@ -7,8 +7,6 @@ import entity.Odetail;
 import entity.Order;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,8 +31,7 @@ public class UpdateOrderCommand extends Command {
         String _shedWidth = request.getParameter("shedWidth");
         String _shedLength = request.getParameter("shedLength");
         String _roofAngle = request.getParameter("roofAngle");
-        
-        int _roofType = 9; // SKAL HENTES FRA FORM NÅR FORM ER UPDATERED MED RIGTIG ROOFTYPE
+        String _roofType = request.getParameter("roofType");
         
         String _employeeID = request.getParameter("employee");
         String _salesPrice = request.getParameter("price");
@@ -49,6 +46,7 @@ public class UpdateOrderCommand extends Command {
             int shedWidth = Integer.parseInt(_shedWidth);
             int shedLength = Integer.parseInt(_shedLength);
             int roofAngle = Integer.parseInt(_roofAngle);
+            int roofType = Integer.parseInt(_roofType);
             int employeeID = Integer.parseInt(_employeeID);
             double salesPrice = 0;
             
@@ -106,7 +104,7 @@ public class UpdateOrderCommand extends Command {
                 return;
             }
             
-            order = new Order(orderID, employeeID, carportHeight, carportWidth, carportLength, shedLength, shedWidth, roofAngle, _roofType, salesPrice);
+            order = new Order(orderID, employeeID, carportHeight, carportWidth, carportLength, shedLength, shedWidth, roofAngle, roofType, salesPrice);
             //Order updatedOrder = logic.updateOrder(order);
             
             List<Odetail> carport = logic.buildCarport(order);

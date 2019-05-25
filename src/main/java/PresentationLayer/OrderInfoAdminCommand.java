@@ -6,6 +6,7 @@ import entity.Customer;
 import entity.Order;
 import entity.Employee;
 import entity.Odetail;
+import entity.Product;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class OrderInfoAdminCommand extends Command {
         List<Integer> shedSelectWidth = new ArrayList();
         List<Integer> shedSelectLength = new ArrayList();
         List<Integer> roofSelectAngle = new ArrayList();
+        List<Product> roofTypes = lf.getRoofTypes();
         
         List<Employee> employees = lf.getEmployees();
         
@@ -89,6 +91,7 @@ public class OrderInfoAdminCommand extends Command {
         request.setAttribute("shedSelectWidth", shedSelectWidth);
         request.setAttribute("shedSelectLength", shedSelectLength);
         request.setAttribute("roofSelectAngle", roofSelectAngle);
+        request.setAttribute("roofTypes", roofTypes);
         
         request.setAttribute("employees", employees);
         
