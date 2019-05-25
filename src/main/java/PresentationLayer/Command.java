@@ -31,6 +31,7 @@ public abstract class Command {
         COMMANDS.put("mats", new MaterialPageCommand());
         COMMANDS.put("carport", new CarportProductsCommand());
         COMMANDS.put("carportEdit", new CarportProductsEditCommand());
+        COMMANDS.put("downloadpdf", new DownloadPDFCommand());
     }
 
     //private static Map<String, Command> commands = null;
