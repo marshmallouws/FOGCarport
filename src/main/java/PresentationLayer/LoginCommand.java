@@ -21,8 +21,10 @@ public class LoginCommand extends Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         HttpSession session = request.getSession();
-        if("logout".equals(request.getParameter("c")) && session.getAttribute("user") != null){
+        if("logout".equals(request.getParameter("c"))){
+            if(session.getAttribute("user") != null){
             session.removeAttribute("user");
+            }
             response.sendRedirect("");
             return;
         }
