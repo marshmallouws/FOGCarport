@@ -29,7 +29,7 @@
     </head>
     <body>
         <%@ include file="/WEB-INF/parts/navigation.jspf" %>
-        <div class="page-wrapper menu-spacer">
+        <div class="page-wrapper menu-spacer" style="margin-bottom:20px;">
             <h1>Bestilling #<%=order.getId()%></h1> 
 
             <div id="search-container">
@@ -246,15 +246,12 @@
                     </div>
                 </div>
 
-                <button type="button" class="btn btn-primary" id="editBtn">Edit</button>
-                <button type="submit" class="btn btn-success" id="updateBtn">Opdater</button>
-
+                <button type="button" class="btn btn-primary" id="editBtn">Redigér</button>
+                <button type="submit" class="btn btn-success" id="updateBtn">Gem</button>
+                <a style="float:right;" class="btn btn-primary" id="pdfBtn" href="./byggecenter?view=downloadpdf&orderID=<%= order.getId()%>">Hent PDF</a>
 
             </form>
-            <form method="POST" id="orderForm" action="byggecenter?view=downloadpdf">
-                <input type="hidden" class="input-disabled" name="orderID" id="orderID" value="<%= order.getId()%>">
-                <button type="submit" class="btn btn-primary" id="pdfBtn">Hent pdf</button>
-            </form>                
+    
 
         </div> <!-- container end -->
 

@@ -159,3 +159,10 @@ a.light-link {
     margin-bottom: 15px;
     margin-top: 20px;
 }
+
+#pdfBtn {
+    background-image: url(../images/pdf.png);
+    background-repeat: no-repeat;
+    background-position: 10px;
+    padding-left: 35px;
+}
