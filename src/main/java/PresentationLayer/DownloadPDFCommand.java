@@ -38,7 +38,7 @@ public class DownloadPDFCommand extends Command {
             ex.printStackTrace();
         }
         
-        Document doc = p.createPDF(o, "C:\\Users\\Annika\\Desktop\\Netbeans Projects\\2. Semester\\Exam\\FOGCarport\\src\\main\\webapp\\");
+        Document doc = p.createPDF(o, request.getRequestURL().toString().replace("byggecenter", ""));
         p.closeDoc(doc);
 
     }

@@ -57,7 +57,7 @@ public class PDFCreator {
             doc = new Document(pdf);
             doc.setMargins(170, 50, 40, 50);
 
-            Image logo = new Image(ImageDataFactory.create(path + "images/logo.png"));
+            Image logo = new Image(ImageDataFactory.create(path + "/images/logo.PNG"));
 
             ImageEventHandler handler = new ImageEventHandler(logo);
             pdf.addEventHandler(PdfDocumentEvent.END_PAGE, handler);
