@@ -26,14 +26,6 @@ public class AssignOrderCommand extends Command {
         String _orderID = request.getParameter("orderID");
         int orderID;
         int employeeID;
-
-        if (user == null) {
-            // error handling
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-            out.append("Du er ikke logget ind..");
-            out.close();
-        } else {
             try {
                 orderID = Integer.parseInt(_orderID);
                 employeeID = user.getId();
@@ -44,8 +36,6 @@ public class AssignOrderCommand extends Command {
             } catch (NumberFormatException ex) {
                 // error handling
             }
-
-        }
     }
 
 }

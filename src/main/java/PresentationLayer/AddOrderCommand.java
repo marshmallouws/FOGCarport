@@ -41,9 +41,7 @@ public class AddOrderCommand extends Command {
                 zip.length() != 4 || fullname.length() > 45 ||
                 !email.contains("@") || !email.contains("."))
         {
-            request.setAttribute("error", "Det ser ud til, at kundeinformationen ikke var udfyldt korrekt!");
-            request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
-            return;
+            throw new FOGException("Det ser ud til, at kundeinformationen ikke var udfyldt korrekt!");
         }
 
         LogicFacade lf = new LogicFacade();
@@ -71,44 +69,30 @@ public class AddOrderCommand extends Command {
                 StringUtils.isStrictlyNumeric(_roofAngle) == false || 
                 StringUtils.isStrictlyNumeric(_carportHeight) == false) 
             {
-                request.setAttribute("error", "Kun tal kan bruges til at oprette en ordre.");
-                request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
-                return;
+                throw new FOGException("Kun tal kan bruges til at oprette en ordre.");
             } else {
                 if (Integer.parseInt(_carportWidth) < 240 || Integer.parseInt(_carportWidth) > 750) {
-                    request.setAttribute("error", "Det ser ud til, at størrelse på carporten er for stor! Kontakt support.");
-                    request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
-                    return;
+                    throw new FOGException("Det ser ud til, at størrelse på carporten er for stor! Kontakt support.");
                 }
                 
                 if (Integer.parseInt(_carportLength) < 240 || Integer.parseInt(_carportLength) > 780) {
-                    request.setAttribute("error", "Det ser ud til, at størrelse på carporten er for stor! Kontakt support.");
-                    request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
-                    return;
+                    throw new FOGException("Det ser ud til, at størrelse på carporten er for stor! Kontakt support.");
                 }
                 
                 if (Integer.parseInt(_roofAngle) < 0 || Integer.parseInt(_roofAngle) > 45) {
-                    request.setAttribute("error", "Det ser ud til, at vinklen på carportens tag er for stor! Kontakt support.");
-                    request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
-                    return;
+                    throw new FOGException("Det ser ud til, at vinklen på carportens tag er for stor! Kontakt support.");
                 }
                 
                 if (Integer.parseInt(_carportHeight) < 225 || Integer.parseInt(_carportHeight) > 500) {
-                    request.setAttribute("error", "Det ser ud til, at højden på carporten er for stor! Kontakt support.");
-                    request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
-                    return;
+                    throw new FOGException("Det ser ud til, at højden på carporten er for stor! Kontakt support.");
                 }
       
                 if (Integer.parseInt(_shedWidth) < 210 || Integer.parseInt(_shedWidth) > 720) {
-                    request.setAttribute("error", "Det ser ud til, at højden på carporten er for stor! Kontakt support.");
-                    request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
-                    return;
+                    throw new FOGException("Det ser ud til, at højden på carporten er for stor! Kontakt support.");
                 }
               
                 if (Integer.parseInt(_shedLength) < 150 || Integer.parseInt(_shedLength) > 690) {
-                    request.setAttribute("error", "Det ser ud til, at højden på carporten er for stor! Kontakt support.");
-                    request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
-                    return;
+                    throw new FOGException("Det ser ud til, at højden på carporten er for stor! Kontakt support.");
                 }
             }
             

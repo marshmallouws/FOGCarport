@@ -108,15 +108,11 @@ public class OrderInfoAdminCommand extends Command {
             List<Odetail> odetails = lf.getOdetails(orderID);
             carport = new Carport(odetails);
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            request.setAttribute("error", "Ugyldigt input. Kontakt support.");
-            request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
-            return;
+            throw new FOGException("Ugyldigt input. Kontakt support.");
         }
         
         if (orderToShow == null || customer == null) {
-            request.setAttribute("error", "Kunne ikke få detajler om ordren. Kontakt support.");
-            request.getRequestDispatcher("/WEB-INF/errorpage.jsp").forward(request, response);
-            return;
+            throw new FOGException("Kunne ikke få detajler om ordren. Kontakt support.");
         } else {
             request.setAttribute("customer", customer);
             request.setAttribute("order", orderToShow);
