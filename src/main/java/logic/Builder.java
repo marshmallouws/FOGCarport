@@ -38,7 +38,6 @@ public class Builder {
         }
     }
 
-    
     public static void main(String[] args) {
         Connector con = Connector.getInstance();
         Builder b = new Builder(con);
@@ -46,15 +45,15 @@ public class Builder {
         Order o = new Order(270, 640, 640, 300, 300, 20, 12);
         //System.out.println(b.calcRoofMap(7, o.getRoofType(), o));
         //System.out.println(b.calcSurfaceMap(o.getShedLength(), o.getHeight(), 5, 8, o, 2));
-        
+
         try {
             System.out.println(b.carportBlueprint(o, bm.getBlueprint(1)));
         } catch (BuildException ex) {
             ex.printStackTrace();
         }
-        
+
     }
-     
+
     // y afgør hvor mange rækker
     public Map<Integer, Integer> calcSpaerMap(int categoryID, int productID, int x, int y, boolean angled) throws BuildException {
         Map<Integer, Integer> map = new HashMap();
@@ -340,12 +339,65 @@ public class Builder {
                     break;
                 // Understernbrædder sider
                 case 4:
-                    addProductToBuild(reqs, order, calcStolperMap(b.getCategory_id(), b.getProduct_id(), order), b.getCategory_id(), b.getProduct_id(), b.getMessage());
+                    x = order.getLenght();
+                    addProductToBuild(reqs, order, calcWoodsMap(b.getCategory_id(), b.getProduct_id(), x), b.getCategory_id(), b.getProduct_id(), b.getMessage());
                     break;
                 // Understernbrædder for- og bagende
                 case 5:
-                    addProductToBuild(reqs, order, calcStolperMap(b.getCategory_id(), b.getProduct_id(), order), b.getCategory_id(), b.getProduct_id(), b.getMessage());
+                    y = order.getWidth();
+                    addProductToBuild(reqs, order, calcWoodsMap(b.getCategory_id(), b.getProduct_id(), y), b.getCategory_id(), b.getProduct_id(), b.getMessage());
                     break;
+
+                // Tagplader tag fladt 
+                case 6:
+                    if (order.getRoofAngle() == 0) {
+                        addProductToBuild(reqs, order, calcRoofMap(b.getCategory_id(), order.getRoofType(), order), b.getCategory_id(), order.getRoofType(), b.getMessage());
+                    }
+                    break;
+                    
+                // Tagsten tag rejsning
+                case 7:
+                    if (order.getRoofAngle() > 0) {
+                        addProductToBuild(reqs, order, calcRoofMap(b.getCategory_id(), order.getRoofType(), order), b.getCategory_id(), order.getRoofType(), b.getMessage());
+                    }
+                    break;
+
+                // Spær tag rejsning    
+                case 8:
+                    if (order.getRoofAngle() > 0) {
+                        addProductToBuild(reqs, order, calcSpaerMap(b.getCategory_id(), b.getProduct_id(), order.getLenght(), (int) calcRoofAngledLength(order), true), b.getCategory_id(), b.getProduct_id(), b.getMessage());
+                    }
+                    break;
+
+                // skruer til tagplader (bundskruer)    
+                case 9:
+                    addProductToBuild(reqs, order, calcScrews(7, 60, 8, reqs), b.getCategory_id(), b.getProduct_id(), b.getMessage());
+                    break;
+
+                // Beklædning sider
+                case 10:
+                    if (order.getShedLength() > 0 && order.getShedWidth() > 0) {
+                        addProductToBuild(reqs, order, calcSurfaceMap(order.getShedLength(), order.getHeight(), b.getCategory_id(), b.getProduct_id(), order, 2), b.getCategory_id(), b.getProduct_id(), b.getMessage());
+                    }
+                    break;
+
+                // Beklædning gavle
+                case 11:
+                    if (order.getShedLength() > 0 && order.getShedWidth() > 0) {
+                        addProductToBuild(reqs, order, calcSurfaceMap(order.getShedWidth(), order.getHeight(), b.getCategory_id(), b.getProduct_id(), order, 2), b.getCategory_id(), b.getProduct_id(), b.getMessage());
+                    }
+                    break;
+
+                // Skruer beklædning yderste
+                case 12:
+                    addProductToBuild(reqs, order, calcScrews(5, 70, 6, reqs), b.getCategory_id(), b.getProduct_id(), b.getMessage());
+                    break;
+
+                // Skruer beklædning inderste
+                case 13:
+                    addProductToBuild(reqs, order, calcScrews(5, 50, 8, reqs), b.getCategory_id(), b.getProduct_id(), b.getMessage());
+                    break;
+
                 default:
                     break;
             }
@@ -354,111 +406,8 @@ public class Builder {
         return reqs;
     }
 
-    // Standard blueprint for en carport
-    public List<Orequest> carportBlueprint(Order order) throws BuildException {
-        String comment;
-        int catID;
-        int prodID;
-        int length;
-        List<Orequest> reqs = new ArrayList();
-
-        if (order == null) {
-            throw new BuildException("Ingen ordre tilknyttet blueprintet.. (null)");
-        }
-
-        if (order.getHeight() <= 0 || order.getLenght() <= 0 || order.getWidth() <= 0) {
-            throw new BuildException("Mål mangler på ordre..");
-        }
-
-        //Remme
-        comment = "Remme i sider, sadles ned i stolper";
-        catID = 2;
-        prodID = 5;
-        length = order.getLenght();
-        //addProductToBuild(reqs, order, calcRemmeMap(order), catID, prodID, comment);
-        addProductToBuild(reqs, order, calcWoodsMap(catID, prodID, length), catID, prodID, comment);
-
-        // Stolper
-        comment = "Stolper";
-        catID = 1;
-        prodID = 7;
-        addProductToBuild(reqs, order, calcStolperMap(catID, prodID, order), catID, prodID, comment);
-
-        // Spær almindelig
-        comment = "Spær";
-        catID = 8;
-        prodID = 5;
-        addProductToBuild(reqs, order, calcSpaerMap(catID, prodID, order.getLenght(), order.getWidth(), false), catID, prodID, comment);
-
-        // Understernbrædder siderne
-        comment = "Understernbrædder siderne";
-        catID = 3;
-        prodID = 1;
-        length = order.getLenght();
-        addProductToBuild(reqs, order, calcWoodsMap(catID, prodID, length), catID, prodID, comment);
-
-        // Understernbrædder for- og bagende
-        comment = "Understernbrædder for- og bagende";
-        length = order.getWidth();
-        addProductToBuild(reqs, order, calcWoodsMap(catID, prodID, length), catID, prodID, comment);
-
-        // Tag fladt
-        if (order.getRoofAngle() == 0) {
-            comment = "Tagplader monteres på spær";
-            catID = 7;
-            prodID = order.getRoofType();
-            addProductToBuild(reqs, order, calcRoofMap(catID, prodID, order), catID, prodID, comment);
-        } else {
-            comment = "Tagplader monteres på spær med hældning";
-            catID = 7;
-            prodID = order.getRoofType();
-            addProductToBuild(reqs, order, calcRoofMap(catID, prodID, order), catID, prodID, comment);
-
-            // Spær til taget
-            comment = "Spær til taget";
-            catID = 8;
-            prodID = 5;
-            addProductToBuild(reqs, order, calcSpaerMap(catID, prodID, order.getLenght(), (int) calcRoofAngledLength(order), true), catID, prodID, comment);
-
-        }
-
-        // Bundskruer
-        comment = "Skruer til tagplader";
-        length = 60;
-        catID = 11;
-        prodID = 13;
-        addProductToBuild(reqs, order, calcScrews(7, length, 8, reqs), catID, prodID, comment);
-
-        // Beklædning af skur sider
-        if (order.getShedLength() > 0 && order.getShedWidth() > 0) {
-            comment = "Til beklædning af skur siderne";
-            catID = 5;
-            prodID = 8;
-            addProductToBuild(reqs, order, calcSurfaceMap(order.getShedLength(), order.getHeight(), catID, prodID, order, 2), catID, prodID, comment);
-
-            comment = "Til beklædning af skur gavle";
-            catID = 5;
-            prodID = 8;
-            addProductToBuild(reqs, order, calcSurfaceMap(order.getShedWidth(), order.getHeight(), catID, prodID, order, 2), catID, prodID, comment);
-
-            // Skruer til ydrebeklædning
-            comment = "Til montering af yderste beklædning";
-            length = 70;
-            catID = 11;
-            prodID = 15;
-            addProductToBuild(reqs, order, calcScrews(5, length, 6, reqs), catID, prodID, comment);
-
-            // skruer til inderbeklædning
-            comment = "Til montering af inderste beklædning";
-            length = 50;
-            addProductToBuild(reqs, order, calcScrews(5, length, 8, reqs), catID, prodID, comment);
-        }
-
-        return reqs;
-    }
-    
     // tjekker om styklisten indholder alle nødvendige produkter
-    public boolean validateCarport(Carport carport, Order order) {
+    public boolean validateCarport(Carport carport, Order order, List<Blueprint> blueprint) {
         boolean status = false;
         int[] shed = {1};
         if (order.getShedLength() > 0 && order.getShedWidth() > 0) {
@@ -480,7 +429,7 @@ public class Builder {
 
     public Map<Integer, Integer> calcStolperMap(int categoryID, int productID, Order order) throws BuildException {
         List<Product> woods = bm.getProductsAllForBuild(categoryID, productID);
-        int bigLen = 1000;
+        int bigLen = 1000; // big carport size
         int height = order.getHeight();
 
         int max = calcMaxLength(woods);
@@ -516,8 +465,7 @@ public class Builder {
                 }
             }
         }
-
-        //map.put(x, map.getOrDefault(order.getHeight(), 0) + count);
+        
         return map;
 
     }

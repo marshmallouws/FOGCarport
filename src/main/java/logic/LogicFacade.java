@@ -223,13 +223,9 @@ public class LogicFacade {
     }
     
     public List<Odetail> buildCarport(Order order) throws BuildException {
-        List<Orequest> car = builder.carportBlueprint(order);
-        
-        //List<Blueprint> blueprint = builderMapper.getBlueprint(1);
-        //List<Orequest> car = builder.carportBlueprint(order, blueprint);
-        return builderMapper.carportBuilder(car, order);
-        
-        
+        List<Blueprint> blueprint = builderMapper.getBlueprint(1);
+        List<Orequest> car = builder.carportBlueprint(order, blueprint);
+        return builderMapper.carportBuilder(car, order);    
     }
 
     public List<Product> getRoofTypes() {
