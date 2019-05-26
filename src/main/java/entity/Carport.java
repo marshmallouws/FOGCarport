@@ -22,10 +22,17 @@ public class Carport {
     int width;
     double price;
     List<Odetail> items;
+    List<Blueprint> blueprint;
 
     public Carport(List<Odetail> items) {
         this.items = items;
         this.price = calcPrice(items);
+    }
+    
+    public Carport(List<Odetail> items, List<Blueprint> blueprint) {
+        this.items = items;
+        this.price = calcPrice(items);
+        this.blueprint = blueprint;
     }
 
     public double getPrice() {
@@ -80,12 +87,22 @@ public class Carport {
             int count = 0;
             for (Odetail o : items) {
                 if (o.getProduct().getCategory().getId() == categoryID) {
-                    count++;
+                    count+= o.getQty();
                 }
             }
             return count;
         } catch (Exception ex) {
             return 0;
         }
+    }
+    
+    public int getProductUsed(int usageID) {
+        int id = 0;
+        for (Blueprint b : blueprint) {
+            if (b.getUsage() == usageID) {
+                id = b.getProduct_id();
+            }
+        }
+        return id;
     }
 }

@@ -1,12 +1,9 @@
 package data;
 
 import logic.Builder;
-import entity.Carport;
-import entity.Odetail;
 import entity.Order;
-import entity.Orequest;
 import entity.Product;
-import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,20 +137,47 @@ public class BuilderTest {
      * Test of calcStolerMap method, of class Builder.
      */
     @Test
-    public void testCalcStolperMap() throws BuildException {
-        System.out.println("calcStolperMap");
-        int categoryID = 1;
-        int productID = 7;
-        Order o = order;
-        Builder instance = builder;
-        int expResult = 11;
-        Map<Integer, Integer> result = instance.calcStolperMap(categoryID, productID, o);
-        assertEquals(true, result.containsValue(expResult));
+    public void testCalcStolperMap() {
+        try {
+            System.out.println("calcStolperMap");
+            int categoryID = 1;
+            int productID = 7;
+            Order o = order;
+            Builder instance = builder;
+            int expResult = 11;
+            Map<Integer, Integer> result = instance.calcStolperMap(categoryID, productID, o);
+            assertEquals(true, result.containsValue(expResult));
+        } catch (BuildException ex) {
+            fail(ex.getMessage());
+        }
     }
     
     @Test
     public void testCalcRoofAngledLength() {
         System.out.println("calcRoofAngledLength");
+    }
+    
+    @Test
+    public void testCalcMaxLength() {
+        try {
+            System.out.println("calcMaxLength");
+            List<Product> woods = new ArrayList();
+            Builder instance = builder;
+            woods.add(new Product(null, 0, 10, 0, 0, 0));
+            woods.add(new Product(null, 0, 15, 0, 0, 0));
+            woods.add(new Product(null, 0, 33, 0, 0, 0));
+            woods.add(new Product(null, 0, 3, 0, 0, 0));
+            woods.add(new Product(null, 0, 2, 0, 0, 0));
+            woods.add(new Product(null, 0, 333, 0, 0, 0));
+            woods.add(new Product(null, 0, 5, 0, 0, 0));
+            woods.add(new Product(null, 0, 1, 0, 0, 0));
+            woods.add(new Product(null, 0, 555, 0, 0, 0));
+            int expResult = 555;
+            int result = instance.calcMaxLength(woods);
+            assertEquals(expResult, result);
+        } catch (BuildException ex) {
+            fail(ex.getMessage());
+        }
     }
 
 }

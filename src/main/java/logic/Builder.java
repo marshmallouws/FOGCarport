@@ -497,18 +497,18 @@ public class Builder {
     }
 
     // max længden af et bestemt produkt
-    private int calcMaxLength(List<Product> woods) throws BuildException {
+    public int calcMaxLength(List<Product> woods) throws BuildException {
         List<Integer> len = new ArrayList();
 
+        if (woods == null || woods.isEmpty()) {
+            throw new BuildException("Ingen produkter tilgængelig til at udregne maxLength ");
+        }
+        
         for (Product p : woods) {
             len.add(p.getLength());
         }
 
         Collections.sort(len);
-
-        if (woods == null || woods.isEmpty()) {
-            throw new BuildException("Ingen produkter tilgængelig til at udregne maxLength ");
-        }
 
         int max = 0;
 
@@ -523,7 +523,7 @@ public class Builder {
     }
 
     // min længden af et bestemt produkt
-    private int calcMinLength(List<Product> woods) throws BuildException {
+    public int calcMinLength(List<Product> woods) throws BuildException {
         List<Integer> len = new ArrayList();
 
         for (Product p : woods) {

@@ -27,9 +27,16 @@ import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.ListNumberingType;
 import com.itextpdf.layout.property.TextAlignment;
 import data.BuildException;
+import data.BuilderMapper;
+import data.Connector;
+import data.ConnectorInterface;
+import data.ProductMapper;
+import entity.Blueprint;
+import entity.Carport;
 import entity.Category;
 import entity.Odetail;
 import entity.Order;
+import entity.Product;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.util.List;
@@ -41,6 +48,7 @@ import java.util.logging.Logger;
  * @author Annika
  */
 public class PDFCreator {
+
     OutputStream outputStream;
     LogicFacade l = new LogicFacade();
 
@@ -78,10 +86,10 @@ public class PDFCreator {
             } catch (Exception ex) {
                 // IGNORE THIS
             } */
-            doc.add(new AreaBreak()); 
+            doc.add(new AreaBreak());
             createInstructions(order, doc);
 
-        //} catch (MalformedURLException ex) {
+            //} catch (MalformedURLException ex) {
             //Logger.getLogger(PDFCreator.class.getName()).log(Level.SEVERE, null, ex);
         } catch (BuildException ex) {
             Logger.getLogger(PDFCreator.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,9 +99,9 @@ public class PDFCreator {
         return doc;
 
     }
-    
+
     public void closeDoc(Document doc) {
-        if(doc != null) {
+        if (doc != null) {
             doc.close();
         }
     }
@@ -101,16 +109,61 @@ public class PDFCreator {
     private void createInstructions(Order order, Document doc) throws BuildException {
         doc.add(new Paragraph(new Text("Husk at kontrollere styklisten inden du går i gang").setBold()));
 
+        Connector con = Connector.getInstance();
+        ProductMapper pm = new ProductMapper(con);
+        BuilderMapper bm = new BuilderMapper(con);
+        List<Blueprint> blueprint = bm.getBlueprint(1);
         List<Odetail> odetails = l.buildCarport(order);
+        Carport carport = new Carport(odetails, blueprint);
 
         com.itextpdf.layout.element.List list = new com.itextpdf.layout.element.List(ListNumberingType.DECIMAL);
         list.add(new ListItem("Grundplan afsættes ved at hamre en stump"
                 + "lægte (A) i jorden til ca. markering af"
                 + "carportens hjørnestolper, en pæl i hvert hjørne."));
 
+        // stolper
+        String _stolperCount = String.valueOf(carport.getCountCategory(1));
         if (order.getShedLength() != 0) {
-            list.add(new ListItem("Placér de syv skurstolper"));
+            list.add(new ListItem("Placér de" +_stolperCount+ " skurstolper"));
         }
+
+        // remme
+        list.add(new ListItem("Når stolper er monteret, Skæres et hak/blad udvendig i toppen af hver stolpe (E)\n"
+                + "til remmen (F)\n"
+                + "Der skal skæres ud, så remmen flugter eller er lidt højere end toppen af stolpen,\n"
+                + "Så remmen får et fald bagud på carporten.\n"
+                + "Dette gøres nemmest ved at holde remmen op mod stolpen og fast holde med en skrue tvinge.\n"
+                + "Sæt højden på oversiden af remmen ved forreste stolpe til, 209 cm. (Ved plan grund) og sænke\n"
+                + "bagenden til 200 cm. ved bagerste stolpe, derefter kan der streges op på stolperne, så får du lavet\n"
+                + "et saddelhakket med fald på. Bemærk at faldet kan øges hvis man ønsker det, ved at sænke\n"
+                + "bagenden"));
+
+        // alm. spær
+        list.add(new ListItem("Universal/spær beslag til fastgørelse af spær på rem.\n"
+                + "Start med at opmærke på oversiden af remmene, hvor det forreste og det bagerste spær skal\n"
+                + "placeres. Opmærk på begge sidder af hvert spær, spæret skal senere placeres imellem disse to\n"
+                + "streger. Der opmærkes på samme måde til de mellemliggende spær.\n"
+                + "Afstanden mellem spærene skal være ens max 60.cm"));
+
+        
+        // indsæt SVG af spær
+        
+        // understernbræt
+        Product understern = pm.getProductMain(carport.getProductUsed(4));
+        String _understern = understern.getThickness() + " x " + understern.getWidth();
+        
+        list.add(new ListItem("Start med understernbræt (" + _understern + " mm) som skal sidde på det forreste spær (den høje ende).\n"
+                + "Afkort det så det har samme længde som spæret plus 5.cm.\n"
+                + "Monter sternbrættet så det er 2,5 cm længere end spæret i hver side og sternbrættets overkant\n"
+                + "flugter med spæret.\n"
+                + "De to under Sternbrædder i siderne monteres ligeledes så de flugter overkant af spærene, og\n"
+                + "skrues fast i enderne af spærene. Længden tilpasses individuelt afhængig af om der monteres\n"
+                + "tagrende. (tagrende medfølger ikke)\n"
+                + "Det bagerste under sternbræt afkortes og tilpasses så det passer imellem de to side sternbrædder,\n"
+                + "og skrues fast på bagerste spær. Bemærk: Overkant bagerste sternbræt skal også være lig med\n"
+                + "overkant af bagerste spær.\n"
+                + "Her efter kan over sternen (25x125) monteres, på forenden, samt sider, men skal placeres 30 mm.\n"
+                + "Højere end spærene, således at trapez taget bliver skjult."));
 
         doc.add(list);
 
