@@ -466,7 +466,6 @@
                             <div id="blueprint_select_wrapper">
                                 <select id="blueprints_modelSelect_input">
                                     <option value="" disabled selected>Vælg model</option>
-                                    <option value="">Tester</option>
                                 </select>
                             </div>
                             

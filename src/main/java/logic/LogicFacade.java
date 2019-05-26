@@ -17,6 +17,7 @@ import data.OrderMapper;
 import data.ProductMapper;
 import data.UpdateException;
 import data.UserMapper;
+import entity.Blueprint;
 import entity.Category;
 import entity.Customer;
 import entity.Odetail;
@@ -223,6 +224,9 @@ public class LogicFacade {
     
     public List<Odetail> buildCarport(Order order) throws BuildException {
         List<Orequest> car = builder.carportBlueprint(order);
+        
+        //List<Blueprint> blueprint = builderMapper.getBlueprint(1);
+        //List<Orequest> car = builder.carportBlueprint(order, blueprint);
         return builderMapper.carportBuilder(car, order);
         
         

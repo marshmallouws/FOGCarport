@@ -67,10 +67,10 @@ CREATE TABLE products_in_categories (
     product_id INT(8) NOT NULL,
     CONSTRAINT pic_category
 		FOREIGN KEY(category_id)
-        REFERENCES category(id),
+        REFERENCES categories(id),
 	CONSTRAINT pic_product 
 		FOREIGN KEY(product_id)
-        REFERENCES product_variants(id)
+        REFERENCES products(id)
 );
 
 CREATE TABLE product_variants (
