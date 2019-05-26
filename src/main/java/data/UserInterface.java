@@ -14,7 +14,26 @@ import java.util.List;
  * @author Annika
  */
 public interface UserInterface {
+
+    /**
+     * Attemps to log in an employee with given username and password
+     * @param username
+     * @param password
+     * @return an employee object on successful login
+     * @throws LogInException
+     */
     public Employee logIn(String username, String password) throws LogInException;
+
+    /**
+     * Gets a list of all employees
+     * @return List of employee objects
+     */
     public List<Employee> getEmployees();
+
+    /**
+     * Gets a specific customer by given id
+     * @param customerID
+     * @return Customer object
+     */
     public Customer getCustomer(int customerID);
 }

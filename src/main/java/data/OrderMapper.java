@@ -170,6 +170,11 @@ public class OrderMapper implements OrderInterface {
         return orders;
     }
 
+    /**
+     * Gets a specific employee by a given ID
+     * @param id
+     * @return Employee object
+     */
     private Employee getEmployee(int id) {
         UserMapper u = new UserMapper(connI);
         return u.getEmployee(id);

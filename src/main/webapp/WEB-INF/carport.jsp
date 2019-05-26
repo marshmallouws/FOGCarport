@@ -44,8 +44,6 @@
 
 
             <form method="POST" action="byggecenter?view=carportEdit">
-                <input type="hidden" name="orderID" value="<%= order.getId()%>">
-                <input type="submit">
                 <h5>Træ & Tagplader</h5>
                 <table class="table table-striped table-sm" id="stykliste">
                     <thead>
@@ -102,6 +100,8 @@
                     <% }%>
                     </tbody>
                 </table>
+                <input type="hidden" name="orderID" value="<%= order.getId()%>">
+                <input type="submit" class="btn btn-primary" value="Gem ændringer" style="margin-bottom:40px;">
             </form>
 
             <% }%> <!-- end of else statement handling error-->

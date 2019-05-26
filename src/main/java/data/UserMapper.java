@@ -52,6 +52,14 @@ public class UserMapper implements UserInterface {
         return user;
     }*/
     
+    /**
+     * Attemps to log in an employee with given username and password
+     * @param username
+     * @param password
+     * @return an employee object on successful login
+     * @throws LogInException
+     */
+    @Override
     public Employee logIn(String username, String password) throws LogInException {
         Employee user = null;
         try {
@@ -75,6 +83,10 @@ public class UserMapper implements UserInterface {
         return user;
     }
 
+     /**
+     * Gets a list of all employees
+     * @return List of employee objects
+     */
     @Override
     public List<Employee> getEmployees() {
         List<Employee> employees = new ArrayList();
@@ -120,6 +132,11 @@ public class UserMapper implements UserInterface {
         return id;
     }
 
+    /**
+     * Gets a specific customer by given id
+     * @param customerID
+     * @return Customer object
+     */
     @Override
     public Customer getCustomer(int customerID) {
         Customer customer = null;
@@ -142,6 +159,11 @@ public class UserMapper implements UserInterface {
         return customer;
     }
 
+    /**
+     * Gets a specific employee by a given ID
+     * @param id
+     * @return Employee object
+     */
     public Employee getEmployee(int emplId) {
         Employee empl = null;
         try {
