@@ -102,6 +102,10 @@
                     $('#materials_prodSelect_input_wrapper').slideDown("fast");
                     $('#materials_matCreate_wrapper').slideDown("fast");
                 });
+                // BLUEPRINTS
+                $('#blueprints_modelSelect_input').one('change', function () {
+                   $('#blueprint_table_wrapper').slideDown("fast"); 
+                });
                 // Pick Category
                 $('#materials_catSelect').change(function () {
                     $.get("byggecenter?view=mats&c=productsInCat&categoryID=" + $(this).val(), function (jsonResp) {
@@ -148,6 +152,8 @@
                         optionTag.appendTo(list);
                     });
                 });
+
+
                 // OPRET PRODUKTER
                 // load cat again - better way?
                 $.get("byggecenter?view=mats&c=categories", function (jsonResp) {
@@ -194,6 +200,23 @@
                         });
                     }
 
+                });
+
+                // BLUEPRINTS
+
+                $.get("byggecenter?view=mats&c=models", function (jsonResp) {
+                    var list = $('#blueprints_modelSelect_input');
+                    if (jsonResp == "error") {
+                        
+                    } else {
+                        var jsonObj = JSON.parse(jsonResp);
+                        $('option[data-option]', list).remove();
+                        $.each(jsonObj, function (key, value) { // Iterate over the JSON array.
+                            var optionTag = $("<option data-option>").text(value.title);
+                            optionTag.val(value.id);
+                            optionTag.appendTo(list);
+                        });
+                    }
                 });
                 var cProduct;
                 $('#materials_saveBtn').click(function () {
@@ -436,14 +459,29 @@
                         </div>
                     </div>
                     <!-- create end -->
-                    
+
                     <!-- edit blueprint -->
                     <div id="blueprint_editUI" style="display:none;">
                         <div id="blueprint_wrapper">
                             <div id="blueprint_select_wrapper">
-                                <select>
-                                    <option></option>
+                                <select id="blueprints_modelSelect_input">
+                                    <option value="" disabled selected>Vælg model</option>
+                                    <option value="">Tester</option>
                                 </select>
+                            </div>
+                            
+                            <div id="blueprint_table_wrapper" style="display:none;">
+                                <table id="blueprint_table" class="table">
+                                    <thead>
+                                    <th>Kategori</th>
+                                    <th>Produkt</th>
+                                    <th>Usage</th>
+                                    </thead>
+                                    <tbody id="blueprint_table_body">
+                                        
+                                    </tbody>
+                                </table>
+                                <button id="blueprint_saveBtn" class="btn btn-info">Gem Blueprint</button>
                             </div>
                         </div>
                     </div>

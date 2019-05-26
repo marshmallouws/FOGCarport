@@ -1,5 +1,6 @@
 package data;
 
+import logic.Builder;
 import entity.Carport;
 import entity.Odetail;
 import entity.Order;
@@ -19,12 +20,14 @@ import org.junit.BeforeClass;
  */
 public class BuilderTest {
 
+    private static BuilderMapper mapper;
     private static Builder builder;
     private static Order order;
 
     @BeforeClass
     public static void setUpClass() {
         ConnectorMock m = ConnectorMock.getInstance();
+        mapper = new BuilderMapper(m);
         builder = new Builder(m);
         order = new Order(270, 640, 640, 300, 300, 20, 12);
     }
@@ -37,7 +40,7 @@ public class BuilderTest {
         System.out.println("getProductsAllForBuild - Stolper");
         int categoryID = 1;
         int productID = 7;
-        Builder instance = builder;
+        BuilderMapper instance = mapper;
         int expResult = categoryID;
         List<Product> result = instance.getProductsAllForBuild(categoryID, productID);
         assertNotNull(result);

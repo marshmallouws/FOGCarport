@@ -18,7 +18,9 @@ public class MaterialPageCommand extends Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException {
-        if(request.getSession().getAttribute("user")==null)throw new FOGException("Du skal være logget ind for at tilgå denne side.");
+        if (request.getSession().getAttribute("user") == null) {
+            throw new FOGException("Du skal være logget ind for at tilgå denne side.");
+        }
         String cmd = request.getParameter("c");
         if (cmd == null || cmd.isEmpty()) {
             request.getRequestDispatcher("/WEB-INF/materials.jsp").forward(request, response);
@@ -63,6 +65,18 @@ public class MaterialPageCommand extends Command {
                     json = logic.createProduct(request.getParameter("product"));
                     break;
                 }
+
+            case "models":
+                json = logic.getModels();
+                break;
+                
+            case "blueprint":
+                json = logic.getBlueprint(request.getParameter("modelID"));
+                break;
+                
+            case "blueprintUpdate":
+                json = "";
+                break;
 
             default:
                 json = "error";

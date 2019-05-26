@@ -1,5 +1,10 @@
-package data;
+package logic;
 
+import data.BuildException;
+import data.BuilderMapper;
+import data.Connector;
+import data.ConnectorInterface;
+import entity.Blueprint;
 import entity.Carport;
 import entity.Category;
 import entity.Odetail;
@@ -7,7 +12,6 @@ import entity.Order;
 import entity.Orequest;
 import entity.Product;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,6 +27,8 @@ import java.util.Map;
 public class Builder {
 
     private Connection conn;
+    private ConnectorInterface con = Connector.getInstance();
+    private BuilderMapper bm = new BuilderMapper(con);
 
     public Builder(ConnectorInterface conn) {
         try {
@@ -36,9 +42,16 @@ public class Builder {
     public static void main(String[] args) {
         Connector con = Connector.getInstance();
         Builder b = new Builder(con);
+        BuilderMapper bm = new BuilderMapper(con);
         Order o = new Order(270, 640, 640, 300, 300, 20, 12);
         //System.out.println(b.calcRoofMap(7, o.getRoofType(), o));
-        System.out.println(b.calcSurfaceMap(o.getShedLength(), o.getHeight(), 5, 8, o, 2));
+        //System.out.println(b.calcSurfaceMap(o.getShedLength(), o.getHeight(), 5, 8, o, 2));
+        
+        try {
+            System.out.println(b.carportBlueprint(o, bm.getBlueprint(1)));
+        } catch (BuildException ex) {
+            ex.printStackTrace();
+        }
         
     }
      
@@ -54,7 +67,7 @@ public class Builder {
             throw new BuildException("Mangler mål til udregning af spær");
         }
 
-        List<Product> woods = getProductsAllForBuild(categoryID, productID);
+        List<Product> woods = bm.getProductsAllForBuild(categoryID, productID);
 
         if (woods == null || woods.isEmpty()) {
             throw new BuildException(("Ingen produkter med categoryID; " + categoryID + " og productID: " + productID + " blev fundet til at udregne spær"));
@@ -106,7 +119,7 @@ public class Builder {
 
     public Map<Integer, Integer> calcWoodsMap(int categoryID, int productID, int length) throws BuildException {
         Map<Integer, Integer> map = new HashMap();
-        List<Product> woods = getProductsAllForBuild(categoryID, productID);
+        List<Product> woods = bm.getProductsAllForBuild(categoryID, productID);
 
         int len = length;
         int max = calcMaxLength(woods);
@@ -137,7 +150,7 @@ public class Builder {
     public Map<Integer, Integer> calcRoofMap(int categoryID, int productID, Order order) {
         try {
             Map<Integer, Integer> map = new HashMap();
-            List<Product> roofs = getProductsAllForBuild(categoryID, productID);
+            List<Product> roofs = bm.getProductsAllForBuild(categoryID, productID);
 
             if (roofs == null || roofs.isEmpty()) {
                 throw new Exception("Ingen produkter med categoryID " + categoryID + " og productID " + productID + " blev fundet til at beregne taget..");
@@ -212,7 +225,7 @@ public class Builder {
     public Map<Integer, Integer> calcSurfaceMap(int x, int y, int categoryID, int productID, Order order, int sides) {
         try {
             Map<Integer, Integer> map = new HashMap();
-            List<Product> woods = getProductsAllForBuild(categoryID, productID);
+            List<Product> woods = bm.getProductsAllForBuild(categoryID, productID);
 
             if (woods == null || woods.isEmpty()) {
                 throw new Exception("Ingen produkter med categoryID " + categoryID + " og productID " + productID + " blev fundet til at beregne taget..");
@@ -270,43 +283,7 @@ public class Builder {
 
     }
 
-    // henter alle varianter af et bestemt produkt i en kategori
-    public List<Product> getProductsAllForBuild(int categoryID, int productID) {
-        List<Product> products = new ArrayList();
-        try {
-            String query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories.category_name, products.thickness, products.width, length, price, stock, product_variants.active, products.product_name FROM carports.product_variants\n"
-                    + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
-                    + "JOIN products ON product_variants.product_id = products.id\n"
-                    + "JOIN categories ON products_in_categories.category_id = categories.id\n"
-                    + "WHERE category_id = ? AND product_variants.product_id = ?;";
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setInt(1, categoryID);
-            ps.setInt(2, productID);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt("product_id");
-                int variant_id = rs.getInt("id");
-                Category category = new Category(rs.getInt("category_id"), rs.getString("category_name"));
-                int thickness = rs.getInt("thickness");
-                int width = rs.getInt("width");
-                int length = rs.getInt("length");
-                double price = rs.getDouble("price");
-                int stock = rs.getInt("stock");
-                String name = rs.getString("product_name");
-                boolean active = rs.getBoolean("active");
-
-                products.add(new Product(id, variant_id, category, thickness, width, length, price, stock, name, active));
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-
-        }
-        return products;
-    }
-
-    public Product buildProduct(ResultSet rs) throws SQLException {
+    public static Product buildProduct(ResultSet rs) throws SQLException {
         int id = rs.getInt("product_id");
         int variant_id = rs.getInt("id");
         Category category = new Category(rs.getInt("category_id"), rs.getString("category_name"));
@@ -363,12 +340,10 @@ public class Builder {
                     break;
                 // Understernbrædder sider
                 case 4:
-                    x = order.getLenght();
                     addProductToBuild(reqs, order, calcStolperMap(b.getCategory_id(), b.getProduct_id(), order), b.getCategory_id(), b.getProduct_id(), b.getMessage());
                     break;
                 // Understernbrædder for- og bagende
                 case 5:
-                    x = order.getWidth();
                     addProductToBuild(reqs, order, calcStolperMap(b.getCategory_id(), b.getProduct_id(), order), b.getCategory_id(), b.getProduct_id(), b.getMessage());
                     break;
                 default:
@@ -388,7 +363,7 @@ public class Builder {
         List<Orequest> reqs = new ArrayList();
 
         if (order == null) {
-            throw new BuildException("Ingen ordre tilknyttet blueprintet..");
+            throw new BuildException("Ingen ordre tilknyttet blueprintet.. (null)");
         }
 
         if (order.getHeight() <= 0 || order.getLenght() <= 0 || order.getWidth() <= 0) {
@@ -481,73 +456,7 @@ public class Builder {
 
         return reqs;
     }
-
-    // En færdig stykliste for en carport ud fra et blueprint
-    public List<Odetail> carportBuilder(List<Orequest> request, Order order) {
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        List<Odetail> odetails = new ArrayList();
-        String query;
-
-        try {
-            for (Orequest r : request) {
-                query = "SELECT product_variants.product_id, product_variants.id, products_in_categories.category_id, categories.category_name, products.thickness, products.width, length, price, stock, product_variants.active, products.product_name FROM carports.product_variants\n"
-                        + "JOIN products_in_categories ON product_variants.product_id = products_in_categories.product_id\n"
-                        + "JOIN products ON product_variants.product_id = products.id\n"
-                        + "JOIN categories ON products_in_categories.category_id = categories.id\n"
-                        + "WHERE category_id = ? AND (length BETWEEN ? AND ?) AND product_variants.product_id = ?;";
-
-                ps = conn.prepareStatement(query);
-                ps.setInt(1, r.getProduct().getCategory_id());
-                ps.setInt(2, r.getProduct().getLengthMin());
-                ps.setInt(3, r.getProduct().getLengthMax());
-                ps.setInt(4, r.getProduct().getId());
-                rs = ps.executeQuery();
-
-                if (rs.next()) {
-                    Product product = buildProduct(rs);
-
-                    int qty = r.getQty();
-                    double amount;
-                    // skruer
-                    if (product.getCategory().getId() == 11) {
-                        amount = qty * product.getPrice();
-                    } else {
-                        amount = qty * product.getPrice() * (product.getLength() / 100);
-                    }
-
-                    String comment = r.getComment();
-                    odetails.add(new Odetail(product, order.getId(), qty, amount, comment));
-
-                }
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                    rs = null;
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
-
-            if (ps != null) {
-                try {
-                    ps.close();
-                    ps = null;
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }
-
-        return odetails;
-    }
-
+    
     // tjekker om styklisten indholder alle nødvendige produkter
     public boolean validateCarport(Carport carport, Order order) {
         boolean status = false;
@@ -570,7 +479,7 @@ public class Builder {
     }
 
     public Map<Integer, Integer> calcStolperMap(int categoryID, int productID, Order order) throws BuildException {
-        List<Product> woods = getProductsAllForBuild(categoryID, productID);
+        List<Product> woods = bm.getProductsAllForBuild(categoryID, productID);
         int bigLen = 1000;
         int height = order.getHeight();
 
@@ -636,8 +545,6 @@ public class Builder {
 
         double length = c / (2 * cos);
 
-        System.out.println("Længde: " + length);
-
         return length;
     }
 
@@ -649,9 +556,7 @@ public class Builder {
             len.add(p.getLength());
         }
 
-        System.out.println("len before: " + len);
         Collections.sort(len);
-        System.out.println("len after: " + len);
 
         if (woods == null || woods.isEmpty()) {
             throw new BuildException("Ingen produkter tilgængelig til at udregne maxLength ");

@@ -7,7 +7,7 @@ package logic;
 
 import com.google.gson.Gson;
 import data.BuildException;
-import data.Builder;
+import data.BuilderMapper;
 import data.Connector;
 import data.ConnectorInterface;
 import entity.Order;
@@ -24,6 +24,8 @@ import entity.Orequest;
 import entity.Product;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -36,6 +38,8 @@ public class LogicFacade {
     private OrderMapper ordermapper = new OrderMapper(conn);
     private UserMapper usermapper = new UserMapper(conn);
     private ProductMapper productmapper = new ProductMapper(conn);
+    private BuilderMapper builderMapper = new BuilderMapper(conn);
+    private Builder builder = new Builder(conn);
 
 //    public int createOrder(Order order, Customer customer) {
 //        return new data.OrderMapper(conn).createOrder(order, customer);
@@ -95,6 +99,23 @@ public class LogicFacade {
 
     public String getCategories() {
         return new Gson().toJson(productmapper.getCategories());
+    }
+    
+    public String getModels() {
+        try {
+            return new Gson().toJson(builderMapper.getModels());
+        } catch (BuildException ex) {
+            return "error";
+        }
+    }
+    
+    public String getBlueprint(String modelID) {
+        try {
+            int id = Integer.parseInt(modelID);
+            return new Gson().toJson(builderMapper.getBlueprint(id));
+        } catch (BuildException | NumberFormatException ex) {
+            return "error";
+        }
     }
 
     public String getProductVariantsList(String categoryID, String productID) {
@@ -201,9 +222,10 @@ public class LogicFacade {
     }
     
     public List<Odetail> buildCarport(Order order) throws BuildException {
-        Builder b = new data.Builder(conn);
-        List<Orequest> car = b.carportBlueprint(order);
-        return b.carportBuilder(car, order);
+        List<Orequest> car = builder.carportBlueprint(order);
+        return builderMapper.carportBuilder(car, order);
+        
+        
     }
 
     public List<Product> getRoofTypes() {
