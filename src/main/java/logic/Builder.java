@@ -54,7 +54,16 @@ public class Builder {
 
     }
 
-    // y afgør hvor mange rækker
+    /**
+     * A method to calculate lengths and qty of spaer using a specific product. If angled is true the calculation is for both sides of an angled roof.
+     * @param categoryID
+     * @param productID
+     * @param x
+     * @param y
+     * @param angled
+     * @return Map of Integer and Integer where key is length and value is qty
+     * @throws BuildException 
+     */
     public Map<Integer, Integer> calcSpaerMap(int categoryID, int productID, int x, int y, boolean angled) throws BuildException {
         Map<Integer, Integer> map = new HashMap();
 
@@ -116,6 +125,14 @@ public class Builder {
         return map;
     }
 
+    /**
+     * A method to calculate length and qty of a product to build a specific length. The result will always give you more wood than you need, so it can be manually cut of if needed when building.
+     * @param categoryID
+     * @param productID
+     * @param length
+     * @return Map of Integer and Integer where key is length and value is qty
+     * @throws BuildException 
+     */
     public Map<Integer, Integer> calcWoodsMap(int categoryID, int productID, int length) throws BuildException {
         Map<Integer, Integer> map = new HashMap();
         List<Product> woods = bm.getProductsAllForBuild(categoryID, productID);
@@ -144,8 +161,13 @@ public class Builder {
 
         return map;
     }
-
-    // Beregner antallet af produkter til et tag
+/**
+ * A method to calculate length and qty of Product to build a flat or angled roof.
+ * @param categoryID
+ * @param productID
+ * @param order
+ * @return Map of Integer and Integer where key is length and value is qty
+ */
     public Map<Integer, Integer> calcRoofMap(int categoryID, int productID, Order order) {
         try {
             Map<Integer, Integer> map = new HashMap();
@@ -221,6 +243,16 @@ public class Builder {
 
     }
 
+    /**
+     * A method to calculate length and qty of Product to build a flat surface like walls and floors
+     * @param x
+     * @param y
+     * @param categoryID
+     * @param productID
+     * @param order
+     * @param sides
+     * @return Map of Integer and Integer where key is length and value is qty
+     */
     public Map<Integer, Integer> calcSurfaceMap(int x, int y, int categoryID, int productID, Order order, int sides) {
         try {
             Map<Integer, Integer> map = new HashMap();
@@ -282,6 +314,12 @@ public class Builder {
 
     }
 
+    /**
+     * Method to build a Product from a ResultSet
+     * @param rs
+     * @return Product
+     * @throws SQLException 
+     */
     public static Product buildProduct(ResultSet rs) throws SQLException {
         int id = rs.getInt("product_id");
         int variant_id = rs.getInt("id");
@@ -297,6 +335,16 @@ public class Builder {
         return new Product(id, variant_id, category, thickness, width, length, price, stock, name, active);
     }
 
+    /**
+     * Adds Orequest objects with Product object to the List of Orequest objects given to this method using the Maps from calculations.
+     * @param reqs
+     * @param order
+     * @param lengths
+     * @param categoryID
+     * @param productID
+     * @param comment
+     * @return Updated list of Orequest
+     */
     private List<Orequest> addProductToBuild(List<Orequest> reqs, Order order, Map<Integer, Integer> lengths, int categoryID, int productID, String comment) {
         int catID = categoryID;
 
@@ -316,6 +364,13 @@ public class Builder {
         return reqs;
     }
 
+    /**
+     * A method for generating the list of Orequest needed to build a Carport of a specifc Model using a blueprint. The Blueprint is represented by a List of Blueprint
+     * @param order
+     * @param blueprints
+     * @return List of Orequest to give to a carportBuilder to build a Carport
+     * @throws BuildException 
+     */
     public List<Orequest> carportBlueprint(Order order, List<Blueprint> blueprints) throws BuildException {
         List<Orequest> reqs = new ArrayList();
         int x; // x to calc
