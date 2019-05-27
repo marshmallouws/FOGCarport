@@ -1,8 +1,7 @@
 package entity;
 
 /**
- *
- * @author caspe
+ * Represents a Model.
  */
 public class Model {
     int id;

@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
- * @author Casper
+ * A class for building a Carport.
  */
 public class Builder {
 
@@ -461,7 +460,14 @@ public class Builder {
         return reqs;
     }
 
-    // tjekker om styklisten indholder alle nødvendige produkter
+    /**
+     * A method to validate a Carport from a Blueprint.
+     * Not implementet yet
+     * @param carport
+     * @param order
+     * @param blueprint
+     * @return boolean
+     */
     public boolean validateCarport(Carport carport, Order order, List<Blueprint> blueprint) {
         boolean status = false;
         int[] shed = {1};
@@ -482,6 +488,14 @@ public class Builder {
         return status;
     }
 
+    /**
+     * A method to calculate length and qty of Product to build posts
+     * @param categoryID
+     * @param productID
+     * @param order
+     * @return Map of Integer and Integer where key is length and value is qty
+     * @throws BuildException 
+     */
     public Map<Integer, Integer> calcStolperMap(int categoryID, int productID, Order order) throws BuildException {
         List<Product> woods = bm.getProductsAllForBuild(categoryID, productID);
         int bigLen = 1000; // big carport size
@@ -525,6 +539,14 @@ public class Builder {
 
     }
 
+    /**
+     * A method to calculate qty of Screws
+     * @param productCatID
+     * @param screwLength
+     * @param ratio
+     * @param blueprint
+     * @return Map of Integer and Integer where key is length and value is qty
+     */
     private Map<Integer, Integer> calcScrews(int productCatID, int screwLength, int ratio, List<Orequest> blueprint) {
         Map<Integer, Integer> map = new HashMap();
 
@@ -537,7 +559,11 @@ public class Builder {
         return map;
     }
 
-    // Længden på siden af taget
+    /**
+     * A method for calculating the length of an angled roof.
+     * @param order
+     * @return lenght
+     */
     public double calcRoofAngledLength(Order order) {
 
         double degree = order.getRoofAngle();
@@ -551,7 +577,12 @@ public class Builder {
         return length;
     }
 
-    // max længden af et bestemt produkt
+   /**
+    * A method for calculating the max length of a list of Product
+    * @param woods
+    * @return max length
+    * @throws BuildException 
+    */
     public int calcMaxLength(List<Product> woods) throws BuildException {
         List<Integer> len = new ArrayList();
 
@@ -577,7 +608,12 @@ public class Builder {
 
     }
 
-    // min længden af et bestemt produkt
+    /**
+     * A method for calculating the min length of a list of Product
+     * @param woods
+     * @return min length
+     * @throws BuildException 
+     */
     public int calcMinLength(List<Product> woods) throws BuildException {
         List<Integer> len = new ArrayList();
 

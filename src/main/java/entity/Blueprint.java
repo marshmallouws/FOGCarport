@@ -1,8 +1,7 @@
 package entity;
 
 /**
- *
- * @author caspe
+ * Represents a blueprint.
  */
 public class Blueprint {
     int id;
