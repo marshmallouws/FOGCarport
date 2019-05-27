@@ -14,7 +14,6 @@
 <% Order order = (Order) request.getAttribute("order");
     List<Integer> carportSelectWidth = (List<Integer>) request.getAttribute("carportSelectWidth");
     List<Integer> carportSelectLength = (List<Integer>) request.getAttribute("carportSelectLength");
-    List<Integer> carportSelectHeight = (List<Integer>) request.getAttribute("carportSelectHeight");
     List<Integer> shedSelectWidth = (List<Integer>) request.getAttribute("shedSelectWidth");
     List<Integer> shedSelectLength = (List<Integer>) request.getAttribute("shedSelectLength");
     List<Integer> roofSelectAngle = (List<Integer>) request.getAttribute("roofSelectAngle");
@@ -67,9 +66,9 @@
                                 <option value=0>Vælg medarbejder</option>
                                 <%
                                     for (Employee employee : employees) {
-                                        if (employee.getId() == order.employeeId()) {
+                                        if (order.getEmpl() != null && employee.getId() == order.getEmpl().getId()) {
                                 %>
-                                <option value="<%= order.employeeId()%>" selected><%= order.employeeId()%></option>
+                                <option value="<%= order.getEmpl().getId() %>" selected><%= order.getEmpl().getInitials() %></option>
                                 <%} else {%>
                                 <option value="<%= employee.getId()%>"><%= employee.getInitials()%></option>
                                 <% }
@@ -140,24 +139,13 @@
                                 <% } else {%>
                                 <option value="<%= width%>"><%= width%> cm</option>
                                 <% }
-                                    } %>
+                                    }%>
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label for="carportHeight">Carport højde</label>
-                            <select class="form-control input-disabled" name="carportHeight" id="carportHeight">
-                                <option value=0>Vælg højde</option>
-                                <%
-                                    for (int height : carportSelectHeight) {
-                                        if (height == order.getHeight()) {
-                                %>
-                                <option value="<%= height%>" selected><%= height%> cm</option>
-                                <% } else {%>
-                                <option value="<%= height%>"><%= height%> cm</option>
-                                <% }
-                                    } %>
-                            </select>
+                            <input type="number" class="form-control input-disabled" id="carportHeight" name="carportHeight" value="<%= order.getHeight()%>" min="225" max="500">
                         </div>
 
                         <div class="form-group">
@@ -168,9 +156,9 @@
                                     for (Product roof : roofTypes) {
                                         if (roof.getId() == order.getRoofType()) {
                                 %>
-                                <option value="<%= roof.getId() %>" selected><%= roof.getName() %></option>
+                                <option value="<%= roof.getId()%>" selected><%= roof.getName()%></option>
                                 <% } else {%>
-                                <option value="<%= roof.getId() %>"><%= roof.getName() %></option>
+                                <option value="<%= roof.getId()%>"><%= roof.getName()%></option>
                                 <% }
                                     } %>
                             </select>
