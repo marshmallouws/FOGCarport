@@ -26,7 +26,7 @@ public class BackendPageCommand extends Command {
         Employee currLogged = (Employee)session.getAttribute("user");
         
         if (currLogged == null) {
-            
+
             response.sendRedirect("");
             
         } else {

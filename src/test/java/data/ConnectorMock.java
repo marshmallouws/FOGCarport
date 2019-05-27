@@ -22,19 +22,6 @@ public class ConnectorMock implements ConnectorInterface {
 
     private static Connection singleton;
 
-    /*
-    public static void setConnection(Connection con) {
-        singleton = con;
-    }
-    
-    public static Connection connection() throws ClassNotFoundException, SQLException {
-        if (singleton == null || singleton.isClosed()) {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            singleton = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        }
-        return singleton;
-    }
-     */
     public static ConnectorMock getInstance() {
         if (single == null) {
             single = new ConnectorMock();

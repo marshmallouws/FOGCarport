@@ -90,7 +90,7 @@ public interface OrderInterface {
      * @return the updated order object
      * @throws UpdateException
      */
-    public Order updateOrder(Order order) throws UpdateException;
+    public boolean updateOrder(Order order, List<Odetail> carport) throws UpdateException;
 
     /**
      * Inserts a list of build objects/odetails into a DB

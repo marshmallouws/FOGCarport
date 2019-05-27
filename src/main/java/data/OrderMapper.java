@@ -5,7 +5,6 @@
  */
 package data;
 
-import entity.Customer;
 import entity.Order;
 import entity.Employee;
 import entity.Odetail;
@@ -39,34 +38,6 @@ public class OrderMapper implements OrderInterface {
     }
 
     @Override
-//    public int createOrder(Order order, Customer customer) {
-//        try {
-//            String SQL = "INSERT INTO `c_order` (height, length, width, shed_length, shed_width, roof_angle, roof_type, cust_id) "
-//                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-//            PreparedStatement ps = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-//            ps.setInt(1, order.getHeight());
-//            ps.setInt(2, order.getLenght());
-//            ps.setInt(3, order.getWidth());
-//            ps.setInt(4, order.getShedLength());
-//            ps.setInt(5, order.getShedWidth());
-//            ps.setInt(6, order.getRoofAngle());
-//            ps.setInt(7, order.getRoofType());
-//            ps.setInt(8, customer.getId());
-//            ps.executeUpdate();
-//
-//            ResultSet rs = ps.getGeneratedKeys();
-//
-//            if (rs.next()) {
-//                return rs.getInt(1);
-//            }
-//
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//
-//        return 0;
-//    }
-
     public int createOrder(Order order, String name, String email, String address, int zip, int phone) {
         try {
             conn.setAutoCommit(false);
@@ -208,7 +179,8 @@ public class OrderMapper implements OrderInterface {
         }
         return orders;
     }
-
+    
+    //Not used yet
     @Override
     public List<Order> getUnfinishedOrders() {
         List<Order> orders = new ArrayList<>();
@@ -279,7 +251,8 @@ public class OrderMapper implements OrderInterface {
             ex.printStackTrace();
         }
     }
-
+    
+    /*
     @Override
     public Order updateOrder(Order order) throws UpdateException {
         Order o = null;
@@ -325,7 +298,7 @@ public class OrderMapper implements OrderInterface {
         }
 
         return o;
-    }
+    } */
 
     @Override
     public ArrayList<Order> getOldOrders() {
@@ -374,8 +347,9 @@ public class OrderMapper implements OrderInterface {
         }
 
     }
-
-    public boolean updateOrderFull(Order order, List<Odetail> carport) throws UpdateException {
+    
+    @Override
+    public boolean updateOrder(Order order, List<Odetail> carport) throws UpdateException {
         try {
             conn.setAutoCommit(false);
             String query;
