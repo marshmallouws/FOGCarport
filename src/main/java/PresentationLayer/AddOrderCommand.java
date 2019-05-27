@@ -87,12 +87,12 @@ public class AddOrderCommand extends Command {
                     throw new FOGException("Det ser ud til, at højden på carporten er for stor! Kontakt support.");
                 }
       
-                if (Integer.parseInt(_shedWidth) < 210 || Integer.parseInt(_shedWidth) > 720) {
-                    throw new FOGException("Det ser ud til, at højden på carporten er for stor! Kontakt support.");
+                if (Integer.parseInt(_shedWidth) !=0 && (Integer.parseInt(_shedWidth) < 210 || Integer.parseInt(_shedWidth) > 720)) {
+                    throw new FOGException("Det ser ud til, at skuret på carporten ikke passer! Kontakt support.");
                 }
               
-                if (Integer.parseInt(_shedLength) < 150 || Integer.parseInt(_shedLength) > 690) {
-                    throw new FOGException("Det ser ud til, at højden på carporten er for stor! Kontakt support.");
+                if (Integer.parseInt(_shedLength) !=0 && (Integer.parseInt(_shedLength) < 150 || Integer.parseInt(_shedLength) > 690)) {
+                    throw new FOGException("Det ser ud til, at skuret på carporten ikke passer! Kontakt support.");
                 }
             }
             
@@ -103,7 +103,7 @@ public class AddOrderCommand extends Command {
             int shedLength = Integer.parseInt(_shedLength);
             int roofAngle = Integer.parseInt(_roofAngle);
             int roofType = Integer.parseInt(_roofType);
-
+            if(shedWidth == 0 || shedLength == 0){shedWidth = 0; shedLength = 0;}
             Order order = new Order(height, carportWidth, carportLength, shedWidth, shedLength, roofAngle, roofType);
             int orderID = lf.createOrder(order, fullname, email, address, Integer.parseInt(zip), Integer.parseInt(phone) );
             

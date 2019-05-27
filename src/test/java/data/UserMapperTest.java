@@ -26,7 +26,7 @@ public class UserMapperTest {
         u = new UserMapper(m);
     }
 
-
+    @Test
     public void testLogin() {
         String username = "aaa";
         String password = "aaa";
@@ -42,7 +42,7 @@ public class UserMapperTest {
         assertEquals(e.getPassword(), password);
     }
 
-
+    @Test
     public void negativeTestLogin() {
         String username = null;
         String password = null;
@@ -60,7 +60,7 @@ public class UserMapperTest {
         assertTrue(success);
     }
 
-
+    @Test
     public void testGetEmployee() {
         List<Employee> employees = u.getEmployees();
 
@@ -82,7 +82,7 @@ public class UserMapperTest {
         }
     }
     
-
+    @Test
     public void testGetCustomer() {
         Customer c = u.getCustomer(4);
         String name = "Annika";
@@ -99,7 +99,7 @@ public class UserMapperTest {
     }
     
     //Might fail if random number for email is already in db.
-
+    @Test
     public void testCreateCustomer() {
         double rand = (int)(Math.random()*10000); //Mail is unique
         String name = "Annika";

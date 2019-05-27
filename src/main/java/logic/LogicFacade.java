@@ -117,9 +117,10 @@ public class LogicFacade {
      * @return the updated order object
      * @throws UpdateException
      */
+    /*
     public Order updateOrder(Order order) throws UpdateException {
         return ordermapper.updateOrder(order);
-    }
+    } */
     
     /**
      * Updates the stored order information and buildlist/odetail list with the new order information
@@ -129,7 +130,7 @@ public class LogicFacade {
      * @throws UpdateException
      */
     public boolean updateOrderFull(Order order, List<Odetail> carport) throws UpdateException {
-        return ordermapper.updateOrderFull(order, carport);
+        return ordermapper.updateOrder(order, carport);
     }
 
     /**

@@ -32,6 +32,7 @@ public abstract class Command {
         COMMANDS.put("carport", new CarportProductsCommand());
         COMMANDS.put("carportEdit", new CarportProductsEditCommand());
         COMMANDS.put("downloadpdf", new DownloadPDFCommand());
+        COMMANDS.put("svg", new SVGCommand());
     }
 
     //private static Map<String, Command> commands = null;
