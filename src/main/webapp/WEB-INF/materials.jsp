@@ -104,7 +104,7 @@
                 });
                 // BLUEPRINTS
                 $('#blueprints_modelSelect_input').one('change', function () {
-                   $('#blueprint_table_wrapper').slideDown("fast"); 
+                    $('#blueprint_table_wrapper').slideDown("fast");
                 });
                 // Pick Category
                 $('#materials_catSelect').change(function () {
@@ -203,11 +203,10 @@
                 });
 
                 // BLUEPRINTS
-
                 $.get("byggecenter?view=mats&c=models", function (jsonResp) {
                     var list = $('#blueprints_modelSelect_input');
                     if (jsonResp == "error") {
-                        
+
                     } else {
                         var jsonObj = JSON.parse(jsonResp);
                         $('option[data-option]', list).remove();
@@ -218,6 +217,27 @@
                         });
                     }
                 });
+
+                $('#blueprints_modelSelect_input').change(function () {
+                    $.get("byggecenter?view=mats&c=blueprint&modelID=" + $(this).val(), function (jsonResp) {
+                        var jsonObj = JSON.parse(jsonResp);
+                        var table = $('#blueprint_table').find('tbody');
+                        $.each(jsonObj, function (key, value) {
+                            var tr = $('<tr>');
+                            var td_1 = $('<td>').html(value.usage);
+                            var td_2 = $('<td>').html(value.category_id);
+                            var td_3 = $('<td>').html(value.product_id);
+                            var input = $('<input />').val(value.message);
+                            var td_4 = $('<td>').append(input);
+                            table.append(tr)
+                                    .append(td_1)
+                                    .append(td_2)
+                                    .append(td_3)
+                                    .append(td_4);
+                        });
+                    });
+                });
+
                 var cProduct;
                 $('#materials_saveBtn').click(function () {
                     var currentProduct = cProduct;
@@ -468,16 +488,17 @@
                                     <option value="" disabled selected>Vælg model</option>
                                 </select>
                             </div>
-                            
+
                             <div id="blueprint_table_wrapper" style="display:none;">
                                 <table id="blueprint_table" class="table">
                                     <thead>
+                                    <th>Usage</th>
                                     <th>Kategori</th>
                                     <th>Produkt</th>
-                                    <th>Usage</th>
+                                    <th>Besked</th>
                                     </thead>
                                     <tbody id="blueprint_table_body">
-                                        
+
                                     </tbody>
                                 </table>
                                 <button id="blueprint_saveBtn" class="btn btn-info">Gem Blueprint</button>
