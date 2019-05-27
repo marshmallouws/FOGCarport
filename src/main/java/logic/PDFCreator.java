@@ -26,6 +26,7 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.ListNumberingType;
 import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.svg.converter.SvgConverter;
 import data.BuildException;
 import data.BuilderMapper;
 import data.Connector;
@@ -37,11 +38,17 @@ import entity.Category;
 import entity.Odetail;
 import entity.Order;
 import entity.Product;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -59,22 +66,26 @@ public class PDFCreator {
     public Document createPDF(Order order, String path) {
         Document doc = null;
         PdfDocument pdf = null;
+        PdfWriter writer = null;
 
         try {
-            pdf = new PdfDocument(new PdfWriter(outputStream));
+            writer = new PdfWriter(outputStream);
+            pdf = new PdfDocument(writer);
             doc = new Document(pdf);
-            doc.setMargins(170, 50, 40, 50);
+            doc.setMargins(130, 50, 40, 50);
 
             Image logo = new Image(ImageDataFactory.create(path + "/images/logo.PNG"));
 
             ImageEventHandler handler = new ImageEventHandler(logo);
             pdf.addEventHandler(PdfDocumentEvent.END_PAGE, handler);
+            
+            
 
             createFrontPage(order, doc, pdf);
             //createFooter(doc);
-
             pdf.addNewPage(PageSize.A4);
             doc.add(new AreaBreak());
+            
 
             createMaterialList(order, doc);
 
@@ -88,6 +99,11 @@ public class PDFCreator {
             } */
             doc.add(new AreaBreak());
             createInstructions(order, doc);
+         
+            doc.add(new AreaBreak());
+            pdf.addNewPage(PageSize.A4);
+            addSVG(pdf,doc,order,path,1);
+            addSVG(pdf,doc,order,path,2);
 
             //} catch (MalformedURLException ex) {
             //Logger.getLogger(PDFCreator.class.getName()).log(Level.SEVERE, null, ex);
@@ -105,11 +121,22 @@ public class PDFCreator {
             doc.close();
         }
     }
+    
+    private void addSVG(PdfDocument docu, Document doc, Order order, String path, int svg) {
+        try {
+            String urlString = path+"/byggecenter?view=svg&order="+order.getId()+"&display="+svg;
+            URL url = new URL(urlString);
+            Image image = SvgConverter.convertToImage(url.openStream(), docu);
+            doc.add(image);
+        } catch (Exception e) {
+            //
+        }
+    }
 
     private void createInstructions(Order order, Document doc) throws BuildException {
         doc.add(new Paragraph(new Text("Husk at kontrollere styklisten inden du går i gang").setBold()));
 
-        Connector con = Connector.getInstance();
+        ConnectorInterface con = Connector.getInstance();
         ProductMapper pm = new ProductMapper(con);
         BuilderMapper bm = new BuilderMapper(con);
         List<Blueprint> blueprint = bm.getBlueprint(1);
@@ -198,16 +225,16 @@ public class PDFCreator {
         details = l.buildCarport(order);
 
         Cell c1 = new Cell();
-        c1.add("Beskrivelse").setBold();
+        c1.add(new Paragraph("Beskrivelse")).setBold();
 
         Cell c2 = new Cell();
-        c2.add("Længde").setBold();
+        c2.add(new Paragraph("Længde")).setBold();
 
         Cell c3 = new Cell();
-        c3.add("Antal").setBold();
+        c3.add(new Paragraph("Antal")).setBold();
 
         Cell c4 = new Cell();
-        c4.add("Kommentar").setBold();
+        c4.add(new Paragraph("Kommentar")).setBold();
 
         table.addCell(c1);
         table.addCell(c2);
@@ -232,14 +259,14 @@ public class PDFCreator {
                 if (o.getProduct().getCategory().getName().equals(title)) {
 
                     if (printTitle) {
-                        t.addCell(new Cell(1, 4).add(title).setBold());
+                        t.addCell(new Cell(1, 4).add(new Paragraph(title)).setBold());
                         printTitle = false;
                     }
 
-                    t.addCell(new Cell().add(o.getProduct().getName()));
-                    t.addCell(new Cell().add(String.valueOf(o.getProduct().getLength())));
-                    t.addCell(new Cell().add(String.valueOf(o.getQty())));
-                    t.addCell(new Cell().add(o.getComment()));
+                    t.addCell(new Cell().add(new Paragraph(o.getProduct().getName())));
+                    t.addCell(new Cell().add(new Paragraph(String.valueOf(o.getProduct().getLength()))));
+                    t.addCell(new Cell().add(new Paragraph(String.valueOf(o.getQty()))));
+                    t.addCell(new Cell().add(new Paragraph(o.getComment())));
                 }
             }
 
@@ -268,9 +295,11 @@ public class PDFCreator {
             PdfCanvas aboveCanvas = new PdfCanvas(page.newContentStreamAfter(),
                     page.getResources(), pdfDoc);
             Rectangle area = page.getPageSize();
+            img.scaleToFit(300, 300);
+            area.applyMargins(-15, 0, 0, -15, true);
             new Canvas(aboveCanvas, pdfDoc, area)
                     .add(img);
-            //area.applyMargins(0, 0, 0, 50, true);
+            
 
         }
     }

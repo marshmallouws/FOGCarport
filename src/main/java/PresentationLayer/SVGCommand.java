@@ -20,7 +20,7 @@ public class SVGCommand extends Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException {
         String id = request.getParameter("order");
         if (id == null || id.isEmpty()) {
-            throw new FOGException("Du skal være logget ind for at tilgå denne side.");
+            throw new FOGException("Kunne ikke vise carport tegning. Der mangler parametre.");
         }
         
         try {
