@@ -155,7 +155,7 @@
 
 
                 // OPRET PRODUKTER
-                // load cat again - better way?
+                // load cat again
                 $.get("byggecenter?view=mats&c=categories", function (jsonResp) {
                     var jsonObj = JSON.parse(jsonResp);
                     var list = $('#materials_catSelect_input');
@@ -223,19 +223,75 @@
                         var jsonObj = JSON.parse(jsonResp);
                         var table = $('#blueprint_table').find('tbody');
                         $.each(jsonObj, function (key, value) {
+
                             var tr = $('<tr>');
-                            var td_1 = $('<td>').html(value.usage);
-                            var td_2 = $('<td>').html(value.category_id);
-                            var td_3 = $('<td>').html(value.product_id);
-                            var input = $('<input />').val(value.message);
-                            var td_4 = $('<td>').append(input);
-                            table.append(tr)
-                                    .append(td_1)
-                                    .append(td_2)
-                                    .append(td_3)
-                                    .append(td_4);
+                            var td_id = $('<td class="blueprint_td_id">').html(value.id).hide();
+                            var td_1 = $('<td class="blueprint_td_usage">').html(value.usage);
+                            var td_2 = $('<td class="blueprint_td_categoryID">').html(value.category_id);
+                            var td_3 = $('<td class="blueprint_td_productID">').html(value.product_id);
+                            var input_msg = $('<input type="text" class="blueprint_input_message" />').val(value.message);
+                            var td_4 = $('<td class="blueprint_td_message">').append(input_msg);
+                            tr.append(td_id, td_1, td_2, td_3, td_4);
+                            table.append(tr);
                         });
                     });
+                });
+
+                $('#blueprint_saveBtn').click(function () {
+                    var list = [];
+                    $('#blueprint_table_body tr').each(function () {
+                        var id = $(this).find(".blueprint_td_id").html();
+                        var usage = $(this).find(".blueprint_td_usage").html();
+                        var categoryID = $(this).find(".blueprint_td_categoryID").html();
+                        var productID = $(this).find(".blueprint_td_productID").html();
+                        var message = $(this).find(".blueprint_input_message").val();
+
+                        var blueprint = {
+                            id: id,
+                            usage: usage,
+                            category_id: categoryID,
+                            product_id: productID,
+                            message: message
+                        };
+                        list.push(blueprint);
+                    });
+
+                    $.post("byggecenter?view=mats&c=blueprintUpdate", {blueprintJSON: JSON.stringify(list)}, function (data) {
+                        if (data === "error") {
+                            $('#materials_saveMsg_icon').removeClass("ui-icon-circle-check");
+                            $('#materials_saveMsg_icon').addClass("ui-icon-alert");
+                            $('#materials_saveMsg_msg').html("Der skete en fejl. Kunne ikke gemme ændringer.");
+                        } else {
+                            $('#materials_saveMsg_icon').removeClass("ui-icon-alert");
+                            $('#materials_saveMsg_icon').addClass("ui-icon-circle-check");
+                            $('#materials_saveMsg_msg').html("Success! Ændringerne er nu gemt.");
+                        }
+                    })
+                            .fail(function () {
+                                $('#materials_saveMsg_icon').removeClass("ui-icon-circle-check");
+                                $('#materials_saveMsg_icon').addClass("ui-icon-alert");
+                                $('#materials_saveMsg_msg').html("Der skete en fejl. Kunne ikke gemme ændringer. #404");
+                            })
+                            .always(function () {
+                                $("#materials_saveMsg").dialog({
+                                    draggable: false,
+                                    resizable: false,
+                                    modal: true,
+                                    closeOnEscape: false,
+                                    buttons: {
+                                        Ok: function () {
+                                            //$('#materials_prodSelect_wrapper').slideUp("fast");
+                                            //$('#materials_matSelect_wrapper').slideUp("fast");
+                                            //$('#materials_matEdit_wrapper').slideUp("fast");
+                                            $(this).dialog("close");
+                                        }
+                                    }
+                                });
+                                $('#materials_saveSpinner').css("display", "none");
+                            });
+
+
+
                 });
 
                 var cProduct;

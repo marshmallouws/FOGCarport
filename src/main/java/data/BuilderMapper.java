@@ -97,16 +97,14 @@ public class BuilderMapper {
             String query;
             PreparedStatement ps = null;
             for (Blueprint b : blueprint) {
-                query = "UPDATE blueprints SET (category_id, product_id, message) VALUES (?,?,?) WHERE id = ?;";
+                query = "UPDATE blueprints SET message = ? WHERE id = ?;";
                 ps = conn.prepareStatement(query);
-                ps.setInt(1, b.getCategory_id());
-                ps.setInt(2, b.getProduct_id());
-                ps.setString(3, b.getMessage());
+                ps.setString(1, b.getMessage());
+                ps.setInt(2, b.getId());
                 ps.executeUpdate();
             }
             return true;
         } catch (SQLException ex) {
-            ex.printStackTrace();
             return false;
         }
 

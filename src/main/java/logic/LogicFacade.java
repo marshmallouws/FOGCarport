@@ -24,6 +24,7 @@ import entity.Odetail;
 import entity.Orequest;
 import entity.Product;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +34,7 @@ import java.util.logging.Logger;
  * @author vl48
  */
 public class LogicFacade {
+
     //Should instanciate all Mappers in a constructor to avoid unnessecary object creation at each method call
     //          ^^^^^^ Why create instances of all mappers if only one is needed?
     private ConnectorInterface conn = Connector.getInstance();
@@ -45,9 +47,10 @@ public class LogicFacade {
 //    public int createOrder(Order order, Customer customer) {
 //        return new data.OrderMapper(conn).createOrder(order, customer);
 //    }
-
     /**
-     * Inserts a new order using an object object and the given customer information. 
+     * Inserts a new order using an object object and the given customer
+     * information.
+     *
      * @param order the complete order object.
      * @param name
      * @param email
@@ -55,13 +58,14 @@ public class LogicFacade {
      * @param zip
      * @param phone
      * @return the generated id of the order
-     */ 
+     */
     public int createOrder(Order order, String name, String email, String address, int zip, int phone) {
         return new data.OrderMapper(conn).createOrder(order, name, email, address, zip, phone);
     }
 
     /**
      * Gets a specific order object
+     *
      * @param id the order id
      * @return order object with given id
      */
@@ -71,6 +75,7 @@ public class LogicFacade {
 
     /**
      * Gets a list of all stored orders
+     *
      * @return List of order objects
      */
     public List<Order> getOrders() {
@@ -78,7 +83,9 @@ public class LogicFacade {
     }
 
     /**
-     * Gets a list of all stored orders that hasn't been assigned to an employee.
+     * Gets a list of all stored orders that hasn't been assigned to an
+     * employee.
+     *
      * @return List of order objects.
      */
     public List<Order> getOrdersUnassigned() {
@@ -87,6 +94,7 @@ public class LogicFacade {
 
     /**
      * Gets all orders where the order status hasn't been set to 'delivered'.
+     *
      * @return List of order objects.
      */
     public List<Order> getUnfinishedOrders() {
@@ -95,6 +103,7 @@ public class LogicFacade {
 
     /**
      * Assigns an order to a specific employee.
+     *
      * @param user the employee to assign the order to
      * @param order the order to be assigned
      */
@@ -104,6 +113,7 @@ public class LogicFacade {
 
     /**
      * Assigns an order to a specific employee
+     *
      * @param orderID the id of the order to be assigned
      * @param employeeID the id of the employee to assign the order to
      */
@@ -113,6 +123,7 @@ public class LogicFacade {
 
     /**
      * Updates the stored order information with the new order information
+     *
      * @param order order object with new information
      * @return the updated order object
      * @throws UpdateException
@@ -121,9 +132,10 @@ public class LogicFacade {
     public Order updateOrder(Order order) throws UpdateException {
         return ordermapper.updateOrder(order);
     } */
-    
     /**
-     * Updates the stored order information and buildlist/odetail list with the new order information
+     * Updates the stored order information and buildlist/odetail list with the
+     * new order information
+     *
      * @param order order object with new information
      * @param carport new odetail list
      * @return true if success, otherwise false
@@ -135,6 +147,7 @@ public class LogicFacade {
 
     /**
      * Attemps to log in an employee with given username and password
+     *
      * @param username
      * @param password
      * @return an employee object on successful login
@@ -146,6 +159,7 @@ public class LogicFacade {
 
     /**
      * Gets a list of all employees
+     *
      * @return List of employee objects
      */
     public List<Employee> getEmployees() {
@@ -154,6 +168,7 @@ public class LogicFacade {
 
     /**
      * Inserts a customer with given information in db
+     *
      * @param customer a complete customer object.
      * @return the generated id
      */
@@ -163,6 +178,7 @@ public class LogicFacade {
 
     /**
      * Gets a specific customer by given id
+     *
      * @param customerID
      * @return Customer object
      */
@@ -172,14 +188,16 @@ public class LogicFacade {
 
     /**
      * Gets all product categories in JSON format.
+     *
      * @return JSON object
      */
     public String getCategories() {
         return new Gson().toJson(productmapper.getCategories());
     }
-    
+
     /**
      * Gets all models in JSON format.
+     *
      * @return JSON object
      */
     public String getModels() {
@@ -189,9 +207,10 @@ public class LogicFacade {
             return "error";
         }
     }
-    
+
     /**
      * Gets a blueprint in JSON format from a specific model ID .
+     *
      * @param modelID
      * @return JSON object
      */
@@ -204,8 +223,28 @@ public class LogicFacade {
         }
     }
 
+    public String updateBlueprint(String blueprint) {
+        try {
+            Blueprint[] json = new Gson().fromJson(blueprint, Blueprint[].class);
+            List<Blueprint> carport = Arrays.asList(json);
+
+            boolean success = builderMapper.updateBlueprint(carport);
+
+            if (!success) {
+                throw new Exception();
+            }
+
+            return "success";
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return "error";
+        }
+    }
+
     /**
-     * Gets a list of all product variants in JSON format for a given category and product combination.
+     * Gets a list of all product variants in JSON format for a given category
+     * and product combination.
+     *
      * @param categoryID
      * @param productID
      * @return JSON object
@@ -222,6 +261,7 @@ public class LogicFacade {
 
     /**
      * Gets a list of all products in JSON format in a given category.
+     *
      * @param categoryID
      * @return JSON object
      */
@@ -237,6 +277,7 @@ public class LogicFacade {
 
     /**
      * Gets a specific product variant in JSON format by a given ID.
+     *
      * @param product_id
      * @return JSON object
      */
@@ -251,6 +292,7 @@ public class LogicFacade {
 
     /**
      * Gets a specific product variant in JSON format by a given ID.
+     *
      * @param product_id
      * @return JSON object
      */
@@ -266,9 +308,10 @@ public class LogicFacade {
         }
 
     }
-    
+
     /**
      * Gets a specific product in JSON format by a given ID.
+     *
      * @param product_id
      * @return JSON object
      */
@@ -276,13 +319,14 @@ public class LogicFacade {
         try {
             int prod_id = Integer.parseInt(product_id);
             return new Gson().toJson(productmapper.getProductMain(prod_id));
-        } catch(NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             return "error";
         }
     }
 
     /**
      * Updates a product stored in DB.
+     *
      * @param product as JSON object
      * @return success or error message
      */
@@ -294,7 +338,7 @@ public class LogicFacade {
             if (!success) {
                 throw new Exception();
             }
-            return "succes";
+            return "success";
 
         } catch (Exception ex) {
             return "error";
@@ -304,6 +348,7 @@ public class LogicFacade {
 
     /**
      * Inserts a new product in the DB
+     *
      * @param product as JSON object
      * @return success or error message
      */
@@ -315,7 +360,7 @@ public class LogicFacade {
             if (id == 0) {
                 throw new Exception();
             }
-            return "succes";
+            return "success";
 
         } catch (Exception ex) {
             return "error";
@@ -324,6 +369,7 @@ public class LogicFacade {
 
     /**
      * Inserts a new product variant in DB
+     *
      * @param product as JSON object
      * @return success or error message
      */
@@ -331,7 +377,7 @@ public class LogicFacade {
         try {
             Product prod = new Gson().fromJson(product, Product.class);
             int id = productmapper.createProductVariant(prod);
-            
+
             if (id == 0) {
                 throw new Exception();
             }
@@ -344,16 +390,16 @@ public class LogicFacade {
     }
 
     //Testing something
-
     /**
      * Gets a specific employee by a given ID
+     *
      * @param id
      * @return Employee object
      */
     public Employee getEmployee(int id) {
         return usermapper.getEmployee(id);
     }
-    
+
     /**
      *
      * @param order
@@ -363,11 +409,12 @@ public class LogicFacade {
     public List<Odetail> buildCarport(Order order) throws BuildException {
         List<Blueprint> blueprint = builderMapper.getBlueprint(1);
         List<Orequest> car = builder.carportBlueprint(order, blueprint);
-        return builderMapper.carportBuilder(car, order);    
+        return builderMapper.carportBuilder(car, order);
     }
 
     /**
      * Gets a list of all products with category Roof
+     *
      * @return List of Product objects
      */
     public List<Product> getRoofTypes() {
@@ -382,7 +429,7 @@ public class LogicFacade {
     public List<Order> getOwnOrders(int emplId) {
         return ordermapper.getOwnOrders(emplId);
     }
-    
+
     /**
      *
      * @return
@@ -415,5 +462,5 @@ public class LogicFacade {
     public void editOdetails(List<Odetail> odetails) {
         ordermapper.editOdetails(odetails);
     }
-    
+
 }

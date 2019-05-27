@@ -75,7 +75,7 @@ public class MaterialPageCommand extends Command {
                 break;
                 
             case "blueprintUpdate":
-                json = "";
+                json = logic.updateBlueprint(request.getParameter("blueprintJSON"));
                 break;
 
             default:

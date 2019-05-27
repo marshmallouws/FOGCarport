@@ -117,7 +117,6 @@
                     var text = $(this).find(".odetailComment").text();
                     var input = $("#comment");
                     input.val(text);
-                    console.log(id);
                     $("#editBox").show();
                 });
             });
