@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entity;
 
 /**
- *
- * @author caspe
+ * Represents a simple version of an Odetail used to generate Odetails from a carport builder.
  */
 public class Orequest extends Odetail {
     

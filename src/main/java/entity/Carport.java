@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package entity;
 
 import java.util.ArrayList;
@@ -12,16 +7,25 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 
 /**
- *
- * @author caspe
+ * Represents a Carport.
  */
 public class Carport {
 
     int height;
     int length;
     int width;
+    /**
+     * Represents the total material price for this Carport.
+     * Not the sales price
+     */
     double price;
+    /**
+     * Represents the items used to build this Carport.
+     */
     List<Odetail> items;
+    /**
+     * Represents the blueprint for this Carport.
+     */
     List<Blueprint> blueprint;
 
     public Carport(List<Odetail> items) {
@@ -57,6 +61,10 @@ public class Carport {
         }
     }
 
+    /**
+     * Gets the list of products without screws
+     * @return List of Odetail
+     */
     public List<Odetail> getWoodsList() {
         List<Odetail> woods = new ArrayList();
         for (Odetail o : items) {
@@ -68,6 +76,10 @@ public class Carport {
         return woods;
     }
 
+    /**
+     * Gets the list of products with just screws
+     * @return List of Odetail
+     */
     public List<Odetail> getScrewsList() {
         List<Odetail> screws = new ArrayList();
         for (Odetail o : items) {
@@ -79,6 +91,11 @@ public class Carport {
         return screws;
     }
     
+    /**
+     * Gets the total number of products by a categoryID
+     * @param categoryID
+     * @return int
+     */
     public int getCountCategory(int categoryID) {
         try {
             if (items == null) {
@@ -96,6 +113,11 @@ public class Carport {
         }
     }
     
+    /**
+     * Gets the product id used to build this Carport by a usageID in the Blueprint
+     * @param usageID
+     * @return productID
+     */
     public int getProductUsed(int usageID) {
         int id = 0;
         for (Blueprint b : blueprint) {
