@@ -20,48 +20,90 @@ import static org.junit.Assert.*;
  * @author Annika
  */
 public class OrdeMapperTest {
+
     private static OrderMapper o;
-    
+
     @BeforeClass
     public static void setUpClass() {
         ConnectorMock m = ConnectorMock.getInstance();
         o = new OrderMapper(m);
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
-    
+
     @Test
     public void testGetOrders() {
-        //Make test
+        List<Order> orders = o.getOrders();
+        assertNotNull(orders);
+
+        int id = 19;
+        int height = 200;
+        int length = 300;
+        int width = 330;
+        int shedLength = 0;
+        int shedWidth = 0;
+
+        boolean found = false;
+
+        for (Order or : orders) {
+            if (id == or.getId()) {
+                assertEquals(height, or.getHeight());
+                assertEquals(length, or.getLenght());
+                assertEquals(width, or.getWidth());
+                assertEquals(shedLength, or.getShedLength());
+                assertEquals(shedWidth, or.getShedWidth());
+
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            fail(String.format("Expected id %d was not in database", id));
+        }
     }
-    
+
     @Test
     public void testGetOrder() {
-        //Make test
+        Order order = o.getOrder(19);
+
+        assertNotNull(order);
+
+        int id = 19;
+        int height = 200;
+        int length = 300;
+        int width = 330;
+        int shedLength = 0;
+        int shedWidth = 0;
+
+        assertEquals(height, order.getHeight());
+        assertEquals(length, order.getLenght());
+        assertEquals(width, order.getWidth());
+        assertEquals(shedLength, order.getShedLength());
+        assertEquals(shedWidth, order.getShedWidth());
+
     }
     
-    @Test 
-    public void testAssignOrder() {
-        //Make test
-    }
     
     @Test
-    
+    public void testUpdateOrder() {
+        //Make test
+    }
+
     @Test
     public void testGetOwnOrders() {
         List<Order> orders = o.getOwnOrders(1);
-        	
-        
+
         assertNotNull(orders);
         int id = 11;
         int height = 200;
@@ -73,10 +115,10 @@ public class OrdeMapperTest {
 
         String status = "recieved";
         boolean found = false;
-       
-        for(Order or: orders) {
+
+        for (Order or : orders) {
             System.out.println(or.getId() + " " + or.getLenght());
-            if(id == or.getId()) {
+            if (id == or.getId()) {
                 int orheight = or.getHeight();
                 int orlength = or.getLenght();
                 int orwidth = or.getWidth();
@@ -84,7 +126,7 @@ public class OrdeMapperTest {
                 int orshedw = or.getShedWidth();
                 int orroof = or.getRoofAngle();
                 String orstat = or.getStatus();
-                
+
                 assertEquals(height, orheight);
                 assertEquals(length, orlength);
                 assertEquals(width, orwidth);
@@ -96,10 +138,10 @@ public class OrdeMapperTest {
                 break;
             }
         }
-        
-        if(!found) {
+
+        if (!found) {
             fail(String.format("Expected id %d was not in database", id));
-        }	
+        }
     }
 
     @Test
@@ -111,33 +153,33 @@ public class OrdeMapperTest {
         int shedW = 0;
         int roofangle = 0;
         int rooftype = 1;
-        double rand = (int)(Math.random()*10000); //Mail is unique
+        double rand = (int) (Math.random() * 10000); //Mail is unique
         String name = "Annika";
         String email = rand + "@mail.dk";
         String address = "annikavej 1";
         int zip = 2750;
         int phone = 12341234;
-                
+
         Order ord = new Order(height, width, length, shedL, shedW, roofangle, rooftype);
-        
+
         int id = o.createOrder(ord, name, email, address, zip, phone);
         Order order = o.getOrder(id);
-        
+
         assertNotNull(order);
         assertEquals(height, order.getHeight());
         assertEquals(length, order.getLenght());
         assertEquals(width, order.getWidth());
-        
+
         //int height, int width, int length, int shedLength, int shedWidth, int roofAngle, int roofType
     }
-    
+
     @Test
     public void testGetOrdersUnassigned() {
         List<Order> orders = o.getOrdersUnassigned();
         assertNotNull(orders);
-        
-        for(Order o: orders) {
-            if(o.getEmpl() != null) {
+
+        for (Order o : orders) {
+            if (o.getEmpl() != null) {
                 fail();
             }
         }
