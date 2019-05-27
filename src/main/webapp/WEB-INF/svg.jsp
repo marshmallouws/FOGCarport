@@ -10,8 +10,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
-    //Order order = (Order) request.getAttribute("order");
-    Order order = new Order(270, 600, 820, 300, 300, 10, 12);
+    Order order = (Order) request.getAttribute("order");
+    //Order order = new Order(270, 600, 820, 300, 300, 10, 12);
     //Carport carport = new Carport(new logic.LogicFacade().buildCarport(order));
     int carportWidth = order.getWidth();
     int carportLength = order.getLenght();
@@ -27,11 +27,9 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Carport SVG</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
-
         <svg width="<%= canvasWidth%>" height="<%= canvasHeight%>">
         <text x="0" y="0" fill="red">Test</text>
         <!-- Grunden -->
@@ -69,9 +67,9 @@
         <text x="<%= canvasWidth - 30 %>" y="<%= canvasHeight / 2 - 120 %>" fill="black"><%= carportWidth %></text>
         </svg>
 
-        
+        <br>
         <!-- SIDEVIEW -->
-        <svg width="<%= canvasWidth%>" height="<%= canvasHeight%>">
+        <svg width="<%= canvasWidth%>" height="<%= canvasHeight/3%>">
         <!-- Stolper -->
         <rect x="60" y="0" width="15" height="200" style="fill:white;stroke-width:1;stroke:rgb(0,0,0)" />
         <rect x="350" y="5" width="15" height="195" style="fill:white;stroke-width:1;stroke:rgb(0,0,0)" />
