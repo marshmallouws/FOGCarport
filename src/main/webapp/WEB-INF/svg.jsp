@@ -11,13 +11,15 @@
 
 <%
     Order order = (Order) request.getAttribute("order");
+    String display = (String)request.getParameter("display");
+    if(display==null||display.isEmpty())display="0";
     //Order order = new Order(270, 600, 820, 300, 300, 10, 12);
     //Carport carport = new Carport(new logic.LogicFacade().buildCarport(order));
     int carportWidth = order.getWidth();
     int carportLength = order.getLenght();
 
     int canvasWidth = 800;
-    int canvasHeight = 1000;
+    int canvasHeight = 800;
 
     //int spaer = carport.getCountCategory(8); // spær
     int spaer = 15; // spær
@@ -30,15 +32,17 @@
         <title>Carport SVG</title>
     </head>
     <body>
-        <svg width="<%= canvasWidth%>" height="<%= canvasHeight%>">
-        <text x="0" y="0" fill="red">Test</text>
+        <% int step = carportLength / spaer;
+            int x = 10;
+        %>
+        <% if(display.equals("0")||display.equals("1")) { %>
+        <svg width="<%= canvasWidth%>" height="<%= canvasHeight%>" viewBox="0 0 1000 1000">
         <!-- Grunden -->
-        <rect x="0" y="100" width="<%= carportLength%>" height="<%= carportWidth%>" style="fill:white;stroke-width:0;stroke:rgb(0,0,0)" />
+        <!-- <rect x="0" y="100" width="<%= carportLength%>" height="<%= carportWidth%>" style="fill:white;stroke-width:0;stroke:rgb(0,0,0)" /> -->
         <!-- Spær -->
 
         <%
-            int step = carportLength / spaer;
-            int x = 10;
+            
             for (int i = 0; i < spaer; i++) {
         %>
         <line x1="<%= x-10 %>" y1="70" x2="<%= x-10 %>" y2="90" style="fill:white;stroke-width:1;stroke:rgb(0,0,0)" />
@@ -66,7 +70,8 @@
         <text x="<%= canvasWidth / 2 - 120 %>" y="<%= canvasHeight - 240 %>" fill="black"><%= carportLength%></text>
         <text x="<%= canvasWidth - 30 %>" y="<%= canvasHeight / 2 - 120 %>" fill="black"><%= carportWidth %></text>
         </svg>
-
+        <% } %>
+        <% if(display.equals("0")||display.equals("2")) { %>
         <br>
         <!-- SIDEVIEW -->
         <svg width="<%= canvasWidth%>" height="<%= canvasHeight/3%>">
@@ -90,5 +95,6 @@
         %>
         
         </svg>
+        <% } %>
     </body>
 </html>
