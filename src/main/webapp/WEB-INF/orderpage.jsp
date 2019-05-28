@@ -67,10 +67,9 @@
 
 
             <div class="container sidebar-wrapper">
-                <div class="options_wrapper">
-                    <h2>Quick-Byg</h2>
-
-                    <form method="POST" action="byggecenter?view=addorder">
+                <form id="submitForm" method="POST" action="byggecenter?view=addorder">
+                    <div class="options_wrapper">
+                        <h2>Quick-Byg</h2>
                         <div class="form-group">
                             <label for="carportWidth">Carport bredde</label>
                             <select id="widthIn" class="form-control" name="carportWidth" id="carportWidth"  required>
@@ -134,46 +133,104 @@
                             <label for="height">Højde</label>
                             <input id="heightIn" class="form-control" name="carportHeight" type="number" value="305" min="225" max="500"  required>
                         </div>
-                </div>
-
-                <div class="customer_wrapper">
-                    <h2>Klar til at bestille?</h2>
-                    <div class="form-group">
-                        <label for="fullname">Navn</label>
-                        <input type="text" class="form-control" placeholder="Indtast navn.." name="fullname" id="fullname"  required>
                     </div>
 
-                    <div class="form-group">
-                        <label for="address">Adresse</label>
-                        <input type="text" class="form-control" placeholder="Indtast adresse.." name="address" id="address"  required>
+                    <div class="customer_wrapper">
+                        <h2>Klar til at bestille?</h2>
+                        <div class="form-group">
+                            <label for="fullname">Navn</label>
+                            <input type="text" class="form-control" placeholder="Indtast navn.." name="fullname" id="fullname"  required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address">Adresse</label>
+                            <input type="text" class="form-control" placeholder="Indtast adresse.." name="address" id="address"  required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="zip">Postnummer</label>
+                            <input type="text" class="form-control" placeholder="Indtast postnummer.." name="zip" id="zip"  required> 
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Telefon</label>
+                            <input type="text" class="form-control" placeholder="Indtast telefonnummer.." name="phone" id="phone"  required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="text" class="form-control" placeholder="Indtast email.." name="email" id="email"  required>
+                        </div>
+
+                        <!--               <div class="form-group">
+                                           <label for="message">Evt. bemærkninger</label>
+                                           <textarea class="form-control" name="message" id="message"></textarea>
+                                       </div>
+                        -->
+                        <button id="getOffer_btn" type="submit" class="btn btn-success order-btn">Bestil Tilbud*</button>
                     </div>
 
-                    <div class="form-group">
-                        <label for="zip">Postnummer</label>
-                        <input type="text" class="form-control" placeholder="Indtast postnummer.." name="zip" id="zip"  required> 
-                    </div>
-
-                    <div class="form-group">
-                        <label for="phone">Telefon</label>
-                        <input type="text" class="form-control" placeholder="Indtast telefonnummer.." name="phone" id="phone"  required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="text" class="form-control" placeholder="Indtast email.." name="email" id="email"  required>
-                    </div>
-
-                    <!--               <div class="form-group">
-                                       <label for="message">Evt. bemærkninger</label>
-                                       <textarea class="form-control" name="message" id="message"></textarea>
-                                   </div>
-                    -->
-                    <button id="getOffer_btn" type="submit" class="btn btn-success order-btn">Bestil Tilbud*</button>
-                </div>
-                </form>
 
             </div><!-- container end -->
+        </form>
+    </div>
+    <script>
+        $('#submitForm').submit(function (e) {
+            e.preventDefault();
+            $('#getOffer_btn').prop("disabled",true);
+            var form = $(this);
+            var action = form.attr('action');
+            $.ajax({
+                type: "POST",
+                url: action,
+                data: form.serialize(),
+                success: function (data) {
+                    console.log(data);
+                    if (data !== "error") {
+                        $('#order_modal_1').fadeIn();
+                        $("#submitForm :input").prop("disabled", true);
+                        $('#order_modal_1 a').attr("href", "byggecenter?view=orderinfo&orderID="+data);
+                    } else {
+                        $('#order_modal_2').fadeIn();
+                        $('#getOffer_btn').prop("disabled",false);
+                    }
+                }
+            });
+        });
+    </script>
 
+    <div id="order_modal_1" class="popup-modal" style="display:none;">
+        <div class="page-wrapper" style="text-align:center;margin-top:20%;">
+            <form class="login-form" style="width:450px !important;">
+                <img class="login-close-btn" onclick="$('#order_modal_1').fadeOut();" src="images/b_close.png">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style="width:40px;position: absolute;left: 95px;">
+                <circle fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
+                <polyline fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+                </svg>
+                <h4 style="margin-top:5px;margin-left: 40px;">Anmodning sendt!</h4>
+                <p style="clear:both;margin-top:15px;">Dit tilbud er nu under behandling og du vil høre fra os snarest med en pris på din carport.</p>
+                <small><a href="#">Du kan se din bestillingsbekræftelse ved at klikke her</a></small>
+
+            </form>
         </div>
-    </body>
+    </div>
+
+    <div id="order_modal_2" class="popup-modal" style="display:none;">
+        <div class="page-wrapper" style="text-align:center;margin-top:20%;">
+            <form class="login-form" style="width:450px !important;">
+                <img class="login-close-btn" onclick="$('#order_modal_2').fadeOut();" src="images/b_close.png">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style="width:40px;position: absolute;left: 95px;">
+                <circle  fill="none" stroke="#D06079" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
+                <line  fill="none" stroke="#D06079" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8" y2="92.3"/>
+                <line fill="none" stroke="#D06079" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" x1="95.8" y1="38" x2="34.4" y2="92.2"/>
+                </svg>
+                <h4 style="margin-top:5px;margin-left: 40px;">Der skete en fejl!</h4>
+                <p style="clear:both;margin-top:15px;">Dit tilbud kunne ikke bestilles. Kontroller at alle felter er udfyldt korrekt eller kontakt support hvis problemet forsætter.</p>
+                <small><a href="#">Du kan kontakte support ved at klikke her</a></small>
+
+            </form>
+        </div>
+    </div>
+
+</body>
 </html>
