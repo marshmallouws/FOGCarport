@@ -117,21 +117,16 @@ public class UpdateOrderCommand extends Command {
             }
 
             order = new Order(orderID, employeeID, carportHeight, carportWidth, carportLength, shedLength, shedWidth, roofAngle, roofType, salesPrice);
-            //Order updatedOrder = logic.updateOrder(order);
 
             List<Odetail> carport = logic.buildCarport(order);
             logic.updateOrderFull(order, carport);
 
             response.sendRedirect("byggecenter?view=orderinfoadmin&orderID=" + orderID);
 
-            //response.sendRedirect("byggecenter?view=orderinfoadmin&orderID=" + updatedOrder.getId());
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
         } catch (UpdateException ex) {
             throw new FOGException(ex.getMessage());
-//            request.setAttribute("error", ex.getMessage());
-//            request.getRequestDispatcher("byggecenter?view=orderinfoadmin&orderID=" + _orderID).forward(request, response);
-
         } catch (BuildException ex) {
             throw new FOGException(ex.getMessage());
         }

@@ -10,10 +10,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Annika
- */
 public class ProductMapper implements ProductDAOInterface {
     
     private Connection conn;

@@ -3,7 +3,6 @@ package PresentationLayer;
 import data.BuildException;
 import com.mysql.cj.util.StringUtils;
 import data.FOGException;
-import entity.Customer;
 import entity.Order;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -43,20 +42,7 @@ public class AddOrderCommand extends Command {
         }
 
         LogicFacade lf = new LogicFacade();
-//        Customer c = null;
-//        try {
-//            
-//            int formatZip = Integer.parseInt(zip);
-//            //int formatPhone = Integer.parseInt(phone);
-//
-//            c = new Customer(fullname, email, address, formatZip, formatPhone);
-//            int custID = lf.createCustomer(c);
-//            
-//            c.setID(custID);
-//            
-//        } catch (NumberFormatException ex) {
-//            ex.printStackTrace();
-//        }
+
 
         try {
 

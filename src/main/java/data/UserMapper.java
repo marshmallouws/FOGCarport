@@ -30,28 +30,6 @@ public class UserMapper implements UserInterface {
         }
     }
 
-    /*public Employee logIn(String username, String password) throws LogInException {
-        Employee user = null;
-        try {
-            String query = "SELECT username, pass, id FROM c_user WHERE username = ? AND pass = ?";
-            PreparedStatement ps = Connector.connection().prepareStatement(query);
-
-            ps.setString(1, username);
-            ps.setString(2, password);
-
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                user = new Employee(rs.getInt("id"), username, password);
-            }
-
-        } catch (Exception ex) {
-            throw new LogInException();
-        }
-
-        return user;
-    }*/
-    
     /**
      * Attemps to log in an employee with given username and password
      * @param username
