@@ -4,7 +4,7 @@
     Author     : vl48
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="Windows-1252"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -274,17 +274,17 @@
                         if (data === "error") {
                             $('#materials_saveMsg_icon').removeClass("ui-icon-circle-check");
                             $('#materials_saveMsg_icon').addClass("ui-icon-alert");
-                            $('#materials_saveMsg_msg').html("Der skete en fejl. Kunne ikke gemme Ã¦ndringer.");
+                            $('#materials_saveMsg_msg').html("Der skete en fejl. Kunne ikke gemme ændringer.");
                         } else {
                             $('#materials_saveMsg_icon').removeClass("ui-icon-alert");
                             $('#materials_saveMsg_icon').addClass("ui-icon-circle-check");
-                            $('#materials_saveMsg_msg').html("Success! Ã†ndringerne er nu gemt.");
+                            $('#materials_saveMsg_msg').html("Success! Ændringerne er nu gemt.");
                         }
                     })
                             .fail(function () {
                                 $('#materials_saveMsg_icon').removeClass("ui-icon-circle-check");
                                 $('#materials_saveMsg_icon').addClass("ui-icon-alert");
-                                $('#materials_saveMsg_msg').html("Der skete en fejl. Kunne ikke gemme Ã¦ndringer. #404");
+                                $('#materials_saveMsg_msg').html("Der skete en fejl. Kunne ikke gemme ændringer. #404");
                             })
                             .always(function () {
                                 $("#materials_saveMsg").dialog({
@@ -321,17 +321,17 @@
                         if (data === "error") {
                             $('#materials_saveMsg_icon').removeClass("ui-icon-circle-check");
                             $('#materials_saveMsg_icon').addClass("ui-icon-alert");
-                            $('#materials_saveMsg_msg').html("Der skete en fejl. Kunne ikke gemme Ã¦ndringer.");
+                            $('#materials_saveMsg_msg').html("Der skete en fejl. Kunne ikke gemme ændringer.");
                         } else {
                             $('#materials_saveMsg_icon').removeClass("ui-icon-alert");
                             $('#materials_saveMsg_icon').addClass("ui-icon-circle-check");
-                            $('#materials_saveMsg_msg').html("Success! Ã†ndringerne er nu gemt.");
+                            $('#materials_saveMsg_msg').html("Success! Ændringerne er nu gemt.");
                         }
                     })
                             .fail(function () {
                                 $('#materials_saveMsg_icon').removeClass("ui-icon-circle-check");
                                 $('#materials_saveMsg_icon').addClass("ui-icon-alert");
-                                $('#materials_saveMsg_msg').html("Der skete en fejl. Kunne ikke gemme Ã¦ndringer. #404");
+                                $('#materials_saveMsg_msg').html("Der skete en fejl. Kunne ikke gemme ændringer. #404");
                             })
                             .always(function () {
                                 $("#materials_saveMsg").dialog({
@@ -434,7 +434,7 @@
                     $('#materials_productActive').prop("checked", jsonObj.active);
                     $('#materials_productStock').html(jsonObj.stock);
                     $('#materials_productPrice').val(jsonObj.price);
-                    //mÃ¥l
+                    //mål
                     $('#materials_productHeight').val(jsonObj.height);
                     //$('#materials_productHeight').attr("disabled", !jsonObj.category.height);
                     $('#materials_productLength').val(jsonObj.length);
@@ -449,7 +449,7 @@
         <%@ include file="/WEB-INF/parts/navigation.jspf" %>
         <div class="page-wrapper menu-spacer">
             <div id="materials_topWrapper">
-                <button id="materials_editBtn" class="btn btn-primary active">RedigÃ©r materialer</button>
+                <button id="materials_editBtn" class="btn btn-primary active">Redigér materialer</button>
                 <button id="materials_createBtn" class="btn btn-primary">Opret materialer</button>
                 <button id="blueprint_editBtn" class="btn btn-primary">Rediger Blueprint</button>
                 <div id="materials_ui_wrapper">
@@ -459,7 +459,7 @@
                         <div class="materials_select_wrapper">
                             Kategori:
                             <select id="materials_catSelect" class="form-control">
-                                <option value="" disabled selected>VÃ¦lg kategori</option>
+                                <option value="" disabled selected>Vælg kategori</option>
                             </select>
                         </div>
 
@@ -470,14 +470,14 @@
                         <div id="materials_prodSelect_wrapper" class="materials_select_wrapper" style="display:none;">
                             Produkter:
                             <select id="materials_prodSelect" class="form-control">
-                                <option value="" disabled selected>VÃ¦lg produkt</option>
+                                <option value="" disabled selected>Vælg produkt</option>
                             </select>
                         </div>
 
                         <div id="materials_matSelect_wrapper" class="materials_select_wrapper" style="display:none;">
                             Materiale:
                             <select id="materials_matSelect" class="form-control">
-                                <option value="" disabled selected>VÃ¦lg materiale</option>
+                                <option value="" disabled selected>Vælg materiale</option>
                             </select>
                         </div>
 
@@ -488,17 +488,17 @@
                                 <div class="materials_formBox">
                                     <h5>Status</h5>
                                     <input id="materials_productActive" type="checkbox" name="active" value=""> Aktiv<br>
-                                    PÃ¥ lager: <span id="materials_productStock">0</span> stk.<br>
+                                    På lager: <span id="materials_productStock">0</span> stk.<br>
                                     Pris: <input id="materials_productPrice" type="number" name="price" min="0">
                                 </div>
                                 <div class="materials_formBox">
-                                    <h5>MÃ¥l</h5>
+                                    <h5>Mål</h5>
                                     <div class="materials_inputWrapper">
-                                        HÃ¸jde:<br>
+                                        Højde:<br>
                                         <input id="materials_productHeight" type="number" name="height" min="0">
                                     </div>
                                     <div class="materials_inputWrapper">
-                                        LÃ¦ngde:<br>
+                                        Længde:<br>
                                         <input id="materials_productLength" type="number" name="length" min="0">
                                     </div>
                                     <div class="materials_inputWrapper">
@@ -507,7 +507,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button id="materials_saveBtn" class="btn btn-info">Gem Ã¦ndringer</button>
+                            <button id="materials_saveBtn" class="btn btn-info">Gem ændringer</button>
                             <div id="materials_saveSpinner" style="display:none;">
                                 <div class="spinner-border" role="status">
                                     <span class="sr-only">Gemmer...</span>
@@ -522,7 +522,7 @@
                         <div class="materials_select_wrapper">
                             Kategori:
                             <select id="materials_catSelect_input" class="form-control">
-                                <option value="" disabled selected>VÃ¦lg kategori</option>
+                                <option value="" disabled selected>Vælg kategori</option>
                             </select>
                         </div>
 
@@ -540,7 +540,7 @@
 
                             <div id="materials_matCreateVariant_wrapper" style="display:none;">
                                 <p>Opret Ny Variant<p>
-                                    LÃ¦ngde<input id="product_length_input" disabled class="form-control" type="number" name="prodlength">
+                                    Længde<input id="product_length_input" disabled class="form-control" type="number" name="prodlength">
                                     Pris<input id="product_price_input" disabled class="form-control" type="number" name="prodprice">
                                     Antal<input id="product_stock_input" disabled class="form-control" type="number" name="prodstock">
                                     Aktiv<input id="product_active_input" disabled class="form-control" type="checkbox" name="prodactive" value="">
@@ -555,7 +555,7 @@
                         <div id="blueprint_wrapper">
                             <div id="blueprint_select_wrapper">
                                 <select id="blueprints_modelSelect_input">
-                                    <option value="" disabled selected>VÃ¦lg model</option>
+                                    <option value="" disabled selected>Vælg model</option>
                                 </select>
                             </div>
 
@@ -579,10 +579,10 @@
                 </div>
             </div>
 
-            <div id="materials_saveMsg" title="Ã†ndringer" style="display:none;">
+            <div id="materials_saveMsg" title="Ændringer" style="display:none;">
                 <p>
                     <span id="materials_saveMsg_icon" class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
-                    <span id="materials_saveMsg_msg">Success! Ã†ndringerne er nu gemt.</span>
+                    <span id="materials_saveMsg_msg">Success! Ændringerne er nu gemt.</span>
                 </p>
             </div>
         </div>
