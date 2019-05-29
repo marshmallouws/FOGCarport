@@ -5,7 +5,6 @@
  */
 package data;
 
-import entity.Customer;
 import entity.Order;
 import java.util.List;
 import org.junit.After;
@@ -40,18 +39,19 @@ public class OrdeMapperTest {
     @After
     public void tearDown() {
     }
+    	
 
     @Test
     public void testGetOrders() {
         List<Order> orders = o.getOrders();
         assertNotNull(orders);
 
-        int id = 19;
-        int height = 200;
-        int length = 300;
-        int width = 330;
-        int shedLength = 0;
-        int shedWidth = 0;
+        int id = 1;
+        int height = 305;
+        int length = 690;
+        int width = 360;
+        int shedLength = 330;
+        int shedWidth = 210;
 
         boolean found = false;
 
@@ -75,16 +75,15 @@ public class OrdeMapperTest {
 
     @Test
     public void testGetOrder() {
-        Order order = o.getOrder(19);
+        Order order = o.getOrder(1);
 
         assertNotNull(order);
 
-        int id = 19;
-        int height = 200;
-        int length = 300;
-        int width = 330;
-        int shedLength = 0;
-        int shedWidth = 0;
+        int height = 305;
+        int length = 690;
+        int width = 360;
+        int shedLength = 330;
+        int shedWidth = 210;
 
         assertEquals(height, order.getHeight());
         assertEquals(length, order.getLenght());
@@ -94,8 +93,7 @@ public class OrdeMapperTest {
 
     }
     
-    
-    @Test
+    //@Test
     public void testUpdateOrder() {
         //Make test
     }
@@ -105,13 +103,13 @@ public class OrdeMapperTest {
         List<Order> orders = o.getOwnOrders(1);
 
         assertNotNull(orders);
-        int id = 11;
-        int height = 200;
-        int length = 300;
-        int width = 330;
-        int shedLength = 0;
-        int shedWidth = 0;
-        int roofAngle = 0;
+        int id = 4;
+        int height = 305;
+        int length = 450;
+        int width = 630;
+        int shedLength = 330;
+        int shedWidth = 210;
+        int roofAngle = 25;
 
         String status = "recieved";
         boolean found = false;

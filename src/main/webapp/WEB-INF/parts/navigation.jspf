@@ -35,7 +35,7 @@ Author     : vl48
 
 
 </div>
-<div id="login_modal" style="display:none;">
+<div id="login_modal" class="popup-modal" style="display:none;">
     <div class="page-wrapper" style="text-align:center;margin-top:20%;">
         <form class="login-form" method="POST" action="byggecenter?view=login">
             <img class="login-close-btn" onclick="$('#login_modal').fadeOut();" src="images/b_close.png">
