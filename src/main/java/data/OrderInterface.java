@@ -5,12 +5,9 @@
  */
 package data;
 
-import entity.Category;
-import entity.Customer;
 import entity.Order;
 import entity.Employee;
 import entity.Odetail;
-import entity.Product;
 
 import java.util.List;
 

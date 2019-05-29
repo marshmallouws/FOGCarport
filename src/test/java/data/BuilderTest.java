@@ -48,21 +48,6 @@ public class BuilderTest {
 
     }
     
-    /**
-     * Test of validateCarport method, of class Builder.
-     */
-//    @Test
-//    public void testValidateCarport() {
-//        System.out.println("validateCarport");
-//        Carport carport = null;
-//        Order order = null;
-//        Builder instance = builder;
-//        boolean expResult = false;
-//        boolean result = instance.validateCarport(carport, order);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        //fail("The test case is a prototype.");
-//    }
     
     @Test
     public void testCalcWoodsMap() throws BuildException {

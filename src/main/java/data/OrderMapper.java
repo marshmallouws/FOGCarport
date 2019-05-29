@@ -251,54 +251,6 @@ public class OrderMapper implements OrderInterface {
             ex.printStackTrace();
         }
     }
-    
-    /*
-    @Override
-    public Order updateOrder(Order order) throws UpdateException {
-        Order o = null;
-        String query;
-        PreparedStatement ps;
-        try {
-            if (order.employeeId() == 0) {
-                query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ?, sales_price = ? WHERE id = ?;";
-                ps = conn.prepareStatement(query);
-
-                ps.setInt(1, order.getHeight());
-                ps.setInt(2, order.getLenght());
-                ps.setInt(3, order.getWidth());
-                ps.setInt(4, order.getShedLength());
-                ps.setInt(5, order.getShedWidth());
-                ps.setInt(6, order.getRoofAngle());
-                ps.setDouble(7, order.getSalesPrice());
-                ps.setInt(8, order.getId());
-
-            } else {
-                query = "UPDATE c_order SET height = ?, length = ?, width = ?, shed_length = ?, shed_width = ?, roof_angle = ?, emp_id = ?, sales_price = ? WHERE id = ?;";
-                ps = conn.prepareStatement(query);
-
-                ps.setInt(1, order.getHeight());
-                ps.setInt(2, order.getLenght());
-                ps.setInt(3, order.getWidth());
-                ps.setInt(4, order.getShedLength());
-                ps.setInt(5, order.getShedWidth());
-                ps.setInt(6, order.getRoofAngle());
-                ps.setInt(7, order.employeeId());
-                ps.setDouble(8, order.getSalesPrice());
-                ps.setInt(9, order.getId());
-            }
-
-            if (ps.executeUpdate() == 1) {
-                o = getOrder(order.getId());
-            } else {
-                throw new UpdateException("Fejl ved opdatering af ordre " + order.getId());
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            throw new UpdateException("Fejl ved opdatering af ordre " + order.getId());
-        }
-
-        return o;
-    } */
 
     @Override
     public ArrayList<Order> getOldOrders() {
