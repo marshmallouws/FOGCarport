@@ -84,11 +84,11 @@ public class UserMapperTest {
     
     @Test
     public void testGetCustomer() {
-        Customer c = u.getCustomer(4);
-        String name = "Annika";
-        String email = "2591.0@mail.dk";
-        int zip = 2750;
-        int phone = 12341234;
+        Customer c = u.getCustomer(13);
+        String name = "Peter Petersen";
+        String email = "peter@mail.dk";
+        int zip = 9990;
+        int phone = 12345678;
 
         assertNotNull(c);
         assertEquals(name, c.getName());
@@ -96,27 +96,5 @@ public class UserMapperTest {
         assertEquals(zip, c.getZip());
         assertEquals(phone, c.getPhone());
 
-    }
-    
-    //Might fail if random number for email is already in db.
-    @Test
-    public void testCreateCustomer() {
-        double rand = (int)(Math.random()*10000); //Mail is unique
-        String name = "Annika";
-        String email = rand + "@mail.dk";
-        String address = "annikavej 1";
-        int zip = 2750;
-        int phone = 12341234;
-        Customer c = new Customer(name, email, address, zip, phone);
-        
-        int id = u.createCustomer(c);
-        
-        Customer customer = u.getCustomer(id);
-        
-        assertNotNull(customer);
-        assertEquals(name, customer.getName());
-        assertEquals(address, customer.getAddress());
-        assertEquals(zip, customer.getZip());
-        
     }
 }
