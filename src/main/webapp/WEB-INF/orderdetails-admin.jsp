@@ -237,7 +237,7 @@
 
                 <button type="button" class="btn btn-primary" id="editBtn">Redigér</button>
                 <button type="submit" class="btn btn-success" id="updateBtn">Gem</button>
-                <a style="float:right;" class="btn btn-primary" id="pdfBtn" href="./byggecenter?view=downloadpdf&orderID=<%= order.getId()%>">Hent PDF</a>
+                <a style="float:right;" class="btn btn-primary" id="pdfBtn" href="./byggecenter?view=downloadpdf&orderID=<%= order.getId()%>" target="_blank">Hent PDF</a>
 
             </form>
 
