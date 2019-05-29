@@ -36,22 +36,20 @@ public class Builder {
 
         }
     }
-
-    public static void main(String[] args) {
-        Connector con = Connector.getInstance();
-        Builder b = new Builder(con);
-        BuilderMapper bm = new BuilderMapper(con);
-        Order o = new Order(270, 640, 640, 300, 300, 20, 12);
-        //System.out.println(b.calcRoofMap(7, o.getRoofType(), o));
-        //System.out.println(b.calcSurfaceMap(o.getShedLength(), o.getHeight(), 5, 8, o, 2));
-
-        try {
-            System.out.println(b.carportBlueprint(o, bm.getBlueprint(1)));
-        } catch (BuildException ex) {
-            ex.printStackTrace();
-        }
-
-    }
+//
+//    public static void main(String[] args) {
+//        Connector con = Connector.getInstance();
+//        Builder b = new Builder(con);
+//        BuilderMapper bm = new BuilderMapper(con);
+//        Order o = new Order(270, 640, 640, 300, 300, 20, 12);
+//        
+//        try {
+//            System.out.println(b.carportBlueprint(o, bm.getBlueprint(1)));
+//        } catch (BuildException ex) {
+//            ex.printStackTrace();
+//        }
+//
+//    }
 
     /**
      * A method to calculate lengths and qty of spaer using a specific product. If angled is true the calculation is for both sides of an angled roof.

@@ -65,19 +65,32 @@
                 $('#materials_editBtn').click(function () {
                     if (!$(this).hasClass('active')) {
                         $(this).addClass('active');
-                        $('#materials_createBtn').removeClass('active');
                         $("#materials_createUI").slideToggle("fast", function () {
-                            $("#materials_editUI").slideToggle("fast");
+                            if ($('#materials_createBtn').hasClass('active')) {
+                                $("#materials_createUI").slideToggle("fast");
+                                $('#materials_createBtn').removeClass('active');
+                            }
+                            if ($('#blueprint_editBtn').hasClass('active')) {
+                                $("#blueprint_editUI").slideToggle("fast");
+                                $('#blueprint_editBtn').removeClass('active');
+                            }
                         });
                     }
                 });
                 $('#materials_createBtn').click(function () {
                     if (!$(this).hasClass('active')) {
                         $(this).addClass('active');
-                        $('#materials_editBtn').removeClass('active');
-                        $("#materials_editUI").slideToggle("fast", function () {
-                            $("#materials_createUI").slideToggle("fast");
-                        });
+
+                        if ($('#materials_editBtn').hasClass('active')) {
+                            $('#materials_editUI').slideToggle("fast");
+                            $('#materials_editBtn').removeClass('active');
+                        }
+
+                        if ($('blueprint_editBtn').hasClass('active')) {
+                            $("#blueprint_editUI").slideToggle("fast");
+                            $('#blueprint_editBtn').removeClass('active');
+                        }
+                    
                     }
                 });
                 $('#blueprint_editBtn').click(function () {

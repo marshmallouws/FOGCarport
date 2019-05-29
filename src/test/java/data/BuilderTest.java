@@ -155,6 +155,11 @@ public class BuilderTest {
     @Test
     public void testCalcRoofAngledLength() {
         System.out.println("calcRoofAngledLength");
+        Order o = order;
+        Builder instance = builder;
+        double expResult = 340;
+        double result = instance.calcRoofAngledLength(order);
+        assertEquals(expResult, result, 1.0);
     }
     
     @Test
@@ -171,12 +176,36 @@ public class BuilderTest {
             woods.add(new Product(null, 0, 333, 0, 0, 0));
             woods.add(new Product(null, 0, 5, 0, 0, 0));
             woods.add(new Product(null, 0, 1, 0, 0, 0));
-            woods.add(new Product(null, 0, 555, 0, 0, 0));
-            int expResult = 555;
+            woods.add(new Product(null, 0, 332, 0, 0, 0));
+            int expResult = 333;
             int result = instance.calcMaxLength(woods);
             assertEquals(expResult, result);
         } catch (BuildException ex) {
             fail(ex.getMessage());
+        }
+    }
+    
+    @Test
+    public void testCalcMinLength() {
+        try {
+            System.out.println("calcMinLength");
+            List<Product> woods = new ArrayList();
+            Builder instance = builder;
+            woods.add(new Product(null, 0, 10, 0, 0, 0));
+            woods.add(new Product(null, 0, 15, 0, 0, 0));
+            woods.add(new Product(null, 0, 33, 0, 0, 0));
+            woods.add(new Product(null, 0, 3, 0, 0, 0));
+            woods.add(new Product(null, 0, 2, 0, 0, 0));
+            woods.add(new Product(null, 0, 333, 0, 0, 0));
+            woods.add(new Product(null, 0, 5, 0, 0, 0));
+            woods.add(new Product(null, 0, 1, 0, 0, 0));
+            woods.add(new Product(null, 0, 332, 0, 0, 0));
+            int expResult = 1;
+            int result = instance.calcMinLength(woods);
+            assertEquals(expResult, result);
+        } catch (BuildException ex) {
+            fail(ex.getMessage());
+            
         }
     }
 
