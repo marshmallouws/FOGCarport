@@ -68,8 +68,8 @@ public class UpdateOrderCommand extends Command {
                 salesPrice = Double.parseDouble(_salesPrice);
             }
 
-            if (carportHeight < 180 || carportHeight > 300) {
-                err = new Error("Højden skal være mellem 180 og 300");
+            if (carportHeight < 225 || carportHeight > 500) {
+                err = new Error("Højden skal være mellem 225 og 500");
             }
 
             if (carportLength % 30 != 0 || carportLength < 240 || carportLength > 780) {
