@@ -25,12 +25,6 @@ public class BackendPageCommand extends Command {
         
         Employee currLogged = (Employee)session.getAttribute("user");
         
-        if (currLogged == null) {
-
-            response.sendRedirect("");
-            
-        } else {
-        
             LogicFacade logic = new LogicFacade();
             List<Order> myOrders = logic.getOwnOrders(((Employee)session.getAttribute("user")).getId());
             List<Order> unassignedOrders = logic.getOrdersUnassigned();
@@ -41,7 +35,7 @@ public class BackendPageCommand extends Command {
 
             request.getRequestDispatcher("/WEB-INF/backendpage.jsp").forward(request, response);
         
-        }
+        
         
     }
     

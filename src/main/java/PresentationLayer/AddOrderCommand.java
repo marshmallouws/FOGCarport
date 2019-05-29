@@ -111,6 +111,7 @@ public class AddOrderCommand extends Command {
             response.setContentType("text/plain");
             response.setCharacterEncoding("UTF-8");
             if (orderID > 0) {
+                order.setId(orderID);
                 lf.createOdetail(lf.buildCarport(order));
                 json = ""+orderID;
             } else {

@@ -25,7 +25,7 @@ public class LoginCommand extends Command {
             if(session.getAttribute("user") != null){
             session.removeAttribute("user");
             }
-            response.sendRedirect("");
+            response.sendRedirect("./");
             return;
         }
         
@@ -41,7 +41,7 @@ public class LoginCommand extends Command {
                 session.setAttribute("user", user);
                 response.sendRedirect("byggecenter?view=backendpage");
             } else {
-                response.sendRedirect("");
+                response.sendRedirect("./");
             }
             
         } catch (LogInException ex) {
