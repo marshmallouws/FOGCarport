@@ -180,15 +180,6 @@
                             </select>
                         </div>
 
-                        <div class="custom-control custom-switch">
-                            <% if (order.getShedLength() > 0 && order.getShedWidth() > 0) { %>
-                            <input type="checkbox" class="custom-control-input input-disabled" id="switch1" name="example" checked>
-                            <% } else {  %>
-                            <input type="checkbox" class="custom-control-input input-disabled" id="switch1" name="example">
-                            <% } %>
-                            <label class="custom-control-label" for="switch1">Redskabsrum</label>
-                        </div>
-
                         <div class="form-group">
                             <label for="shedWidth">Redskabsrum bredde</label>
                             <select class="form-control input-disabled" name="shedWidth" id="shedWidth">
