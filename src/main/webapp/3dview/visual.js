@@ -67,7 +67,7 @@ function updateScene() {
     var wIn = document.getElementById("widthIn");
     var lIn = document.getElementById("lengthIn");
     var shedLin = document.getElementById("shedLengthIn");
-    var shedWin = document.getElementById("shedWidthIn")
+    var shedWin = document.getElementById("shedWidthIn");
     var roofTin = document.getElementById("roofType");
     var heightInput = document.getElementById("heightIn");
     if(heightInput.value > heightInput.max-0)heightInput.value = heightInput.max;

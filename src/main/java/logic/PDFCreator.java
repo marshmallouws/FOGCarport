@@ -38,17 +38,12 @@ import entity.Category;
 import entity.Odetail;
 import entity.Order;
 import entity.Product;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -78,25 +73,15 @@ public class PDFCreator {
 
             ImageEventHandler handler = new ImageEventHandler(logo);
             pdf.addEventHandler(PdfDocumentEvent.END_PAGE, handler);
-            
-            
 
-            createFrontPage(order, doc, pdf);
-            //createFooter(doc);
+            createFrontPage(order, doc);
+
             pdf.addNewPage(PageSize.A4);
             doc.add(new AreaBreak());
             
 
             createMaterialList(order, doc);
 
-            /*
-            //TODO: Observe if header is correct when adding new pages
-            try {
-                //createHeader("VÆREBRO\nCARPORTE", 25, pdf, doc);
-                manipulatePdf(doc, pdf);
-            } catch (Exception ex) {
-                // IGNORE THIS
-            } */
             doc.add(new AreaBreak());
             createInstructions(order, doc);
          
@@ -105,8 +90,6 @@ public class PDFCreator {
             addSVG(pdf,doc,order,path,1);
             addSVG(pdf,doc,order,path,2);
 
-            //} catch (MalformedURLException ex) {
-            //Logger.getLogger(PDFCreator.class.getName()).log(Level.SEVERE, null, ex);
         } catch (BuildException ex) {
             Logger.getLogger(PDFCreator.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
@@ -196,7 +179,7 @@ public class PDFCreator {
 
     }
 
-    private void createFrontPage(Order order, Document doc, PdfDocument pdf) {
+    private void createFrontPage(Order order, Document doc) {
 
         Text info = new Text("Ordre nummer:" + order.getId());
         Text date = new Text(order.getDate().substring(0, 10));

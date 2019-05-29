@@ -65,42 +65,43 @@
                 $('#materials_editBtn').click(function () {
                     if (!$(this).hasClass('active')) {
                         $(this).addClass('active');
-                        $("#materials_createUI").slideToggle("fast", function () {
-                            if ($('#materials_createBtn').hasClass('active')) {
-                                $("#materials_createUI").slideToggle("fast");
-                                $('#materials_createBtn').removeClass('active');
-                            }
-                            if ($('#blueprint_editBtn').hasClass('active')) {
-                                $("#blueprint_editUI").slideToggle("fast");
-                                $('#blueprint_editBtn').removeClass('active');
-                            }
-                        });
+                        if ($('#materials_createBtn').hasClass('active')) {
+                            $("#materials_createUI").slideUp("fast");
+                            $('#materials_createBtn').removeClass('active');
+                        }
+                        if ($('#blueprint_editBtn').hasClass('active')) {
+                            $("#blueprint_editUI").slideUp("fast");
+                            $('#blueprint_editBtn').removeClass('active');
+                        }
+                        $("#materials_editUI").slideDown("fast");
                     }
                 });
                 $('#materials_createBtn').click(function () {
                     if (!$(this).hasClass('active')) {
                         $(this).addClass('active');
-
                         if ($('#materials_editBtn').hasClass('active')) {
-                            $('#materials_editUI').slideToggle("fast");
+                            $("#materials_editUI").slideUp("fast");
                             $('#materials_editBtn').removeClass('active');
                         }
-
-                        if ($('blueprint_editBtn').hasClass('active')) {
-                            $("#blueprint_editUI").slideToggle("fast");
+                        if ($('#blueprint_editBtn').hasClass('active')) {
+                            $("#blueprint_editUI").slideUp("fast");
                             $('#blueprint_editBtn').removeClass('active');
                         }
-                    
+                        $("#materials_createUI").slideDown("fast");
                     }
                 });
                 $('#blueprint_editBtn').click(function () {
                     if (!$(this).hasClass('active')) {
                         $(this).addClass('active');
-                        $('#materials_editBtn').removeClass('active');
-                        $('#materials_createBtn').removeClass('active');
-                        $("#materials_editUI").slideToggle("fast", function () {
-                            $("#blueprint_editUI").slideToggle("fast");
-                        });
+                        if ($('#materials_createBtn').hasClass('active')) {
+                            $("#materials_createUI").slideUp("fast");
+                            $('#materials_createBtn').removeClass('active');
+                        }
+                        if ($('#materials_editBtn').hasClass('active')) {
+                            $("#materials_editUI").slideUp("fast");
+                            $('#materials_editBtn').removeClass('active');
+                        }
+                        $("#blueprint_editUI").slideDown("fast");
                     }
                 });
                 // EDIT
