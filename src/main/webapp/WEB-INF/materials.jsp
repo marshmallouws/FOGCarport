@@ -455,7 +455,6 @@
                 <div id="materials_ui_wrapper">
                     <!-- Edit materials -->
                     <div id="materials_editUI">
-
                         <div class="materials_select_wrapper">
                             Kategori:
                             <select id="materials_catSelect" class="form-control">
