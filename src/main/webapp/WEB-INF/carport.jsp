@@ -8,7 +8,7 @@
 <%@page import="entity.Order"%>
 <%@page import="entity.Odetail"%>
 <%@page import="java.util.List"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="Windows-1252"%>
 <% Carport carport = (Carport) request.getAttribute("carport"); %>
 <% Order order = (Order) request.getAttribute("order");%>
 <% String error = (String) request.getAttribute("error");%>
@@ -44,15 +44,15 @@
 
 
             <form method="POST" action="byggecenter?view=carportEdit">
-                <h5>TrÃ¦ & Tagplader</h5>
+                <h5>Træ & Tagplader</h5>
                 <table class="table table-striped table-sm" id="stykliste">
                     <thead>
                         <tr>
                             <th>Varenummer</th>
                             <th>Navn</th>
-                            <th>LÃ¦ngde</th>
+                            <th>Længde</th>
                             <th>Antal</th>
-                            <th>BelÃ¸b</th>
+                            <th>Beløb</th>
                             <th>Placering</th>
                             <th>Beskrivelse</th>
                         </tr>
@@ -78,9 +78,9 @@
                         <tr>
                             <th>Varenummer</th>
                             <th>Navn</th>
-                            <th>LÃ¦ngde</th>
+                            <th>Længde</th>
                             <th>Antal</th>
-                            <th>BelÃ¸b</th>
+                            <th>Beløb</th>
                             <th>Placering</th>
                             <th>Beskrivelse</th>
                         </tr>
@@ -101,7 +101,7 @@
                     </tbody>
                 </table>
                 <input type="hidden" name="orderID" value="<%= order.getId()%>">
-                <input type="submit" class="btn btn-primary" value="Gem Ã¦ndringer" style="margin-bottom:40px;">
+                <input type="submit" class="btn btn-primary" value="Gem ændringer" style="margin-bottom:40px;">
             </form>
 
             <% }%> <!-- end of else statement handling error-->

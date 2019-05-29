@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author caspe
  */
 
-//windows1252
 public abstract class Command {
 
     private final static Map<String, Command> COMMANDS;
@@ -35,14 +34,9 @@ public abstract class Command {
         COMMANDS.put("svg", new SVGCommand());
     }
 
-    //private static Map<String, Command> commands = null;
-
     public abstract void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FOGException;
 
     public static Command from(HttpServletRequest request) {
-//        if (commands == null) {
-//            initMap();
-//        }
         Command c;
         String origin = request.getParameter("view");
 
