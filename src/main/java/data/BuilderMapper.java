@@ -13,6 +13,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import logic.Builder;
 
 /**
  *
@@ -108,6 +111,26 @@ public class BuilderMapper {
             return false;
         }
 
+    }
+    
+    public List<Product> getProductVariants(int productID) {
+        try {
+            List<Product> products = new ArrayList();
+            String query = "";
+            PreparedStatement ps = conn.prepareStatement(query);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                products.add(Builder.buildProduct(rs));
+            }
+            
+            return products;
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     /**

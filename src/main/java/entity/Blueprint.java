@@ -12,6 +12,7 @@ public class Blueprint {
     int product_id;
     String product_name;
     String message;
+    Enum usageEnum;
 
     public Blueprint(int id, int usage, int model_id, int category_id, int product_id, String message) {
         this.id = id;
@@ -29,6 +30,11 @@ public class Blueprint {
     public int getUsage() {
         return usage;
     }
+
+    public Enum getUsageEnum() {
+        return usageEnum;
+    }
+    
 
     public int getModel_id() {
         return model_id;

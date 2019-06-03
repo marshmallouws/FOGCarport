@@ -45,6 +45,7 @@ public class LoginCommand extends Command {
             }
             
         } catch (LogInException ex) {
+            response.sendRedirect("./");
             ex.printStackTrace();
         }
         

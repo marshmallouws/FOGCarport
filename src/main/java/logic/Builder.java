@@ -158,6 +158,35 @@ public class Builder {
 
         return map;
     }
+    
+    public Map<Integer, Integer> calcWoodsMap(int productID, int length) throws BuildException {
+        Map<Integer, Integer> map = new HashMap();
+        List<Product> woods = bm.getProductVariants(productID);
+        
+        int len = length;
+        int max = calcMaxLength(woods);
+        int min = calcMinLength(woods);
+        
+        while (len > 0) {
+            if (len > max) {
+                map.put(max, map.getOrDefault(max, 0) + 1);
+                len -= max;
+            } else if (len < min) {
+                map.put(min, map.getOrDefault(min, 0) + 1);
+                len -= min;
+            } else {
+                for (Product p : woods) {
+                    if (p.getLength() > len) {
+                        map.put(p.getLength(), map.getOrDefault(p.getLength(), 0) + 1);
+                        len -= p.getLength();
+                        break;
+                    }
+                }
+            }
+        }
+        
+        return map;
+    }
 /**
  * A method to calculate length and qty of Product to build a flat or angled roof.
  * @param categoryID
@@ -358,6 +387,42 @@ public class Builder {
             reqs.add(new Orequest(product, order.getId(), qty, amount, comment));
         }
 
+        return reqs;
+    }
+    
+    private List<Orequest> addProductToBuild(List<Orequest> reqs, Order order, Map<Integer, Integer> lengths, Blueprint blueprint) {
+        for (Map.Entry<Integer, Integer> entry : lengths.entrySet()) {
+            int lengthMin = entry.getKey();
+            int lengthMax = entry.getKey();
+            int prodID = blueprint.getProduct_id();
+            int catID = blueprint.getCategory_id();
+            String comment = blueprint.getMessage();
+            int width = 195; // bliver pt. ikke benyttet, nødløsning til søm
+
+            Product product = new Product(catID, prodID, lengthMin, lengthMax, width);
+
+            int qty = entry.getValue();
+            double amount = qty * (product.getPrice() * (product.getLength() / 100));
+            reqs.add(new Orequest(product, order.getId(), qty, amount, comment));
+        }
+
+        return reqs;
+    }
+    
+    public List<Orequest> carportBlueprintNew(Order order, List<Blueprint> blueprints) {
+        List<Orequest> reqs = new ArrayList();
+        
+        for (Blueprint b : blueprints) {
+            switch (b.getUsageEnum().name()) {
+                
+                case "STOLPER":
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        
         return reqs;
     }
 
